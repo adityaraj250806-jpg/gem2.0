@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useApp } from '../context/AppContext';
+import { ROLES } from '../services/authService';
 
 /* ─── DESIGN TOKENS ──────────────────────────────────────────── */
 const T = {
@@ -68,8 +71,8 @@ const TopBar: React.FC = () => (
 );
 
 /* ─── NAVIGATION ─────────────────────────────────────────────── */
-interface NavProps { onOfficerLogin: () => void; onExploreTenders: () => void; }
-const Navbar: React.FC<NavProps> = ({ onOfficerLogin, onExploreTenders }) => {
+interface NavProps { onOfficerLogin: () => void; onExploreTenders: () => void; onPortalLogin?: () => void; }
+const Navbar: React.FC<NavProps> = ({ onOfficerLogin, onExploreTenders, onPortalLogin }) => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -134,6 +137,17 @@ const Navbar: React.FC<NavProps> = ({ onOfficerLogin, onExploreTenders }) => {
 
         {/* CTAs */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {onPortalLogin && (
+            <button onClick={onPortalLogin}
+              style={{
+                background: 'none', border: `1.5px solid ${T.border}`, cursor: 'pointer',
+                padding: '8px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                color: T.ink, fontFamily: font, transition: 'all 0.15s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = T.navy; e.currentTarget.style.color = T.navy; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.ink; }}
+            >Portal Login</button>
+          )}
           <button onClick={onExploreTenders}
             style={{
               background: 'none', border: `1.5px solid ${T.border}`, cursor: 'pointer',
@@ -453,7 +467,7 @@ const JourneySection: React.FC<JourneyProps> = ({ onBidder, onOfficer }) => (
             </div>
           </div>
 
-          <div style={{ space: 0, marginBottom: 32 }}>
+          <div style={{ marginBottom: 32 }}>
             {[
               ['🔍', 'Discover tenders by category, organisation, or location'],
               ['📋', 'Review NIT conditions and mandatory qualification criteria'],
@@ -1030,7 +1044,7 @@ const Footer: React.FC = () => (
 );
 
 /* ─── MODALS ─────────────────────────────────────────────────── */
-const OfficerLoginModal: React.FC<{ onClose: () => void }> = ({ onClose }) => (
+const OfficerLoginModal: React.FC<{ onClose: () => void; onAuthSuccess: () => void }> = ({ onClose, onAuthSuccess }) => (
   <div onClick={onClose} style={{
     position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15,23,42,0.6)',
     backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
@@ -1064,7 +1078,7 @@ const OfficerLoginModal: React.FC<{ onClose: () => void }> = ({ onClose }) => (
         ))}
 
         <button
-          onClick={() => { alert('Officer Authentication Successful! Redirecting to Evaluation Workspace…'); onClose(); }}
+          onClick={onAuthSuccess}
           style={{
             width: '100%', padding: '13px', borderRadius: 10, fontSize: 14, fontWeight: 800, fontFamily: font,
             background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`, border: 'none', color: 'white', cursor: 'pointer',
@@ -1078,7 +1092,7 @@ const OfficerLoginModal: React.FC<{ onClose: () => void }> = ({ onClose }) => (
   </div>
 );
 
-const TenderDetailModal: React.FC<{ tender: typeof tenders[0]; onClose: () => void }> = ({ tender, onClose }) => (
+const TenderDetailModal: React.FC<{ tender: typeof tenders[0]; onClose: () => void; onSubmit: () => void }> = ({ tender, onClose, onSubmit }) => (
   <div onClick={onClose} style={{
     position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15,23,42,0.6)',
     backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
@@ -1124,7 +1138,7 @@ const TenderDetailModal: React.FC<{ tender: typeof tenders[0]; onClose: () => vo
 
       <div style={{ padding: '16px 24px', borderTop: `1px solid ${T.border}`, display: 'flex', justifyContent: 'flex-end', gap: 12, flexShrink: 0 }}>
         <button onClick={onClose} style={{ padding: '9px 20px', borderRadius: 9, fontSize: 13, fontWeight: 600, fontFamily: font, border: `1.5px solid ${T.border}`, background: 'white', color: T.ink, cursor: 'pointer' }}>Close</button>
-        <button onClick={() => { alert('Proceeding to Bid Submission Portal…'); onClose(); }}
+        <button onClick={onSubmit}
           style={{ padding: '9px 20px', borderRadius: 9, fontSize: 13, fontWeight: 700, fontFamily: font, border: 'none', background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`, color: 'white', cursor: 'pointer', boxShadow: `0 4px 16px ${T.navy}30` }}
         >Proceed to Submission →</button>
       </div>
@@ -1134,12 +1148,26 @@ const TenderDetailModal: React.FC<{ tender: typeof tenders[0]; onClose: () => vo
 
 /* ─── MAIN HOME PAGE ─────────────────────────────────────────── */
 export const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+  const { login } = useApp();
   const [officerModal, setOfficerModal] = useState(false);
   const [selectedTender, setSelectedTender] = useState<typeof tenders[0] | null>(null);
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   const openOfficer = () => setOfficerModal(true);
   const openTenders = () => scrollTo('tenders');
+
+  const handleOfficerSuccess = async () => {
+    setOfficerModal(false);
+    await login('procurement.officer@cpcl.gov.in', 'DemoPass', ROLES.OFFICER);
+    navigate('/officer/dashboard');
+  };
+
+  const handleTenderSubmit = async () => {
+    setSelectedTender(null);
+    await login('tenders@abcengineering.com', 'DemoPass', ROLES.BIDDER);
+    navigate('/bidder/tenders/CPCL-2026-TE-045/documents');
+  };
 
   return (
     <div style={{ minHeight: '100vh', background: 'white' }}>
@@ -1153,7 +1181,7 @@ export const HomePage: React.FC = () => {
       `}</style>
 
       <TopBar />
-      <Navbar onOfficerLogin={openOfficer} onExploreTenders={openTenders} />
+      <Navbar onOfficerLogin={openOfficer} onExploreTenders={openTenders} onPortalLogin={() => navigate('/login')} />
       <HeroSection onExplore={openTenders} onLogin={openOfficer} />
       <StatsSection />
       <JourneySection onBidder={openTenders} onOfficer={openOfficer} />
@@ -1166,8 +1194,8 @@ export const HomePage: React.FC = () => {
       <FinalCTA onExplore={openTenders} onLogin={openOfficer} />
       <Footer />
 
-      {officerModal && <OfficerLoginModal onClose={() => setOfficerModal(false)} />}
-      {selectedTender && <TenderDetailModal tender={selectedTender} onClose={() => setSelectedTender(null)} />}
+      {officerModal && <OfficerLoginModal onClose={() => setOfficerModal(false)} onAuthSuccess={handleOfficerSuccess} />}
+      {selectedTender && <TenderDetailModal tender={selectedTender} onClose={() => setSelectedTender(null)} onSubmit={handleTenderSubmit} />}
     </div>
   );
 };
