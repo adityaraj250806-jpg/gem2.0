@@ -107,8 +107,12 @@ export const LoginPage: React.FC = () => {
       return;
     }
 
-    await login(username, password, role);
-    navigate(role === ROLES.OFFICER ? "/officer/dashboard" : "/bidder/dashboard");
+    try {
+      await login(username, password, role);
+      navigate(role === ROLES.OFFICER ? "/officer/dashboard" : "/bidder/dashboard");
+    } catch (err: any) {
+      showToast(err.message || "Login failed. Please check your credentials.", "danger");
+    }
   };
 
   const handleDemoLogin = async (targetRole: UserRole) => {

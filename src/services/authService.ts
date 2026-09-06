@@ -38,6 +38,9 @@ export const DEFAULT_USERS: Record<UserRole, User> = {
   }
 };
 
+export const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5000/api";
+const TOKEN_KEY = "gem_sentinel_jwt";
+
 export class AuthService {
   private currentUser: User | null;
 
@@ -57,37 +60,100 @@ export class AuthService {
     return DEFAULT_USERS[ROLES.BIDDER];
   }
 
-  saveSession(user: User | null): void {
+  saveSession(user: User | null, token?: string): void {
     this.currentUser = user;
     try {
       if (user) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+        if (token) localStorage.setItem(TOKEN_KEY, token);
       } else {
         localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(TOKEN_KEY);
       }
     } catch (e) {
       console.warn("Failed to persist session:", e);
     }
   }
 
-  login(email?: string, _password?: string, role: UserRole = ROLES.BIDDER): Promise<{ success: boolean; user: User }> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const user: User = {
-          ...(DEFAULT_USERS[role] || DEFAULT_USERS[ROLES.BIDDER]),
-          email: email || DEFAULT_USERS[role]?.email
-        };
-        this.saveSession(user);
-        resolve({ success: true, user });
-      }, 200);
-    });
+  getToken(): string | null {
+    return localStorage.getItem(TOKEN_KEY);
   }
 
-  logout(): Promise<{ success: boolean }> {
-    return new Promise((resolve) => {
-      this.saveSession(null);
-      resolve({ success: true });
+  async login(email?: string, password?: string, role: UserRole = ROLES.BIDDER): Promise<{ success: boolean; user: User }> {
+    // If credentials are provided, attempt real database authentication
+    if (email && password && password !== "DemoPass") {
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, role })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || "Invalid credentials. Please check your username and password.");
+        }
+
+        const user: User = {
+          id: data.user.id || data.user._id,
+          email: data.user.email,
+          name: data.user.name,
+          role: data.user.role,
+          roleTitle: data.user.roleTitle || (data.user.role === ROLES.OFFICER ? "Chief Procurement Officer" : "Registered Bidder"),
+          orgName: data.user.orgName || (data.user.role === ROLES.OFFICER ? "CPCL / Ministry of Petroleum" : "ABC Engineering Ltd"),
+          avatarInitial: data.user.avatarInitial || data.user.name.charAt(0).toUpperCase()
+        };
+
+        this.saveSession(user, data.token);
+        return { success: true, user };
+      } catch (err: any) {
+        // If it's a 401/403 credentials error, propagate it directly to the user
+        if (err.message && !err.message.includes("Failed to fetch") && !err.message.includes("NetworkError")) {
+          throw err;
+        }
+        console.warn("Backend API unreachable, falling back to local session:", err.message);
+      }
+    }
+
+    // Demo shortcut fallback
+    const user: User = {
+      ...(DEFAULT_USERS[role] || DEFAULT_USERS[ROLES.BIDDER]),
+      email: email || DEFAULT_USERS[role]?.email
+    };
+    this.saveSession(user);
+    return { success: true, user };
+  }
+
+  async register(data: { email: string; password: string; name: string; role: UserRole; orgName?: string; gstin?: string }): Promise<{ success: boolean; user: User }> {
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
     });
+
+    const resData = await response.json();
+    if (!response.ok || !resData.success) {
+      throw new Error(resData.message || "Registration failed.");
+    }
+
+    const user: User = {
+      id: resData.user.id || resData.user._id,
+      email: resData.user.email,
+      name: resData.user.name,
+      role: resData.user.role,
+      roleTitle: resData.user.roleTitle,
+      orgName: resData.user.orgName,
+      avatarInitial: resData.user.avatarInitial
+    };
+
+    this.saveSession(user, resData.token);
+    return { success: true, user };
+  }
+
+  async logout(): Promise<{ success: boolean }> {
+    this.saveSession(null);
+    return { success: true };
   }
 
   getCurrentUser(): User | null {
