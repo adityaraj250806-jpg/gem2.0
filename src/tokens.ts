@@ -1,18 +1,27 @@
 /**
- * GeM Sentinel Design System Tokens
- * Shared color, typography, shadow, and border presets.
+ * GemxAI Design System Tokens
+ * Shared color, typography, shadow, and border presets inspired by GeM portal.
  */
 
 export const C = {
-  navy: '#0b3d91',
+  navy: '#002d62',
   navyDark: '#071f52',
-  navyLight: '#1a5cb5',
+  navyLight: '#0b3d91',
+  gemOrange: '#f37021',
+  gemOrangeDark: '#d95400',
+  gemOrangeLight: '#ff8c38',
+  gemOrangeSubtle: '#fff7ed',
+  gemOrangeBorder: '#fed7aa',
+  gemGreen: '#138808',
+  gemGreenLight: '#16a34a',
+  gemGreenSubtle: '#f0fdf4',
+  gemGreenBorder: '#bbf7d0',
   teal: '#0891b2',
   tealLight: '#06b6d4',
   tealSubtle: '#f0f9ff',
-  emerald: '#059669',
+  emerald: '#16a34a',
   emeraldSubtle: '#f0fdf4',
-  saffron: '#ea580c',
+  saffron: '#f37021',
   saffronSubtle: '#fff7ed',
   amber: '#d97706',
   amberSubtle: '#fffbeb',
@@ -29,8 +38,9 @@ export const C = {
 };
 
 export const F = {
-  sans: `'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
-  serif: `'Merriweather', 'Georgia', serif`,
+  sans: `'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
+  head: `'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
+  serif: `'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
   mono: `'JetBrains Mono', monospace`,
 };
 

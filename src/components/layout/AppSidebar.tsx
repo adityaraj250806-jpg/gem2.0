@@ -3,6 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { ROLES } from "../../services/authService";
 import { C, F } from "../../tokens";
+import { GemLogo } from "../GemLogo";
 
 export const AppSidebar: React.FC = () => {
   const { user, showToast } = useApp();
@@ -136,11 +137,13 @@ export const AppSidebar: React.FC = () => {
           lineHeight: 1.5
         }}
       >
-        <strong style={{ color: C.inkMuted }}>GeM Sentinel Secure</strong>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+          <GemLogo size={22} />
+          <strong style={{ color: C.inkMuted }}>GemxAI Platform</strong>
+        </div>
+        256-Bit SSL Encrypted • GFR 2017
         <br />
-        256-Bit SSL Encrypted
-        <br />
-        National Informatics Centre
+        Government e-Marketplace Suite
       </div>
     </aside>
   );

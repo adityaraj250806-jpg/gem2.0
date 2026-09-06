@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { ROLES } from "../../services/authService";
 import { C, F } from "../../tokens";
+import { GemLogo } from "../GemLogo";
 
 export const AppHeader: React.FC = () => {
   const { user, logout, switchRole, showToast } = useApp();
@@ -69,26 +70,10 @@ export const AppHeader: React.FC = () => {
             textDecoration: "none"
           }}
         >
-          <div
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 8,
-              background: `linear-gradient(135deg, ${C.navy}, ${C.navyLight})`,
-              color: "#ffffff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: 800,
-              fontSize: 13,
-              letterSpacing: 1
-            }}
-          >
-            GeM
-          </div>
+          <GemLogo size={36} />
           <div>
             <div style={{ fontSize: 16, fontWeight: 800, color: C.ink, letterSpacing: "-0.01em" }}>
-              GeM <span style={{ color: C.teal }}>SENTINEL</span>
+              Gemx<span style={{ color: C.gemOrange }}>AI</span>
             </div>
             <div style={{ fontSize: 10, color: C.inkFaint, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
               AI Tender Evaluation Portal

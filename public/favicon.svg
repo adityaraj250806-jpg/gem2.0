@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="fav-y" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#65a30d"/>
+    </linearGradient>
+    <linearGradient id="fav-g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+    <linearGradient id="fav-b" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="fav-db" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="fav-r" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="fav-o" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Clean Crisp White Favicon Square Card as shown in screenshot -->
+  <rect x="4" y="4" width="92" height="92" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5" filter="url(#cardShadow)"/>
+
+  <!-- GeM Star Emblem (Centered) -->
+  <g transform="translate(0, 0)">
+    <!-- Top-Right Green / Yellow Wing -->
+    <polygon points="50,50 44,32 52,18 64,30" fill="url(#fav-y)"/>
+    <polygon points="50,50 64,30 80,32 68,48" fill="url(#fav-g)"/>
+
+    <!-- Bottom Blue / Deep Navy Wing -->
+    <polygon points="50,50 68,48 76,66 58,62" fill="url(#fav-b)"/>
+    <polygon points="50,50 58,62 52,82 40,64" fill="url(#fav-db)"/>
+
+    <!-- Left Red / Orange Main Chevron -->
+    <polygon points="50,50 40,64 20,60 34,48" fill="url(#fav-o)"/>
+    <polygon points="50,50 34,48 20,32 44,32" fill="url(#fav-r)"/>
+
+    <!-- Accent Darts -->
+    <!-- Right Orange Chevron Dart -->
+    <polygon points="74,48 88,51 78,58 79,52" fill="#ea580c"/>
+    <!-- Top-Left Cyan Accent Dart -->
+    <polygon points="34,22 42,27 37,32" fill="#0284c7" opacity="0.95"/>
+    <!-- Bottom-Left Lime Accent Dart -->
+    <polygon points="34,70 42,75 36,80" fill="#84cc16" opacity="0.95"/>
+
+    <!-- Center White Hub -->
+    <circle cx="50" cy="50" r="8" fill="#ffffff" opacity="0.9"/>
+    <circle cx="50" cy="50" r="3" fill="#1e293b" opacity="0.35"/>
+  </g>
+</svg>

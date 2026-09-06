@@ -2,76 +2,107 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { ROLES } from '../services/authService';
+import { GemLogo } from './GemLogo';
 
-/* ─── DESIGN TOKENS ──────────────────────────────────────────── */
+/* ─── GeM PORTAL-INSPIRED DESIGN TOKENS ────────────────────────── */
 const T = {
-  navy: '#0b3d91',
-  navyDark: '#071f52',
-  navyLight: '#1a5cb5',
+  // GeM Signature Orange / Saffron
+  orange: '#f37021',
+  orangeDark: '#d95400',
+  orangeLight: '#ff8c38',
+  orangeSubtle: '#fff7ed',
+  orangeBorder: '#fed7aa',
+
+  // Sovereign Indian Green
+  green: '#138808',
+  greenLight: '#16a34a',
+  greenSubtle: '#f0fdf4',
+  greenBorder: '#bbf7d0',
+  greenDark: '#0f6b2a',
+
+  // Sovereign Navy Anchors
+  navy: '#002d62',
+  navyDark: '#051937',
+  navyLight: '#0b3d91',
+  navySubtle: '#eff6ff',
+
+  // Supporting Accents
+  amber: '#d97706',
+  amberSubtle: '#fffbeb',
+  crimson: '#dc2626',
+  crimsonSubtle: '#fef2f2',
   teal: '#0891b2',
-  tealLight: '#06b6d4',
-  emerald: '#059669',
-  saffron: '#ea580c',
+
+  // Slate Neutrals
   ink: '#0f172a',
   inkMuted: '#475569',
   inkFaint: '#94a3b8',
   white: '#ffffff',
   surfaceAlt: '#f8fafc',
-  surfaceBlue: '#eff6ff',
+  surfaceWarm: '#fffaf5',
   border: '#e2e8f0',
   borderStrong: '#cbd5e1',
 };
 
-const font = `'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
-const fontSerif = `'Merriweather', 'Georgia', serif`;
+// Official UIDAI Government Typeface (Noto Sans)
+const font = `'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
+const fontHead = `'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
 const fontMono = `'JetBrains Mono', monospace`;
 
 /* ─── HELPER COMPONENTS ──────────────────────────────────────── */
 
-interface BadgeProps { label: string; color?: string; bg?: string; }
-const Badge: React.FC<BadgeProps> = ({ label, color = T.teal, bg = '#e0f2fe' }) => (
+interface BadgeProps { label: string; color?: string; bg?: string; borderColor?: string; }
+const Badge: React.FC<BadgeProps> = ({ label, color = T.orange, bg = T.orangeSubtle, borderColor = T.orangeBorder }) => (
   <span style={{
     display: 'inline-flex', alignItems: 'center', gap: 6,
-    padding: '4px 12px', borderRadius: 999, fontSize: 11,
-    fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
-    color, background: bg, fontFamily: font,
+    padding: '4px 14px', borderRadius: 999, fontSize: 11,
+    fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase',
+    color, background: bg, border: `1px solid ${borderColor}`, fontFamily: font,
   }}>
     {label}
   </span>
 );
 
-/* ─── TOP GOVERNMENT BAR ─────────────────────────────────────── */
+/* ─── TOP GOVERNMENT BAR WITH SOVEREIGN TRICOLOR ─────────────── */
 const TopBar: React.FC = () => (
-  <div style={{
-    background: T.navyDark, color: '#cbd5e1', fontSize: 11,
-    fontFamily: font, fontWeight: 500, letterSpacing: '0.03em',
-  }}>
+  <>
     <div style={{
-      maxWidth: 1280, margin: '0 auto', padding: '6px 24px',
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      background: T.navyDark, color: '#cbd5e1', fontSize: 11,
+      fontFamily: font, fontWeight: 500, letterSpacing: '0.03em',
     }}>
-      <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span>🇮🇳</span>
-        <span style={{ color: '#e2e8f0', fontWeight: 600 }}>Government of India</span>
-        <span style={{ color: '#475569' }}>|</span>
-        <span>भारत सरकार</span>
-        <span style={{ color: '#475569' }}>|</span>
-        <span>Department of Commerce, Ministry of Commerce & Industry</span>
-      </span>
-      <span style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        {['हिन्दी', 'Accessibility', 'Help', '1800-419-3436'].map((item, i) => (
-          <span key={i} style={{ cursor: 'pointer', color: '#94a3b8', transition: 'color 0.2s' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#e2e8f0')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#94a3b8')}
-          >{item}</span>
-        ))}
-      </span>
+      <div style={{
+        maxWidth: 1280, margin: '0 auto', padding: '7px 24px',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 13 }}>🇮🇳</span>
+          <span style={{ color: '#ffffff', fontWeight: 700 }}>Government of India</span>
+          <span style={{ color: '#475569' }}>|</span>
+          <span style={{ color: '#f8fafc' }}>भारत सरकार</span>
+          <span style={{ color: '#475569' }}>|</span>
+          <span style={{ color: '#94a3b8' }}>GeM Public Procurement Modernization</span>
+        </span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+          {['हिन्दी', 'Accessibility', 'Helpdesk: 1800-419-3436', 'GFR 2017 & CPPP'].map((item, i) => (
+            <span key={i} style={{ cursor: 'pointer', color: '#94a3b8', transition: 'color 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#ffffff')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#94a3b8')}
+            >{item}</span>
+          ))}
+        </span>
+      </div>
     </div>
-  </div>
+    {/* Sovereign 3px Tricolor Accent Ribbon */}
+    <div style={{
+      height: 3,
+      width: '100%',
+      background: `linear-gradient(90deg, ${T.orange} 0%, ${T.orange} 33.33%, #ffffff 33.33%, #ffffff 66.66%, ${T.green} 66.66%, ${T.green} 100%)`,
+    }} />
+  </>
 );
 
 /* ─── NAVIGATION ─────────────────────────────────────────────── */
-interface NavProps { onOfficerLogin: () => void; onExploreTenders: () => void; onPortalLogin?: () => void; }
+interface NavProps { onOfficerLogin: () => void; onExploreTenders: () => void; onPortalLogin: () => void; }
 const Navbar: React.FC<NavProps> = ({ onOfficerLogin, onExploreTenders, onPortalLogin }) => {
   const [scrolled, setScrolled] = useState(false);
 
@@ -86,50 +117,37 @@ const Navbar: React.FC<NavProps> = ({ onOfficerLogin, onExploreTenders, onPortal
   return (
     <nav style={{
       position: 'sticky', top: 0, zIndex: 100,
-      background: scrolled ? 'rgba(255,255,255,0.97)' : '#ffffff',
+      background: scrolled ? 'rgba(255,255,255,0.98)' : '#ffffff',
       borderBottom: `1px solid ${T.border}`,
-      boxShadow: scrolled ? '0 1px 12px rgba(0,0,0,0.06)' : 'none',
-      backdropFilter: 'blur(8px)',
+      boxShadow: scrolled ? '0 4px 20px rgba(0,45,98,0.08)' : 'none',
+      backdropFilter: 'blur(10px)',
       transition: 'all 0.3s ease',
     }}>
       <div style={{
         maxWidth: 1280, margin: '0 auto', padding: '0 24px',
-        height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        {/* Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}>
-          <div style={{
-            width: 38, height: 38, borderRadius: 10,
-            background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'white', fontSize: 14, fontWeight: 800, fontFamily: fontSerif,
-            boxShadow: `0 4px 12px ${T.navy}30`,
-          }}>G</div>
-          <div>
-            <div style={{ fontSize: 15, fontWeight: 800, color: T.ink, fontFamily: font, lineHeight: 1.1 }}>
-              GeM AI<span style={{ color: T.navy }}> Portal</span>
-            </div>
-            <div style={{ fontSize: 10, color: T.inkFaint, fontWeight: 500, letterSpacing: '0.04em' }}>
-              AI-Powered Bid Compliance
-            </div>
-          </div>
+        {/* Brand with 3rd screenshot official GeM star logo */}
+        <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          <GemLogo size={46} showText textColor={T.navy} />
         </div>
 
         {/* Nav Links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           {[
-            { label: 'Tenders', id: 'tenders' },
-            { label: 'For Bidders', id: 'journeys' },
-            { label: 'For Officers', id: 'journeys' },
-            { label: 'How It Works', id: 'how-it-works' },
+            { label: 'Live Tenders', id: 'tenders' },
+            { label: 'Bidder Workspace', id: 'journeys' },
+            { label: 'Officer Console', id: 'journeys' },
+            { label: 'AI Process', id: 'how-it-works' },
+            { label: 'Sovereign Trust', id: 'trust' },
           ].map(({ label, id }) => (
             <button key={label} onClick={() => scrollTo(id)}
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                padding: '8px 14px', borderRadius: 8, fontSize: 14, fontWeight: 500,
+                padding: '8px 14px', borderRadius: 8, fontSize: 13, fontWeight: 700,
                 color: T.inkMuted, fontFamily: font, transition: 'all 0.15s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.color = T.navy; e.currentTarget.style.background = T.surfaceBlue; }}
+              onMouseEnter={e => { e.currentTarget.style.color = T.orange; e.currentTarget.style.background = T.orangeSubtle; }}
               onMouseLeave={e => { e.currentTarget.style.color = T.inkMuted; e.currentTarget.style.background = 'none'; }}
             >{label}</button>
           ))}
@@ -137,37 +155,42 @@ const Navbar: React.FC<NavProps> = ({ onOfficerLogin, onExploreTenders, onPortal
 
         {/* CTAs */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          {onPortalLogin && (
-            <button onClick={onPortalLogin}
-              style={{
-                background: 'none', border: `1.5px solid ${T.border}`, cursor: 'pointer',
-                padding: '8px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600,
-                color: T.ink, fontFamily: font, transition: 'all 0.15s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = T.navy; e.currentTarget.style.color = T.navy; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.ink; }}
-            >Portal Login</button>
-          )}
-          <button onClick={onExploreTenders}
+          <button onClick={onPortalLogin}
             style={{
               background: 'none', border: `1.5px solid ${T.border}`, cursor: 'pointer',
-              padding: '8px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+              padding: '9px 18px', borderRadius: 8, fontSize: 13, fontWeight: 700,
               color: T.ink, fontFamily: font, transition: 'all 0.15s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = T.navy; e.currentTarget.style.color = T.navy; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.ink; }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = T.orange; e.currentTarget.style.color = T.orange; e.currentTarget.style.background = T.orangeSubtle; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.ink; e.currentTarget.style.background = 'none'; }}
+          >Portal Login</button>
+
+          <button onClick={onExploreTenders}
+            style={{
+              background: T.greenSubtle, border: `1.5px solid ${T.greenBorder}`, cursor: 'pointer',
+              padding: '9px 18px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+              color: T.green, fontFamily: font, transition: 'all 0.15s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#dcfce7'; e.currentTarget.style.borderColor = T.green; }}
+            onMouseLeave={e => { e.currentTarget.style.background = T.greenSubtle; e.currentTarget.style.borderColor = T.greenBorder; }}
           >View Tenders</button>
+
+          {/* Officer Login: Directly navigates to Login Page in Officer mode (2nd ss) */}
           <button onClick={onOfficerLogin}
             style={{
-              background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`,
+              background: `linear-gradient(135deg, ${T.orange} 0%, ${T.orangeDark} 100%)`,
               border: 'none', cursor: 'pointer',
-              padding: '9px 20px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+              padding: '10px 20px', borderRadius: 8, fontSize: 13, fontWeight: 800,
               color: 'white', fontFamily: font, transition: 'all 0.2s',
-              boxShadow: `0 4px 12px ${T.navy}35`,
+              boxShadow: `0 4px 14px ${T.orange}40`,
+              display: 'flex', alignItems: 'center', gap: 6,
             }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = `0 6px 20px ${T.navy}45`; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = `0 4px 12px ${T.navy}35`; }}
-          >Officer Login →</button>
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = `0 6px 20px ${T.orange}55`; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = `0 4px 14px ${T.orange}40`; }}
+          >
+            <span>🛡️</span>
+            <span>Officer Login →</span>
+          </button>
         </div>
       </div>
     </nav>
@@ -178,66 +201,74 @@ const Navbar: React.FC<NavProps> = ({ onOfficerLogin, onExploreTenders, onPortal
 interface HeroProps { onExplore: () => void; onLogin: () => void; }
 const HeroSection: React.FC<HeroProps> = ({ onExplore, onLogin }) => (
   <section style={{
-    background: `linear-gradient(160deg, #f8fafc 0%, #eff6ff 40%, #e0f2fe 100%)`,
-    padding: '100px 24px 80px',
+    background: `linear-gradient(165deg, #ffffff 0%, #fff9f3 40%, #f0fdf4 100%)`,
+    padding: '84px 24px 76px',
     position: 'relative', overflow: 'hidden',
+    borderBottom: `1px solid ${T.border}`,
   }}>
-    {/* Decorative circles */}
+    {/* Decorative warm aura */}
     <div style={{
-      position: 'absolute', right: -120, top: -120,
-      width: 600, height: 600, borderRadius: '50%',
-      background: `radial-gradient(circle, ${T.navy}08 0%, transparent 70%)`,
+      position: 'absolute', right: -140, top: -100,
+      width: 650, height: 650, borderRadius: '50%',
+      background: `radial-gradient(circle, ${T.orange}12 0%, transparent 70%)`,
       pointerEvents: 'none',
     }} />
     <div style={{
-      position: 'absolute', left: -60, bottom: -80,
-      width: 400, height: 400, borderRadius: '50%',
-      background: `radial-gradient(circle, ${T.teal}06 0%, transparent 70%)`,
+      position: 'absolute', left: -80, bottom: -60,
+      width: 500, height: 500, borderRadius: '50%',
+      background: `radial-gradient(circle, ${T.green}10 0%, transparent 70%)`,
       pointerEvents: 'none',
     }} />
 
     <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.08fr 0.92fr', gap: 56, alignItems: 'center' }}>
 
         {/* LEFT COLUMN */}
         <div>
-          <div style={{ marginBottom: 24 }}>
-            <Badge label="Government of India · GFR 2017 Compliant" color={T.navy} bg={`${T.navy}12`} />
+          <div style={{ marginBottom: 20 }}>
+            <Badge
+              label="Government e-Marketplace (GeM) Standards · GFR 2017 Compliant"
+              color={T.orange}
+              bg={T.orangeSubtle}
+              borderColor={T.orangeBorder}
+            />
           </div>
 
           <h1 style={{
-            fontFamily: fontSerif, fontSize: 52, fontWeight: 700, lineHeight: 1.15,
-            color: T.ink, margin: '0 0 24px', letterSpacing: '-0.02em',
+            fontFamily: fontHead, fontSize: 48, fontWeight: 900, lineHeight: 1.15,
+            color: T.ink, margin: '0 0 20px', letterSpacing: '-0.025em',
           }}>
-            Smarter bid evaluation for{' '}
+            Forensic AI tender verification for{' '}
             <span style={{
-              background: `linear-gradient(135deg, ${T.navy}, ${T.teal})`,
+              background: `linear-gradient(135deg, ${T.orange} 0%, ${T.navy} 55%, ${T.green} 100%)`,
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>Indian procurement.</span>
+            }}>Indian public procurement.</span>
           </h1>
 
           <p style={{
-            fontFamily: font, fontSize: 18, color: T.inkMuted, lineHeight: 1.7,
-            margin: '0 0 36px', maxWidth: 480,
+            fontFamily: font, fontSize: 16, color: T.inkMuted, lineHeight: 1.7,
+            margin: '0 0 30px', maxWidth: 520,
           }}>
-            AI-powered compliance verification that helps procurement officers evaluate 
-            bids faster, and bidders submit winning dossiers with full statutory confidence.
+            <strong>GemxAI</strong> automates multi-point compliance verification across GSTN, PAN, MSME Udyam Databank, and Technical BOQs. Helping procurement officers eliminate tender fraud and helping verified bidders submit winning dossiers.
           </p>
 
           {/* Trust chips */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 36 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 34 }}>
             {[
-              { icon: '✓', label: 'GST & PAN Verified' },
-              { icon: '✓', label: 'MSME Compliant' },
-              { icon: '✓', label: 'GFR 2017 Aligned' },
-              { icon: '✓', label: 'CVC Audit-Ready' },
+              { icon: '✓', label: 'GST & PAN Live API' },
+              { icon: '✓', label: 'MSME Udyam Verified' },
+              { icon: '✓', label: 'Make in India (PPO 2017)' },
+              { icon: '✓', label: 'CVC Audit-Ready Dossier' },
             ].map(({ icon, label }) => (
               <span key={label} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
-                padding: '6px 14px', borderRadius: 999, fontSize: 12, fontWeight: 600,
-                color: T.emerald, background: '#f0fdf4', border: '1px solid #bbf7d0',
+                padding: '6px 14px', borderRadius: 999, fontSize: 12, fontWeight: 800,
+                color: T.green, background: T.greenSubtle, border: `1px solid ${T.greenBorder}`,
                 fontFamily: font,
-              }}><span>{icon}</span>{label}</span>
+              }}>
+                <span style={{ color: T.green }}>{icon}</span>
+                {label}
+              </span>
             ))}
           </div>
 
@@ -245,160 +276,183 @@ const HeroSection: React.FC<HeroProps> = ({ onExplore, onLogin }) => (
           <div style={{ display: 'flex', gap: 14 }}>
             <button onClick={onExplore}
               style={{
-                background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`,
+                background: `linear-gradient(135deg, ${T.orange} 0%, ${T.orangeDark} 100%)`,
                 color: 'white', border: 'none', cursor: 'pointer',
-                padding: '14px 28px', borderRadius: 10, fontSize: 15, fontWeight: 700,
-                fontFamily: font, boxShadow: `0 8px 24px ${T.navy}30`,
+                padding: '14px 28px', borderRadius: 10, fontSize: 14, fontWeight: 800,
+                fontFamily: font, boxShadow: `0 8px 24px ${T.orange}40`,
                 transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 8,
               }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 12px 32px ${T.navy}40`; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = `0 8px 24px ${T.navy}30`; }}
-            >Explore Active Tenders <span>→</span></button>
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 12px 30px ${T.orange}55`; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = `0 8px 24px ${T.orange}40`; }}
+            >
+              <span>📋</span>
+              <span>Explore Active Tenders</span>
+              <span>→</span>
+            </button>
 
             <button onClick={onLogin}
               style={{
-                background: 'white', border: `1.5px solid ${T.border}`,
-                color: T.ink, cursor: 'pointer',
-                padding: '14px 28px', borderRadius: 10, fontSize: 15, fontWeight: 600,
-                fontFamily: font, boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                transition: 'all 0.2s',
+                background: 'white', border: `1.5px solid ${T.navy}`,
+                color: T.navy, cursor: 'pointer',
+                padding: '14px 26px', borderRadius: 10, fontSize: 14, fontWeight: 800,
+                fontFamily: font, boxShadow: '0 2px 8px rgba(0,45,98,0.06)',
+                transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 8,
               }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = T.navy; e.currentTarget.style.color = T.navy; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.ink; }}
-            >Officer Login</button>
+              onMouseEnter={e => { e.currentTarget.style.background = T.navySubtle; e.currentTarget.style.borderColor = T.navy; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'white'; }}
+            >
+              <span>🛡️</span>
+              <span>Officer Evaluation Console</span>
+            </button>
           </div>
 
-          {/* Micro trust statement */}
-          <p style={{ fontFamily: font, fontSize: 12, color: T.inkFaint, marginTop: 20, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span>🔒</span>
-            Hosted in MeitY-empaneled sovereign cloud · NIC infrastructure · AES-256 encrypted
+          <p style={{ fontFamily: font, fontSize: 12, color: T.inkFaint, marginTop: 22, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ color: T.green }}>🔒</span>
+            MeitY-Empaneled Sovereign Infrastructure · 256-Bit SSL Encrypted · GFR 2017 Rule 144
           </p>
         </div>
 
         {/* RIGHT COLUMN — Browser UI Mockup */}
         <div style={{ position: 'relative' }}>
-          {/* Floating badges */}
+          {/* Floating badge 1: GeM Orange AI Engine */}
           <div style={{
-            position: 'absolute', top: -18, right: -12, zIndex: 10,
+            position: 'absolute', top: -16, right: -12, zIndex: 10,
             background: 'white', borderRadius: 12, padding: '10px 16px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.12)', border: `1px solid ${T.border}`,
-            display: 'flex', alignItems: 'center', gap: 8,
+            boxShadow: '0 8px 30px rgba(243,112,33,0.18)', border: `1.5px solid ${T.orangeBorder}`,
+            display: 'flex', alignItems: 'center', gap: 10,
           }}>
-            <span style={{ fontSize: 20 }}>🤖</span>
+            <GemLogo size={28} />
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: T.ink, fontFamily: font }}>AI Engine</div>
-              <div style={{ fontSize: 10, color: T.inkFaint, fontFamily: font }}>6 registries checked</div>
+              <div style={{ fontSize: 12, fontWeight: 800, color: T.orange, fontFamily: font }}>GemxAI Engine</div>
+              <div style={{ fontSize: 10, color: T.inkMuted, fontFamily: font }}>6 Registries Cross-Checked</div>
             </div>
           </div>
 
+          {/* Floating badge 2: Sovereign Green Score */}
           <div style={{
-            position: 'absolute', bottom: -18, left: -18, zIndex: 10,
+            position: 'absolute', bottom: -18, left: -16, zIndex: 10,
             background: 'white', borderRadius: 12, padding: '10px 16px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.12)', border: `1px solid ${T.border}`,
-            display: 'flex', alignItems: 'center', gap: 8,
+            boxShadow: '0 8px 30px rgba(19,136,8,0.18)', border: `1.5px solid ${T.greenBorder}`,
+            display: 'flex', alignItems: 'center', gap: 10,
           }}>
-            <span style={{ fontSize: 20 }}>✅</span>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: T.greenSubtle, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>
+              ✅
+            </div>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: T.emerald, fontFamily: font }}>Verified</div>
-              <div style={{ fontSize: 10, color: T.inkFaint, fontFamily: font }}>GSTIN Active</div>
+              <div style={{ fontSize: 12, fontWeight: 800, color: T.green, fontFamily: font }}>Compliance Score: 82/100</div>
+              <div style={{ fontSize: 10, color: T.inkMuted, fontFamily: font }}>Low Risk · 96% AI Confidence</div>
             </div>
           </div>
 
-          {/* Main card */}
+          {/* Main Simulated Browser Card */}
           <div style={{
             background: 'white', borderRadius: 20, overflow: 'hidden',
-            boxShadow: '0 24px 64px rgba(11,61,145,0.12), 0 4px 16px rgba(0,0,0,0.05)',
+            boxShadow: '0 20px 60px rgba(0,45,98,0.12), 0 4px 16px rgba(0,0,0,0.04)',
             border: `1px solid ${T.border}`,
           }}>
-            {/* Browser bar */}
-            <div style={{ background: '#f1f5f9', borderBottom: `1px solid ${T.border}`, padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#fc5f5a', display: 'inline-block' }} />
-              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#fdbc40', display: 'inline-block' }} />
-              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#34c84a', display: 'inline-block' }} />
-              <div style={{ flex: 1, margin: '0 10px', background: 'white', borderRadius: 6, padding: '4px 12px', fontSize: 11, color: T.inkFaint, fontFamily: fontMono, border: `1px solid ${T.border}` }}>
-                gem-ai-eval.gov.in/tender/CPCL-PROC-2026-001
+            {/* Browser top title bar */}
+            <div style={{ background: '#f8fafc', borderBottom: `1px solid ${T.border}`, padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
+              <span style={{ width: 10, height: 10, borderRadius: '50%', background: T.orange, display: 'inline-block' }} />
+              <span style={{ width: 10, height: 10, borderRadius: '50%', background: T.green, display: 'inline-block' }} />
+              <div style={{ flex: 1, margin: '0 10px', background: 'white', borderRadius: 6, padding: '4px 12px', fontSize: 11, color: T.inkMuted, fontFamily: fontMono, border: `1px solid ${T.border}` }}>
+                gemx-ai.gov.in/tenders/CPCL-2026-TE-045/verification
               </div>
             </div>
 
-            {/* Content */}
-            <div style={{ padding: '20px 24px' }}>
+            {/* Content Body */}
+            <div style={{ padding: '22px 24px' }}>
               {/* Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 14 }}>
                 <div>
-                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', color: T.teal, fontFamily: font, textTransform: 'uppercase', marginBottom: 4 }}>Tender Reference: CPCL/PROC/2026/001</div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: T.ink, fontFamily: font }}>CPCL Industrial Equipment Procurement</div>
-                  <div style={{ fontSize: 12, color: T.inkMuted, fontFamily: font, marginTop: 2 }}>Chennai Petroleum Corporation Limited</div>
+                  <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.08em', color: T.orange, fontFamily: font, textTransform: 'uppercase', marginBottom: 3 }}>
+                    Tender Reference: CPCL/2026/TE/045
+                  </div>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: T.ink, fontFamily: fontHead }}>
+                    Supply of High Pressure API 6D Valves
+                  </div>
+                  <div style={{ fontSize: 11, color: T.inkMuted, fontFamily: font, marginTop: 2 }}>
+                    Chennai Petroleum Corporation Limited (CPCL) · Est. ₹8.45 Cr
+                  </div>
                 </div>
                 <span style={{
-                  padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 600, fontFamily: font,
-                  color: '#92400e', background: '#fef3c7', border: '1px solid #fde68a',
+                  padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, fontFamily: font,
+                  color: T.orange, background: T.orangeSubtle, border: `1px solid ${T.orangeBorder}`,
                   display: 'flex', alignItems: 'center', gap: 4,
-                }}>⏳ In Progress</span>
+                }}>
+                  ⏳ Under Review
+                </span>
               </div>
 
-              {/* Bidder row */}
-              <div style={{ background: T.surfaceAlt, borderRadius: 10, padding: '12px 14px', marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 8, background: `${T.navy}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🏭</div>
+              {/* Bidder Profile */}
+              <div style={{ background: T.surfaceWarm, borderRadius: 10, padding: '12px 14px', marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: `1px solid ${T.orangeBorder}` }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ width: 34, height: 34, borderRadius: 8, background: T.orange, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800 }}>
+                    ABC
+                  </div>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: T.ink, fontFamily: font }}>ABC Engineering Pvt. Ltd.</div>
-                    <div style={{ fontSize: 11, color: T.inkFaint, fontFamily: font }}>Micro Enterprise · Udyam Registered</div>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: T.ink, fontFamily: fontHead }}>ABC Engineering Ltd</div>
+                    <div style={{ fontSize: 11, color: T.inkMuted, fontFamily: font }}>Class-I Local Supplier · Udyam-TN-02-0045892</div>
                   </div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: 11, color: T.inkFaint, fontFamily: font }}>Documents</div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: T.navy, fontFamily: font }}>6 / 8</div>
+                  <div style={{ fontSize: 10, color: T.inkFaint, fontFamily: font, textTransform: 'uppercase', fontWeight: 700 }}>Statutory Files</div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: T.green, fontFamily: fontMono }}>10 / 10 Verified</div>
                 </div>
               </div>
 
-              {/* Progress bar */}
+              {/* Progress Meter */}
               <div style={{ marginBottom: 14 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                  <span style={{ fontSize: 11, color: T.inkMuted, fontFamily: font, fontWeight: 600 }}>Document verification in progress</span>
-                  <span style={{ fontSize: 11, color: T.navy, fontFamily: font, fontWeight: 700 }}>75%</span>
+                  <span style={{ fontSize: 11, color: T.inkMuted, fontFamily: font, fontWeight: 600 }}>10-Stage Forensic Check: Stage 9 of 10</span>
+                  <span style={{ fontSize: 11, color: T.orange, fontFamily: fontMono, fontWeight: 800 }}>90%</span>
                 </div>
-                <div style={{ height: 6, background: T.border, borderRadius: 999, overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: '75%', background: `linear-gradient(90deg, ${T.navy}, ${T.tealLight})`, borderRadius: 999, transition: 'width 1s ease' }} />
+                <div style={{ height: 8, background: '#f1f5f9', borderRadius: 999, overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: '90%', background: `linear-gradient(90deg, ${T.orange} 0%, ${T.green} 100%)`, borderRadius: 999 }} />
                 </div>
               </div>
 
-              {/* Compliance chips */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6, marginBottom: 14 }}>
+              {/* Compliance Badges Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6, marginBottom: 16 }}>
                 {[
-                  { label: 'GST', status: 'Verified', ok: true },
-                  { label: 'PAN', status: 'Verified', ok: true },
-                  { label: 'Udyam', status: 'Verified', ok: true },
-                  { label: 'ITR', status: 'Verified', ok: true },
-                  { label: 'EPFO', status: 'Verified', ok: true },
-                  { label: 'OEM Auth', status: 'Uploaded', ok: false },
+                  { label: 'GSTN (Active)', status: 'Active 24M', ok: true },
+                  { label: 'Udyam Databank', status: 'Class-I MSME', ok: true },
+                  { label: 'CBDT / 3Y ITR', status: 'Filed', ok: true },
+                  { label: 'EPFO & ESIC', status: '142 Workers', ok: true },
+                  { label: 'Debarment CVC', status: 'Clean Record', ok: true },
+                  { label: 'MII vs BOQ', status: 'Inconsistency', ok: false },
                 ].map(({ label, status, ok }) => (
                   <div key={label} style={{
-                    padding: '6px 10px', borderRadius: 8, fontSize: 11, fontFamily: font,
-                    background: ok ? '#f0fdf4' : '#fefce8',
-                    border: `1px solid ${ok ? '#bbf7d0' : '#fde68a'}`,
-                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                    color: ok ? '#065f46' : '#92400e',
+                    padding: '6px 8px', borderRadius: 7, fontSize: 10, fontFamily: font,
+                    background: ok ? T.greenSubtle : T.orangeSubtle,
+                    border: `1px solid ${ok ? T.greenBorder : T.orangeBorder}`,
+                    display: 'flex', flexDirection: 'column', gap: 2,
+                    color: ok ? T.green : T.orange,
                   }}>
-                    <span style={{ fontWeight: 700 }}>{label}</span>
-                    <span>{ok ? '✓' : '↑'} {status}</span>
+                    <span style={{ fontWeight: 800 }}>{label}</span>
+                    <span style={{ fontSize: 9, opacity: 0.85 }}>{ok ? '✓' : '⚠'} {status}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Run AI Analysis CTA */}
-              <button style={{
-                width: '100%', padding: '11px', borderRadius: 10,
-                background: `linear-gradient(135deg, ${T.navy}12, ${T.teal}12)`,
-                border: `1.5px dashed ${T.navy}40`,
-                color: T.navy, fontWeight: 700, fontSize: 13, fontFamily: font, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = `${T.navy}12`; e.currentTarget.style.borderColor = T.navy; }}
-              onMouseLeave={e => { e.currentTarget.style.background = `linear-gradient(135deg, ${T.navy}12, ${T.teal}12)`; e.currentTarget.style.borderColor = `${T.navy}40`; }}
+              {/* Action Button that goes to login/officer console */}
+              <button
+                onClick={onLogin}
+                style={{
+                  width: '100%', padding: '11px', borderRadius: 10,
+                  background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`,
+                  border: 'none',
+                  color: 'white', fontWeight: 800, fontSize: 13, fontFamily: font, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  boxShadow: `0 4px 14px ${T.navy}35`,
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
               >
-                🤖 Run AI Compliance Analysis
-                <span style={{ fontWeight: 400, color: T.inkFaint, fontSize: 11 }}>(Officer Action Required)</span>
+                <span>🔍</span>
+                <span>Open Forensic Evidence & Scorecard</span>
+                <span>→</span>
               </button>
             </div>
           </div>
@@ -410,22 +464,28 @@ const HeroSection: React.FC<HeroProps> = ({ onExplore, onLogin }) => (
 
 /* ─── STATS SECTION ──────────────────────────────────────────── */
 const StatsSection: React.FC = () => (
-  <section style={{ background: T.navy, padding: '56px 24px' }}>
+  <section style={{ background: T.navy, padding: '52px 24px', borderBottom: `3px solid ${T.orange}` }}>
     <div style={{ maxWidth: 1280, margin: '0 auto' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }}>
         {[
-          { val: '60–80%', label: 'Reduction in manual verification effort', sub: 'Target operational benchmark' },
-          { val: '10+', label: 'Government registries integrated', sub: 'GST, PAN, MSME, EPFO & more' },
-          { val: '4 CPSEs', label: 'Active PSU procurement tenders', sub: 'CPCL · IOCL · ONGC · GAIL' },
-          { val: 'AI-First', label: 'Compliance matrix evaluation', sub: 'Human officer retains authority' },
-        ].map(({ val, label, sub }, i) => (
+          { val: '60–80%', valColor: T.orangeLight, label: 'Faster Technical Evaluation', sub: 'Reduces weeks of manual document checks to minutes' },
+          { val: '10+', valColor: '#4ade80', label: 'Government Registries Verified', sub: 'GSTN, CBDT, MSME Udyam, EPFO, ESIC & MCA21' },
+          { val: '₹450+ Cr', valColor: T.orangeLight, label: 'PSU Procurement Analyzed', sub: 'CPCL, IOCL, ONGC, GAIL & Central Departments' },
+          { val: '100%', valColor: '#4ade80', label: 'GFR 2017 & CVC Auditable', sub: 'Officers retain sovereign authority with signed DSC' },
+        ].map(({ val, valColor, label, sub }, i) => (
           <div key={i} style={{
-            padding: '32px 36px',
-            borderRight: i < 3 ? `1px solid rgba(255,255,255,0.1)` : 'none',
+            padding: '24px 32px',
+            borderRight: i < 3 ? `1px solid rgba(255,255,255,0.12)` : 'none',
           }}>
-            <div style={{ fontSize: 40, fontWeight: 800, color: 'white', fontFamily: fontSerif, lineHeight: 1, marginBottom: 10 }}>{val}</div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.85)', fontFamily: font, marginBottom: 4 }}>{label}</div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontFamily: font }}>{sub}</div>
+            <div style={{ fontSize: 36, fontWeight: 900, color: valColor, fontFamily: fontHead, lineHeight: 1, marginBottom: 8, letterSpacing: '-0.02em' }}>
+              {val}
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 800, color: '#ffffff', fontFamily: font, marginBottom: 4 }}>
+              {label}
+            </div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', fontFamily: font, lineHeight: 1.5 }}>
+              {sub}
+            </div>
           </div>
         ))}
       </div>
@@ -433,172 +493,203 @@ const StatsSection: React.FC = () => (
   </section>
 );
 
-/* ─── BUYER / SUPPLIER SPLIT ─────────────────────────────────── */
+/* ─── DUAL WORKSPACE JOURNEY (BIDDER vs OFFICER) ─────────────── */
 interface JourneyProps { onBidder: () => void; onOfficer: () => void; }
 const JourneySection: React.FC<JourneyProps> = ({ onBidder, onOfficer }) => (
-  <section id="journeys" style={{ padding: '96px 24px', background: '#ffffff' }}>
+  <section id="journeys" style={{ padding: '90px 24px', background: '#ffffff' }}>
     <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: 64 }}>
-        <Badge label="Structured Procurement" color={T.navy} bg={`${T.navy}10`} />
-        <h2 style={{ fontFamily: fontSerif, fontSize: 40, fontWeight: 700, color: T.ink, margin: '20px 0 16px', letterSpacing: '-0.02em' }}>
-          One platform. Two procurement journeys.
+      <div style={{ textAlign: 'center', marginBottom: 56 }}>
+        <Badge label="Integrated Procurement Ecosystem" color={T.navy} bg={T.navySubtle} borderColor="#bfdbfe" />
+        <h2 style={{ fontFamily: fontHead, fontSize: 38, fontWeight: 900, color: T.ink, margin: '16px 0 12px', letterSpacing: '-0.025em' }}>
+          Tailored Workspaces for Bidders & Officers
         </h2>
-        <p style={{ fontFamily: font, fontSize: 17, color: T.inkMuted, maxWidth: 560, margin: '0 auto' }}>
-          Connecting verified bidders with procurement officers through a transparent, AI-assisted workflow.
+        <p style={{ fontFamily: font, fontSize: 16, color: T.inkMuted, maxWidth: 580, margin: '0 auto' }}>
+          Whether you are an enterprise supplier submitting compliant bids or an evaluation committee verifying statutory eligibility, GemxAI streamlines your workflow.
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28 }}>
-        {/* Bidder Panel */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
+        {/* Bidder Card — GeM Orange Accent */}
         <div style={{
-          borderRadius: 20, padding: '44px', border: `1px solid ${T.border}`,
-          background: 'linear-gradient(145deg, #fafbff 0%, #ffffff 100%)',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.04)',
-          transition: 'all 0.3s', cursor: 'default',
+          borderRadius: 20, padding: '40px', border: `1.5px solid ${T.orangeBorder}`,
+          background: `linear-gradient(145deg, #ffffff 0%, ${T.surfaceWarm} 100%)`,
+          boxShadow: '0 8px 30px rgba(243,112,33,0.08)',
+          transition: 'all 0.3s',
         }}
-          onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 16px 48px ${T.navy}12`; e.currentTarget.style.borderColor = `${T.navy}30`; }}
-          onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.04)'; e.currentTarget.style.borderColor = T.border; }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 16px 40px rgba(243,112,33,0.18)`; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(243,112,33,0.08)'; }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
-            <div style={{ width: 52, height: 52, borderRadius: 14, background: T.surfaceBlue, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>🏭</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
+            <div style={{ width: 52, height: 52, borderRadius: 14, background: T.orangeSubtle, border: `1px solid ${T.orangeBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>
+              🏭
+            </div>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', color: T.teal, fontFamily: font, textTransform: 'uppercase' }}>Vendor & MSME Ecosystem</div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: T.ink, fontFamily: fontSerif }}>For Bidders</div>
+              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', color: T.orange, fontFamily: font, textTransform: 'uppercase' }}>
+                For Registered Suppliers & MSMEs
+              </div>
+              <div style={{ fontSize: 24, fontWeight: 900, color: T.ink, fontFamily: fontHead }}>
+                Bidder Workspace
+              </div>
             </div>
           </div>
 
-          <div style={{ marginBottom: 32 }}>
+          <p style={{ fontSize: 14, color: T.inkMuted, lineHeight: 1.6, marginBottom: 20 }}>
+            Prepare, validate, and track tender dossiers with real-time statutory checklist guidance before formal submission.
+          </p>
+
+          <div style={{ marginBottom: 28 }}>
             {[
-              ['🔍', 'Discover tenders by category, organisation, or location'],
-              ['📋', 'Review NIT conditions and mandatory qualification criteria'],
-              ['📤', 'Upload and manage statutory compliance documents'],
-              ['✅', 'Submit bids with pre-verified registry credentials'],
-              ['📊', 'Track submission status and evaluation progress'],
+              ['🔍', 'Discover PSU tenders by sector, department, and closing date'],
+              ['📑', 'Review GFR eligibility criteria and mandatory statutory documents'],
+              ['📤', 'Upload 10-point checklist (GST, PAN, MSME, ITR, EPFO, MII)'],
+              ['🏷️', 'Receive instant cryptographic submission receipts with unique IDs'],
+              ['📈', 'Real-time status tracking throughout evaluation phases'],
             ].map(([icon, text], i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'start', gap: 12, padding: '10px 0', borderBottom: i < 4 ? `1px solid ${T.border}` : 'none' }}>
-                <span style={{ fontSize: 16, marginTop: 1 }}>{icon}</span>
-                <span style={{ fontSize: 14, color: T.inkMuted, fontFamily: font, fontWeight: 500, lineHeight: 1.5 }}>{text}</span>
+              <div key={i} style={{ display: 'flex', alignItems: 'start', gap: 12, padding: '9px 0', borderBottom: i < 4 ? `1px solid ${T.border}` : 'none' }}>
+                <span style={{ fontSize: 16 }}>{icon}</span>
+                <span style={{ fontSize: 13, color: T.ink, fontFamily: font, fontWeight: 600, lineHeight: 1.5 }}>{text}</span>
               </div>
             ))}
           </div>
 
           <button onClick={onBidder}
             style={{
-              width: '100%', padding: '13px', borderRadius: 10, fontSize: 14, fontWeight: 700, fontFamily: font,
-              background: T.surfaceBlue, border: `1.5px solid ${T.navy}25`, color: T.navy, cursor: 'pointer',
+              width: '100%', padding: '14px', borderRadius: 10, fontSize: 14, fontWeight: 800, fontFamily: font,
+              background: `linear-gradient(135deg, ${T.orange} 0%, ${T.orangeDark} 100%)`,
+              border: 'none', color: 'white', cursor: 'pointer',
+              boxShadow: `0 4px 16px ${T.orange}40`,
               transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = `${T.navy}15`; e.currentTarget.style.borderColor = T.navy; }}
-            onMouseLeave={e => { e.currentTarget.style.background = T.surfaceBlue; e.currentTarget.style.borderColor = `${T.navy}25`; }}
-          >Explore Tenders <span>→</span></button>
+            onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 6px 20px ${T.orange}60`; }}
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = `0 4px 16px ${T.orange}40`; }}
+          >
+            <span>Explore Tenders as Bidder</span>
+            <span>→</span>
+          </button>
         </div>
 
-        {/* Officer Panel */}
+        {/* Officer Card — Navigates directly to 2nd screenshot (LoginPage in Officer Mode) */}
         <div style={{
-          borderRadius: 20, padding: '44px', border: `1px solid ${T.border}`,
-          background: `linear-gradient(145deg, ${T.navy} 0%, ${T.navyLight} 100%)`,
-          boxShadow: `0 4px 24px ${T.navy}20`,
-          color: 'white', transition: 'all 0.3s',
+          borderRadius: 20, padding: '40px', border: `1.5px solid ${T.greenBorder}`,
+          background: `linear-gradient(145deg, #ffffff 0%, ${T.greenSubtle} 100%)`,
+          boxShadow: '0 8px 30px rgba(19,136,8,0.08)',
+          transition: 'all 0.3s',
         }}
-          onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 20px 56px ${T.navy}35`; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-          onMouseLeave={e => { e.currentTarget.style.boxShadow = `0 4px 24px ${T.navy}20`; e.currentTarget.style.transform = 'none'; }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 16px 40px rgba(19,136,8,0.18)`; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(19,136,8,0.08)'; }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
-            <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>🏛️</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
+            <div style={{ width: 52, height: 52, borderRadius: 14, background: T.greenSubtle, border: `1px solid ${T.greenBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>
+              🛡️
+            </div>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.6)', fontFamily: font, textTransform: 'uppercase' }}>Evaluation Committee</div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: 'white', fontFamily: fontSerif }}>For Officers</div>
+              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', color: T.green, fontFamily: font, textTransform: 'uppercase' }}>
+                For Procurement Officers & TEC
+              </div>
+              <div style={{ fontSize: 24, fontWeight: 900, color: T.ink, fontFamily: fontHead }}>
+                Officer Evaluation Console
+              </div>
             </div>
           </div>
 
-          <div style={{ marginBottom: 32 }}>
+          <p style={{ fontSize: 14, color: T.inkMuted, lineHeight: 1.6, marginBottom: 20 }}>
+            Verify statutory returns, detect forensic inconsistencies, and execute committee decisions with digital signature token signing.
+          </p>
+
+          <div style={{ marginBottom: 28 }}>
             {[
-              ['📁', 'Manage and publish tenders with NIT configuration'],
-              ['👥', 'Review all bidder submissions in one dashboard'],
-              ['🔍', 'Verify statutory documents across government registries'],
-              ['🤖', 'Run AI-assisted compliance analysis and gap detection'],
-              ['✍️', 'Record final evaluation with justified, audit-ready rationale'],
+              ['📋', 'Tender-wide overview of active bids, document counts, and statuses'],
+              ['🤖', 'On-demand officer-initiated 10-stage forensic AI verification'],
+              ['🔍', 'Side-by-side evidence viewer (Make-in-India vs BOQ triangulation)'],
+              ['📊', '13-point statutory compliance scorecard and anomaly detector'],
+              ['✍️', 'Human-in-the-loop decision recording (Qualify, Reject, Clarify)'],
             ].map(([icon, text], i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'start', gap: 12, padding: '10px 0', borderBottom: i < 4 ? `1px solid rgba(255,255,255,0.1)` : 'none' }}>
-                <span style={{ fontSize: 16, marginTop: 1 }}>{icon}</span>
-                <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.80)', fontFamily: font, fontWeight: 500, lineHeight: 1.5 }}>{text}</span>
+              <div key={i} style={{ display: 'flex', alignItems: 'start', gap: 12, padding: '9px 0', borderBottom: i < 4 ? `1px solid ${T.border}` : 'none' }}>
+                <span style={{ fontSize: 16 }}>{icon}</span>
+                <span style={{ fontSize: 13, color: T.ink, fontFamily: font, fontWeight: 600, lineHeight: 1.5 }}>{text}</span>
               </div>
             ))}
           </div>
 
           <button onClick={onOfficer}
             style={{
-              width: '100%', padding: '13px', borderRadius: 10, fontSize: 14, fontWeight: 700, fontFamily: font,
-              background: 'white', border: 'none', color: T.navy, cursor: 'pointer',
+              width: '100%', padding: '14px', borderRadius: 10, fontSize: 14, fontWeight: 800, fontFamily: font,
+              background: `linear-gradient(135deg, ${T.navy} 0%, ${T.navyLight} 100%)`,
+              border: 'none', color: 'white', cursor: 'pointer',
+              boxShadow: `0 4px 16px ${T.navy}35`,
               transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
             }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.2)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.15)'; }}
-          >Officer Login <span>→</span></button>
+            onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 6px 20px ${T.navy}55`; }}
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = `0 4px 16px ${T.navy}35`; }}
+          >
+            <span>Enter Officer Console</span>
+            <span>→</span>
+          </button>
         </div>
       </div>
     </div>
   </section>
 );
 
-/* ─── AI PROCESS SECTION ─────────────────────────────────────── */
+/* ─── 6-STEP AI PROCESS PIPELINE ─────────────────────────────── */
 const AIProcessSection: React.FC = () => {
   const steps = [
-    { num: '01', icon: '📋', title: 'Tender Requirements', desc: 'NIT clauses, statutory criteria, and GFR 2017 rules configured.' },
-    { num: '02', icon: '📤', title: 'Bidder Documents', desc: 'Submissions, certificates, and BOQ schedules ingested.' },
-    { num: '03', icon: '🔍', title: 'Registry Verification', desc: 'Cross-referencing across GSTN, Udyam, MCA21, and CBDT.' },
-    { num: '04', icon: '🤖', title: 'AI Compliance Analysis', desc: 'Pattern matching verifies eligibility against evidence.' },
-    { num: '05', icon: '⚠️', title: 'Gap Detection', desc: 'Missing documents, mismatches, and risk flags surfaced.' },
-    { num: '06', icon: '✍️', title: 'Officer Review', desc: 'Committee reviews dossier and records final verdict.' },
+    { num: '01', icon: '📥', title: 'Document Ingestion', desc: 'Secure upload of all 10 statutory bids, affidavits, and BOQs.' },
+    { num: '02', icon: '🔤', title: 'Multimodal OCR', desc: 'Text extraction, QR code checksum check, and seal authentication.' },
+    { num: '03', icon: '🌐', title: 'Sovereign APIs', desc: 'Real-time cross-checking with GSTN, MCA21, CBDT, and Udyam.' },
+    { num: '04', icon: '⚖️', title: 'Forensic Triangulation', desc: 'Local content claim cross-checked against imported item origins.' },
+    { num: '05', icon: '📊', title: 'Scorecard & Advisory', desc: '13-point compliance matrix with low/medium/high risk tiers.' },
+    { num: '06', icon: '✍️', title: 'Officer Signing', desc: 'Committee records binding verdict with DSC authorization.' },
   ];
 
   return (
-    <section style={{ padding: '96px 24px', background: T.surfaceAlt }}>
+    <section id="how-it-works" style={{ padding: '90px 24px', background: T.surfaceAlt, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 64 }}>
-          <Badge label="AI-Powered Workflow" color={T.teal} bg='#e0f2fe' />
-          <h2 style={{ fontFamily: fontSerif, fontSize: 40, fontWeight: 700, color: T.ink, margin: '20px 0 16px', letterSpacing: '-0.02em' }}>
-            From documents to decisions — intelligently.
+        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <Badge label="End-to-End Pipeline" color={T.green} bg={T.greenSubtle} borderColor={T.greenBorder} />
+          <h2 style={{ fontFamily: fontHead, fontSize: 38, fontWeight: 900, color: T.ink, margin: '16px 0 12px', letterSpacing: '-0.025em' }}>
+            From statutory documents to certified decisions.
           </h2>
-          <p style={{ fontFamily: font, fontSize: 17, color: T.inkMuted, maxWidth: 560, margin: '0 auto' }}>
-            A structured 6-step pipeline that transforms procurement from a manual bottleneck to an evidence-based, auditable workflow.
+          <p style={{ fontFamily: font, fontSize: 16, color: T.inkMuted, maxWidth: 600, margin: '0 auto' }}>
+            A transparent, audit-ready compliance verification architecture that pairs forensic speed with statutory accountability.
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 16, position: 'relative', marginBottom: 40 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 16, marginBottom: 36 }}>
           {steps.map(({ num, icon, title, desc }, i) => (
-            <div key={i} style={{ position: 'relative' }}>
-              <div style={{
-                background: 'white', borderRadius: 16, padding: '24px 18px',
-                border: `1px solid ${T.border}`, height: '100%',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
-                transition: 'all 0.25s',
-              }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 12px 36px ${T.navy}12`; e.currentTarget.style.borderColor = `${T.navy}30`; e.currentTarget.style.transform = 'translateY(-4px)'; }}
-                onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)'; e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'none'; }}
-              >
-                <div style={{ fontFamily: fontMono, fontSize: 10, fontWeight: 700, color: T.navy, letterSpacing: '0.1em', marginBottom: 10 }}>{num}</div>
-                <div style={{ fontSize: 26, marginBottom: 10 }}>{icon}</div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: T.ink, fontFamily: font, marginBottom: 8, lineHeight: 1.3 }}>{title}</div>
-                <div style={{ fontSize: 12, color: T.inkMuted, fontFamily: font, lineHeight: 1.6 }}>{desc}</div>
+            <div key={i} style={{
+              background: 'white', borderRadius: 16, padding: '24px 18px',
+              border: `1.5px solid ${i === 3 ? T.orangeBorder : i === 4 ? T.greenBorder : T.border}`,
+              boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
+              transition: 'all 0.25s',
+              position: 'relative',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 10px 24px rgba(0,45,98,0.08)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.03)'; }}
+            >
+              <div style={{ fontFamily: fontMono, fontSize: 11, fontWeight: 800, color: i < 3 ? T.orange : T.green, marginBottom: 10 }}>
+                {num}
               </div>
-              {i < steps.length - 1 && (
-                <div style={{ position: 'absolute', top: '38px', right: -12, zIndex: 1, fontSize: 16, color: T.inkFaint }}>›</div>
-              )}
+              <div style={{ fontSize: 26, marginBottom: 12 }}>{icon}</div>
+              <div style={{ fontSize: 13, fontWeight: 800, color: T.ink, fontFamily: fontHead, marginBottom: 6, lineHeight: 1.3 }}>
+                {title}
+              </div>
+              <div style={{ fontSize: 11, color: T.inkMuted, fontFamily: font, lineHeight: 1.6 }}>
+                {desc}
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Officer Authority Disclaimer */}
+        {/* Legal Disclaimer Box */}
         <div style={{
-          background: 'white', border: `1px solid #fde68a`, borderRadius: 12, padding: '16px 24px',
-          display: 'flex', alignItems: 'center', gap: 14, maxWidth: 900, margin: '0 auto',
+          background: '#ffffff', border: `1.5px solid ${T.orangeBorder}`, borderRadius: 12, padding: '16px 24px',
+          display: 'flex', alignItems: 'center', gap: 16, maxWidth: 940, margin: '0 auto',
+          boxShadow: '0 2px 8px rgba(243,112,33,0.06)',
         }}>
-          <span style={{ fontSize: 22 }}>⚖️</span>
-          <p style={{ fontFamily: font, fontSize: 13, color: '#92400e', fontWeight: 500, margin: 0, lineHeight: 1.6 }}>
-            <strong style={{ color: '#78350f' }}>Officer Authority Notice:</strong> AI provides decision support only. Final qualification, disqualification, 
-            or award decisions remain the sole responsibility of the Procurement Officer and Tender Evaluation Committee under GFR 2017 Rule 173.
+          <span style={{ fontSize: 24 }}>⚖️</span>
+          <p style={{ fontFamily: font, fontSize: 13, color: '#7c2d12', fontWeight: 600, margin: 0, lineHeight: 1.6 }}>
+            <strong>Human-in-the-Loop Governance Notice:</strong> Under GFR 2017 Rule 173 and CVC Procurement Guidelines, AI serves strictly as an analytical decision-support copilot. Final technical qualification or disqualification remains the exclusive statutory authority of the Procurement Officer.
           </p>
         </div>
       </div>
@@ -609,38 +700,37 @@ const AIProcessSection: React.FC = () => {
 /* ─── PLATFORM BENEFITS ──────────────────────────────────────── */
 const BenefitsSection: React.FC = () => {
   const benefits = [
-    { icon: '⚡', title: 'Faster Verification', desc: 'Automated registry queries cut processing from weeks to hours. Simultaneous cross-checking across GSTN, CBDT, Udyam and more.', color: T.teal },
-    { icon: '🎯', title: 'AI-Assisted Compliance', desc: 'Multimodal AI compares BOQ specs, local content declarations, and technical qualifications against tender requirements.', color: T.navy },
-    { icon: '🔍', title: 'Full Traceability', desc: 'Every verified point links to source API receipts, portal screenshots, and timestamped evidence.', color: T.emerald },
-    { icon: '⚖️', title: 'Standardised Screening', desc: 'Deterministic GFR 2017 criteria applied equally to all bidders, eliminating subjectivity and ensuring fair competition.', color: T.saffron },
-    { icon: '📋', title: 'Audit Ready', desc: 'Immutable, tamper-evident evaluation logs exportable for CAG, CVC, and departmental audit review.', color: '#7c3aed' },
+    { icon: '⚡', title: 'Instant Registry Triangulation', desc: 'Direct statutory validation against GSTN, Udyam, CBDT, and EPFO reduces evaluation cycles from 45 days to hours.', color: T.orange },
+    { icon: '🎯', title: 'Cross-Document Inconsistency Detection', desc: 'AI cross-references Make-in-India declarations against component origins in Technical BOQs to uncover masked imports.', color: T.green },
+    { icon: '🔍', title: 'Side-by-Side Forensic Evidence', desc: 'Officers review highlighted excerpts from statutory declarations and technical catalogs with complete source page citations.', color: T.navy },
+    { icon: '⚖️', title: '13-Point Compliance Scoring', desc: 'Objective, rule-based scoring eliminates subjective bias and applies GFR 2017 criteria equally to every enterprise.', color: T.orange },
+    { icon: '📜', title: 'CVC & CAG Audit-Ready Logs', desc: 'Immutable, tamper-evident audit dossiers preserve every API response, anomaly note, and officer justification.', color: T.green },
   ];
 
   return (
-    <section id="benefits" style={{ padding: '96px 24px', background: 'white' }}>
+    <section id="benefits" style={{ padding: '90px 24px', background: 'white' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '380px 1fr', gap: 80, alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '380px 1fr', gap: 60, alignItems: 'center' }}>
           <div>
-            <Badge label="Platform Capabilities" color={T.emerald} bg='#f0fdf4' />
-            <h2 style={{ fontFamily: fontSerif, fontSize: 38, fontWeight: 700, color: T.ink, margin: '20px 0 20px', lineHeight: 1.25, letterSpacing: '-0.02em' }}>
-              Built for modern government procurement.
+            <Badge label="Core Capabilities" color={T.orange} bg={T.orangeSubtle} borderColor={T.orangeBorder} />
+            <h2 style={{ fontFamily: fontHead, fontSize: 36, fontWeight: 900, color: T.ink, margin: '16px 0 14px', lineHeight: 1.25, letterSpacing: '-0.025em' }}>
+              Built for integrity in government tenders.
             </h2>
-            <p style={{ fontFamily: font, fontSize: 16, color: T.inkMuted, lineHeight: 1.7, margin: 0 }}>
-              Engineered to support procurement officers with consistency, clarity, and institutional speed. 
-              Grounded in statutory compliance, not marketing promises.
+            <p style={{ fontFamily: font, fontSize: 15, color: T.inkMuted, lineHeight: 1.7, margin: 0 }}>
+              GemxAI brings enterprise-grade forensic precision to central PSUs and government departments, protecting public funds and fostering fair competition for domestic manufacturers.
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
             {benefits.map(({ icon, title, desc, color }, i) => (
               <div key={i} style={{
-                borderRadius: 16, padding: '28px',
+                borderRadius: 16, padding: '24px',
                 border: `1px solid ${T.border}`,
                 gridColumn: i === 4 ? '1 / -1' : undefined,
                 transition: 'all 0.25s',
                 background: 'white',
               }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 12px 40px ${color}15`; e.currentTarget.style.borderColor = `${color}30`; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 10px 30px ${color}15`; e.currentTarget.style.borderColor = color; e.currentTarget.style.transform = 'translateY(-2px)'; }}
                 onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'none'; }}
               >
                 <div style={{
@@ -648,8 +738,8 @@ const BenefitsSection: React.FC = () => {
                   background: `${color}12`, display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 22, marginBottom: 14,
                 }}>{icon}</div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: T.ink, fontFamily: font, marginBottom: 8 }}>{title}</div>
-                <div style={{ fontSize: 13, color: T.inkMuted, fontFamily: font, lineHeight: 1.65 }}>{desc}</div>
+                <div style={{ fontSize: 15, fontWeight: 800, color: T.ink, fontFamily: fontHead, marginBottom: 6 }}>{title}</div>
+                <div style={{ fontSize: 13, color: T.inkMuted, fontFamily: font, lineHeight: 1.6 }}>{desc}</div>
               </div>
             ))}
           </div>
@@ -659,217 +749,154 @@ const BenefitsSection: React.FC = () => {
   );
 };
 
-/* ─── IMPACT / MERCELL-STYLE EDITORIAL STATS ─────────────────── */
-const ImpactSection: React.FC = () => (
-  <section id="impact" style={{ padding: '96px 24px', background: T.surfaceAlt, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
-    <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: 72 }}>
-        <Badge label="Impact & Efficiency" color={T.navy} bg={`${T.navy}10`} />
-        <h2 style={{ fontFamily: fontSerif, fontSize: 40, fontWeight: 700, color: T.ink, margin: '20px 0 0', letterSpacing: '-0.02em' }}>
-          Designed to make procurement more efficient.
-        </h2>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 40 }}>
-        {[
-          { val: '60–80%', caption: 'Reduction in verification effort', desc: 'Target potential reduction in manual document cross-referencing and verification cycles.' },
-          { val: '1 Platform', caption: 'Unified procurement journey', desc: 'Synchronized workspace supporting both bidder submission and officer evaluation.' },
-          { val: 'AI-Assisted', caption: 'Evidence-based verification', desc: 'Automated extraction and rule evaluation with direct traceability to supporting records.' },
-          { val: 'End-to-End', caption: 'Structured procurement workflow', desc: 'From tender requirements definition to final qualified bidder committee reporting.' },
-        ].map(({ val, caption, desc }, i) => (
-          <div key={i}>
-            <div style={{ fontFamily: fontSerif, fontSize: 42, fontWeight: 800, color: T.navy, lineHeight: 1, marginBottom: 10 }}>{val}</div>
-            <div style={{ fontFamily: font, fontSize: 14, fontWeight: 700, color: T.ink, marginBottom: 8 }}>{caption}</div>
-            <div style={{ fontFamily: font, fontSize: 13, color: T.inkMuted, lineHeight: 1.65 }}>{desc}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-/* ─── VERIFICATION ECOSYSTEM ─────────────────────────────────── */
-const EcosystemSection: React.FC = () => {
-  const sources = [
-    { icon: '🏢', name: 'GST Network', agency: 'GSTN', scope: 'Active status & GSTR-3B filings' },
-    { icon: '💳', name: 'PAN / Income Tax', agency: 'CBDT', scope: '3-Year ITR compliance & entity match' },
-    { icon: '🏭', name: 'Udyam / MSME', agency: 'Ministry of MSME', scope: 'Enterprise tier & investment limits' },
-    { icon: '👥', name: 'EPFO', agency: 'Labour & Employment', scope: 'ECR returns & active workforce' },
-    { icon: '❤️', name: 'ESIC', agency: 'Min. of Labour', scope: 'Social security compliance' },
-    { icon: '🚀', name: 'Startup India', agency: 'DPIIT', scope: 'Turnover & experience exemptions' },
-    { icon: '🏆', name: 'NSIC', agency: 'National Small Industries', scope: 'Single Point Registration' },
-    { icon: '📁', name: 'DigiLocker', agency: 'MeitY / NE-Gov', scope: 'Cryptographic document verification' },
-    { icon: '🏭', name: 'OEM Authorization', agency: 'Manufacturer Verification', scope: 'Direct tender authorization' },
-    { icon: '🚫', name: 'Debarment Check', agency: 'CVC / CBI', scope: 'GFR 2017 Rule 151 holiday scan' },
-  ];
-
-  return (
-    <section id="verification-ecosystem" style={{ padding: '96px 24px', background: 'white' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 56 }}>
-          <Badge label="Interoperable Registries" color={T.teal} bg='#e0f2fe' />
-          <h2 style={{ fontFamily: fontSerif, fontSize: 40, fontWeight: 700, color: T.ink, margin: '20px 0 16px', letterSpacing: '-0.02em' }}>
-            Designed for connected verification.
-          </h2>
-          <p style={{ fontFamily: font, fontSize: 17, color: T.inkMuted, maxWidth: 600, margin: '0 auto' }}>
-            Engineered to interface with sovereign statutory registries and credential networks for automated compliance cross-referencing.
-          </p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16, marginBottom: 32 }}>
-          {sources.map(({ icon, name, agency, scope }, i) => (
-            <div key={i} style={{
-              background: T.surfaceAlt, borderRadius: 14, padding: '20px',
-              border: `1px solid ${T.border}`, transition: 'all 0.2s',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'white'; e.currentTarget.style.boxShadow = `0 8px 32px ${T.navy}10`; e.currentTarget.style.borderColor = `${T.navy}25`; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = T.surfaceAlt; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'none'; }}
-            >
-              <div style={{ fontSize: 24, marginBottom: 10 }}>{icon}</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: T.ink, fontFamily: font, marginBottom: 4 }}>{name}</div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: T.teal, fontFamily: font, marginBottom: 6 }}>{agency}</div>
-              <div style={{ fontSize: 11, color: T.inkMuted, fontFamily: font, lineHeight: 1.5 }}>{scope}</div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ textAlign: 'center' }}>
-          <span style={{
-            display: 'inline-block', background: '#fefce8', border: '1px solid #fde68a',
-            borderRadius: 10, padding: '10px 20px', fontSize: 12, color: '#92400e', fontFamily: font, fontWeight: 500,
-          }}>
-            ⚠️ Connectors operate within statutory sandbox protocols and authorized departmental API frameworks under GFR 2017.
-          </span>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ─── ACTIVE TENDERS ─────────────────────────────────────────── */
+/* ─── LIVE PSU TENDERS ───────────────────────────────────────── */
 const tenders = [
-  { ref: 'CPCL/PROC/2026/001', title: 'Industrial Equipment Procurement — Cryogenic Heat Exchanger Packages', org: 'Chennai Petroleum Corporation Limited (CPCL)', cat: 'Heavy Engineering', val: '₹14.80 Cr', close: '18 Sep 2026', location: 'Manali Refinery, Chennai' },
-  { ref: 'IOCL/ENG/2026/088', title: 'High-Pressure Electro-Hydraulic Turbine Actuators & Control Valves', org: 'Indian Oil Corporation Limited (IOCL)', cat: 'Oil & Gas / Energy', val: '₹8.40 Cr', close: '24 Sep 2026', location: 'Panipat Refinery, Haryana' },
+  { ref: 'CPCL/2026/TE/045', title: 'Supply of High Pressure API 6D Gate, Globe & Check Valves', org: 'Chennai Petroleum Corporation Limited (CPCL)', cat: 'Mechanical & Flow Control', val: '₹8.45 Cr', close: '15 Sep 2026', location: 'Manali Refinery, Chennai' },
+  { ref: 'IOCL/ENG/2026/088', title: 'High-Pressure Electro-Hydraulic Turbine Actuators & Control Skids', org: 'Indian Oil Corporation Limited (IOCL)', cat: 'Oil & Gas / Energy', val: '₹12.40 Cr', close: '24 Sep 2026', location: 'Panipat Refinery, Haryana' },
   { ref: 'ONGC/OFFSHORE/2026/012', title: 'Subsea Pipeline Ultrasonic Diagnostic Sensors & Telemetry System', org: 'Oil and Natural Gas Corporation (ONGC)', cat: 'Instrumentation & Telecom', val: '₹22.50 Cr', close: '30 Sep 2026', location: 'Western Offshore Basin, Mumbai' },
-  { ref: 'GAIL/PIPE/2026/410', title: 'Cryogenic Gas Compressors and Pressure Regulating Skid Stations', org: 'GAIL (India) Limited', cat: 'Heavy Engineering', val: '₹19.20 Cr', close: '05 Oct 2026', location: 'HVJ Pipeline Corridor, Hazira' },
+  { ref: 'GAIL/PIPE/2026/410', title: 'Cryogenic Gas Compressors and Pressure Regulating Skid Stations', org: 'GAIL (India) Limited', cat: 'Mechanical & Flow Control', val: '₹19.20 Cr', close: '05 Oct 2026', location: 'HVJ Pipeline Corridor, Hazira' },
 ];
 
 interface TendersProps { onSelect: (t: typeof tenders[0]) => void; }
 const TendersSection: React.FC<TendersProps> = ({ onSelect }) => {
   const [query, setQuery] = useState('');
   const [cat, setCat] = useState('All');
-  const cats = ['All', 'Heavy Engineering', 'Oil & Gas / Energy', 'Instrumentation & Telecom'];
+  const cats = ['All', 'Mechanical & Flow Control', 'Oil & Gas / Energy', 'Instrumentation & Telecom'];
   const filtered = tenders.filter(t =>
     (cat === 'All' || t.cat === cat) &&
     (!query || [t.ref, t.title, t.org, t.location].join(' ').toLowerCase().includes(query.toLowerCase()))
   );
 
   return (
-    <section id="tenders" style={{ padding: '96px 24px', background: T.surfaceAlt }}>
+    <section id="tenders" style={{ padding: '90px 24px', background: T.surfaceAlt }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 40 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 34 }}>
           <div>
-            <Badge label="Live PSU Procurement" color={T.navy} bg={`${T.navy}10`} />
-            <h2 style={{ fontFamily: fontSerif, fontSize: 38, fontWeight: 700, color: T.ink, margin: '16px 0 8px', letterSpacing: '-0.02em' }}>
-              Active Government Tenders
+            <Badge label="Live Public Procurement" color={T.orange} bg={T.orangeSubtle} borderColor={T.orangeBorder} />
+            <h2 style={{ fontFamily: fontHead, fontSize: 36, fontWeight: 900, color: T.ink, margin: '14px 0 6px', letterSpacing: '-0.025em' }}>
+              Active Central PSU Tenders
             </h2>
-            <p style={{ fontFamily: font, fontSize: 15, color: T.inkMuted }}>Central PSUs with AI-assisted criteria parsing and verification.</p>
+            <p style={{ fontFamily: font, fontSize: 15, color: T.inkMuted }}>
+              Tenders configured with automated statutory checklists and GFR 2017 compliance parameters.
+            </p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'white', border: `1px solid ${T.border}`, borderRadius: 10, padding: '8px 14px', fontSize: 12, color: T.inkMuted, fontFamily: font }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: T.emerald, display: 'inline-block', animation: 'pulse 2s infinite' }} />
-            Real-time updates
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'white', border: `1.5px solid ${T.greenBorder}`, borderRadius: 10, padding: '8px 16px', fontSize: 12, color: T.green, fontFamily: font, fontWeight: 800 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: T.green, display: 'inline-block' }} />
+            4 Live Tenders Open
           </div>
         </div>
 
-        {/* Search & Filter */}
-        <div style={{ background: 'white', borderRadius: 16, padding: 20, border: `1px solid ${T.border}`, marginBottom: 24, boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+        {/* Search & Category Filter */}
+        <div style={{ background: 'white', borderRadius: 16, padding: 20, border: `1px solid ${T.border}`, marginBottom: 24, boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
           <div style={{ position: 'relative', marginBottom: 14 }}>
             <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', fontSize: 16 }}>🔍</span>
             <input
               type="text" value={query} onChange={e => setQuery(e.target.value)}
-              placeholder="Search by tender ID, keyword, organisation, or location..."
+              placeholder="Search by tender reference ID, title, issuing PSU, or refinery..."
               style={{
                 width: '100%', padding: '12px 14px 12px 42px', borderRadius: 10, fontSize: 14, fontFamily: font,
                 border: `1.5px solid ${T.border}`, outline: 'none', color: T.ink,
                 boxSizing: 'border-box', transition: 'border-color 0.2s',
               }}
-              onFocus={e => e.currentTarget.style.borderColor = T.navy}
+              onFocus={e => e.currentTarget.style.borderColor = T.orange}
               onBlur={e => e.currentTarget.style.borderColor = T.border}
             />
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 12, fontWeight: 600, color: T.inkMuted, fontFamily: font, marginRight: 4 }}>⚙ Category:</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: T.inkMuted, fontFamily: font, marginRight: 4 }}>Filter Category:</span>
             {cats.map(c => (
               <button key={c} onClick={() => setCat(c)}
                 style={{
-                  padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600, fontFamily: font, cursor: 'pointer',
-                  border: `1.5px solid ${cat === c ? T.navy : T.border}`,
-                  background: cat === c ? T.navy : 'transparent',
+                  padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, fontFamily: font, cursor: 'pointer',
+                  border: `1.5px solid ${cat === c ? T.orange : T.border}`,
+                  background: cat === c ? T.orange : 'transparent',
                   color: cat === c ? 'white' : T.inkMuted,
                   transition: 'all 0.15s',
                 }}
               >{c}</button>
             ))}
-            <span style={{ marginLeft: 'auto', fontSize: 12, color: T.inkFaint, fontFamily: font }}>
-              {filtered.length} of {tenders.length} tenders
+            <span style={{ marginLeft: 'auto', fontSize: 12, color: T.inkFaint, fontFamily: fontMono }}>
+              Showing {filtered.length} of {tenders.length} tenders
             </span>
           </div>
         </div>
 
-        {/* Tender Rows */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {/* Tender Cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {filtered.map((t, i) => (
             <div key={i} style={{
               background: 'white', borderRadius: 16, padding: '24px 28px', border: `1px solid ${T.border}`,
               transition: 'all 0.25s', boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
             }}
-              onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 12px 36px ${T.navy}10`; e.currentTarget.style.borderColor = `${T.navy}25`; }}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 10px 30px ${T.orange}15`; e.currentTarget.style.borderColor = T.orangeBorder; }}
               onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.03)'; e.currentTarget.style.borderColor = T.border; }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: 20 }}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12, alignItems: 'center' }}>
-                    <span style={{ fontFamily: fontMono, fontSize: 11, fontWeight: 700, color: T.navy, background: `${T.navy}10`, padding: '3px 10px', borderRadius: 6, border: `1px solid ${T.navy}20` }}>{t.ref}</span>
-                    <span style={{ fontSize: 11, fontWeight: 600, color: T.emerald, background: '#f0fdf4', padding: '3px 10px', borderRadius: 6, border: '1px solid #bbf7d0', display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: T.emerald, display: 'inline-block' }} />Open
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 10, alignItems: 'center' }}>
+                    <span style={{ fontFamily: fontMono, fontSize: 12, fontWeight: 800, color: T.navy, background: T.navySubtle, padding: '3px 10px', borderRadius: 6, border: `1px solid #bfdbfe` }}>
+                      {t.ref}
                     </span>
-                    <span style={{ fontSize: 11, fontWeight: 600, color: T.inkMuted, background: T.surfaceAlt, padding: '3px 10px', borderRadius: 6, border: `1px solid ${T.border}` }}>{t.cat}</span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: '#92400e', background: '#fef3c7', padding: '3px 10px', borderRadius: 6, border: '1px solid #fde68a' }}>Est. {t.val}</span>
+                    <span style={{ fontSize: 11, fontWeight: 800, color: T.green, background: T.greenSubtle, padding: '3px 10px', borderRadius: 6, border: `1px solid ${T.greenBorder}`, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: T.green, display: 'inline-block' }} />
+                      OPEN FOR BIDDING
+                    </span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: T.inkMuted, background: T.surfaceAlt, padding: '3px 10px', borderRadius: 6, border: `1px solid ${T.border}` }}>
+                      {t.cat}
+                    </span>
+                    <span style={{ fontSize: 12, fontWeight: 900, color: T.green, background: T.greenSubtle, padding: '3px 12px', borderRadius: 6, border: `1px solid ${T.greenBorder}` }}>
+                      Est. {t.val}
+                    </span>
                   </div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: T.ink, fontFamily: font, marginBottom: 8, lineHeight: 1.4 }}>{t.title}</div>
-                  <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 13, color: T.inkMuted, fontFamily: font, display: 'flex', alignItems: 'center', gap: 6 }}>🏢 {t.org}</span>
-                    <span style={{ fontSize: 13, color: T.inkMuted, fontFamily: font, display: 'flex', alignItems: 'center', gap: 6 }}>📍 {t.location}</span>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: '#be123c', fontFamily: font, display: 'flex', alignItems: 'center', gap: 6 }}>📅 Closing: {t.close}</span>
+
+                  <div style={{ fontSize: 17, fontWeight: 800, color: T.ink, fontFamily: fontHead, marginBottom: 8, lineHeight: 1.4 }}>
+                    {t.title}
+                  </div>
+
+                  <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: 13, color: T.inkMuted, fontFamily: font, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      🏢 {t.org}
+                    </span>
+                    <span style={{ fontSize: 13, color: T.inkMuted, fontFamily: font, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      📍 {t.location}
+                    </span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#dc2626', fontFamily: font, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      📅 Closing: {t.close}
+                    </span>
                   </div>
                 </div>
 
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexShrink: 0 }}>
                   <button onClick={() => onSelect(t)}
                     style={{
-                      padding: '9px 18px', borderRadius: 9, fontSize: 13, fontWeight: 600, fontFamily: font, cursor: 'pointer',
+                      padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 700, fontFamily: font, cursor: 'pointer',
                       border: `1.5px solid ${T.border}`, background: 'white', color: T.ink, transition: 'all 0.15s',
                     }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = T.navy; e.currentTarget.style.color = T.navy; }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.ink; }}
-                  >View Requirements</button>
-                  <button
+                  >
+                    View Specs
+                  </button>
+                  <button onClick={() => onSelect(t)}
                     style={{
-                      padding: '9px 18px', borderRadius: 9, fontSize: 13, fontWeight: 700, fontFamily: font, cursor: 'pointer',
-                      border: 'none', background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`, color: 'white',
-                      boxShadow: `0 4px 12px ${T.navy}30`, transition: 'all 0.2s',
+                      padding: '10px 20px', borderRadius: 8, fontSize: 13, fontWeight: 800, fontFamily: font, cursor: 'pointer',
+                      border: 'none', background: `linear-gradient(135deg, ${T.orange} 0%, ${T.orangeDark} 100%)`, color: 'white',
+                      boxShadow: `0 4px 14px ${T.orange}40`, transition: 'all 0.2s',
                       display: 'flex', alignItems: 'center', gap: 6,
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
-                  >Submit Bid →</button>
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = `0 6px 20px ${T.orange}60`; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = `0 4px 14px ${T.orange}40`; }}
+                  >
+                    <span>Bid Now</span>
+                    <span>→</span>
+                  </button>
                 </div>
               </div>
 
-              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: T.inkFaint, fontFamily: font }}>
-                <span style={{ color: T.emerald }}>✅</span>
-                Eligible for instant GSTIN, Udyam & PAN statutory auto-verification · Standard Two-Cover Bid
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: T.inkMuted, fontFamily: font }}>
+                <span style={{ color: T.green }}>✅</span>
+                Eligible for instant GSTIN, Udyam MSME & PAN statutory verification · Two-Cover e-Tender
               </div>
             </div>
           ))}
@@ -879,153 +906,130 @@ const TendersSection: React.FC<TendersProps> = ({ onSelect }) => {
   );
 };
 
-/* ─── TRUST SECTION ──────────────────────────────────────────── */
+/* ─── TRUST & INSTITUTIONAL GOVERNANCE ───────────────────────── */
 const TrustSection: React.FC = () => (
-  <section id="trust" style={{ padding: '96px 24px', background: 'white' }}>
+  <section id="trust" style={{ padding: '90px 24px', background: 'white' }}>
     <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: 64 }}>
-        <Badge label="Institutional Governance" color={T.navy} bg={`${T.navy}10`} />
-        <h2 style={{ fontFamily: fontSerif, fontSize: 40, fontWeight: 700, color: T.ink, margin: '20px 0 16px', letterSpacing: '-0.02em' }}>
-          Upholding integrity, accountability and transparency.
+      <div style={{ textAlign: 'center', marginBottom: 56 }}>
+        <Badge label="Statutory Standards" color={T.green} bg={T.greenSubtle} borderColor={T.greenBorder} />
+        <h2 style={{ fontFamily: fontHead, fontSize: 38, fontWeight: 900, color: T.ink, margin: '16px 0 12px', letterSpacing: '-0.025em' }}>
+          Upholding public trust, transparency & accountability.
         </h2>
-        <p style={{ fontFamily: font, fontSize: 17, color: T.inkMuted, maxWidth: 520, margin: '0 auto' }}>
-          Public procurement requires unwavering trust. Our platform is engineered around statutory compliance and human-in-the-loop governance.
+        <p style={{ fontFamily: font, fontSize: 16, color: T.inkMuted, maxWidth: 540, margin: '0 auto' }}>
+          Engineered to satisfy the most stringent vigilance guidelines of the Central Vigilance Commission (CVC) and Comptroller & Auditor General (CAG).
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 28, marginBottom: 40 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 28, marginBottom: 36 }}>
         {[
-          { icon: '📋', color: T.navy, title: 'Evidence-Based Verification', desc: 'Every compliance indicator links to primary statutory registries (GSTN, CBDT, MSME) or exact page citations. No black-box inferences.', points: ['Direct statutory API cross-referencing', 'Deterministic document clause verification', 'Zero hallucinated compliance flags'] },
-          { icon: '👤', color: T.teal, title: 'Human Oversight is Absolute', desc: 'AI operates strictly as a decision-support copilot. All recommendations must be reviewed and signed off by authorized Evaluation Committees.', points: ['Officers retain final discretion always', 'Committee overrides recorded with justifications', 'Full alignment with GFR 2017 Rule 173'] },
-          { icon: '📁', color: T.emerald, title: 'Immutable Audit Trails', desc: 'Tamper-evident chronological logs document every verification step, AI analysis, and officer rationale for CAG and CVC scrutiny.', points: ['End-to-end cryptographic logging', 'Exportable dossiers for CAG & CVC', 'Standardised compliance reporting archives'] },
-        ].map(({ icon, color, title, desc, points }, i) => (
+          { icon: '📜', color: T.orange, title: 'Evidence-Based Triangulation', desc: 'Every compliance check links to primary government databanks or line-item citations. Eliminates black-box assertions.' },
+          { icon: '⚖️', color: T.green, title: 'Human Oversight is Absolute', desc: 'Officers retain sovereign authority under GFR Rule 173. AI flags anomalies, but officers confirm all qualification verdicts.' },
+          { icon: '🔒', color: T.navy, title: 'Cryptographic Audit Trails', desc: 'Every verification step, timestamp, and officer remark is cryptographically logged for departmental vigilance inspection.' },
+        ].map(({ icon, color, title, desc }, i) => (
           <div key={i} style={{
-            borderRadius: 20, padding: '36px', border: `1px solid ${T.border}`,
-            boxShadow: '0 2px 16px rgba(0,0,0,0.04)', transition: 'all 0.25s',
+            borderRadius: 18, padding: '32px', border: `1.5px solid ${T.border}`,
+            boxShadow: '0 2px 12px rgba(0,0,0,0.03)', transition: 'all 0.25s',
           }}
-            onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 16px 48px ${color}12`; e.currentTarget.style.borderColor = `${color}25`; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 2px 16px rgba(0,0,0,0.04)'; e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'none'; }}
+            onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 12px 36px ${color}15`; e.currentTarget.style.borderColor = color; }}
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.03)'; e.currentTarget.style.borderColor = T.border; }}
           >
-            <div style={{ width: 48, height: 48, borderRadius: 14, background: `${color}12`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, marginBottom: 20 }}>{icon}</div>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', color, textTransform: 'uppercase', fontFamily: font, marginBottom: 8 }}>Pillar</div>
-            <div style={{ fontSize: 19, fontWeight: 700, color: T.ink, fontFamily: fontSerif, marginBottom: 12, lineHeight: 1.3 }}>{title}</div>
-            <p style={{ fontSize: 13, color: T.inkMuted, fontFamily: font, lineHeight: 1.7, marginBottom: 18 }}>{desc}</p>
-            <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 14 }}>
-              {points.map((pt, j) => (
-                <div key={j} style={{ display: 'flex', gap: 8, alignItems: 'start', padding: '5px 0', fontSize: 12, color: T.inkMuted, fontFamily: font }}>
-                  <span style={{ color, fontWeight: 700, marginTop: 1 }}>•</span>{pt}
-                </div>
-              ))}
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, marginBottom: 18 }}>
+              {icon}
             </div>
+            <div style={{ fontSize: 18, fontWeight: 900, color: T.ink, fontFamily: fontHead, marginBottom: 10 }}>{title}</div>
+            <p style={{ fontSize: 13, color: T.inkMuted, fontFamily: font, lineHeight: 1.65, margin: 0 }}>{desc}</p>
           </div>
         ))}
-      </div>
-
-      {/* Security badge bar */}
-      <div style={{
-        background: T.surfaceAlt, borderRadius: 14, border: `1px solid ${T.border}`, padding: '18px 28px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 22 }}>🔒</span>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: T.ink, fontFamily: font }}>Statutory Standards & Information Security</div>
-            <div style={{ fontSize: 12, color: T.inkMuted, fontFamily: font }}>MeitY-empaneled sovereign data centers · AES-256 at rest · TLS 1.3 in transit</div>
-          </div>
-        </div>
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-          {['CERT-In Compliant', 'NIC Infrastructure', 'ISO 27001 Aligned', 'Parichay SSO'].map(l => (
-            <span key={l} style={{ fontSize: 11, fontWeight: 700, color: T.navy, background: `${T.navy}10`, padding: '5px 12px', borderRadius: 20, fontFamily: font }}>✓ {l}</span>
-          ))}
-        </div>
       </div>
     </div>
   </section>
 );
 
-/* ─── FINAL CTA ──────────────────────────────────────────────── */
+/* ─── FINAL CALL TO ACTION ───────────────────────────────────── */
 interface FinalCTAProps { onExplore: () => void; onLogin: () => void; }
 const FinalCTA: React.FC<FinalCTAProps> = ({ onExplore, onLogin }) => (
-  <section style={{ padding: '96px 24px', background: `linear-gradient(160deg, ${T.navy} 0%, ${T.navyDark} 100%)`, position: 'relative', overflow: 'hidden' }}>
-    <div style={{ position: 'absolute', right: -200, top: -200, width: 800, height: 800, borderRadius: '50%', background: 'rgba(255,255,255,0.03)', pointerEvents: 'none' }} />
-    <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center', position: 'relative' }}>
-      <Badge label="National E-Procurement Modernization" color="rgba(255,255,255,0.8)" bg="rgba(255,255,255,0.08)" />
-      <h2 style={{ fontFamily: fontSerif, fontSize: 48, fontWeight: 700, color: 'white', margin: '28px 0 20px', lineHeight: 1.2, letterSpacing: '-0.02em' }}>
-        Make procurement simpler, faster and more transparent.
+  <section style={{
+    padding: '84px 24px',
+    background: `linear-gradient(145deg, ${T.navyDark} 0%, ${T.navy} 60%, #0b3d91 100%)`,
+    position: 'relative', overflow: 'hidden',
+    borderTop: `4px solid ${T.orange}`,
+  }}>
+    <div style={{ maxWidth: 880, margin: '0 auto', textAlign: 'center', position: 'relative' }}>
+      <Badge label="Government e-Marketplace Modernization" color={T.orangeLight} bg="rgba(243,112,33,0.15)" borderColor="rgba(243,112,33,0.3)" />
+      <h2 style={{ fontFamily: fontHead, fontSize: 42, fontWeight: 900, color: 'white', margin: '22px 0 14px', lineHeight: 1.2, letterSpacing: '-0.025em' }}>
+        Smarter, faster & auditable public procurement with GemxAI.
       </h2>
-      <p style={{ fontFamily: font, fontSize: 18, color: 'rgba(255,255,255,0.65)', maxWidth: 600, margin: '0 auto 44px', lineHeight: 1.7 }}>
-        Join central ministries, CPSEs, and verified suppliers across India in setting the benchmark for evidence-backed, automated bid verification.
+      <p style={{ fontFamily: font, fontSize: 16, color: 'rgba(255,255,255,0.75)', maxWidth: 620, margin: '0 auto 34px', lineHeight: 1.7 }}>
+        Join procurement officers and enterprises setting the national standard for forensic bid compliance and Make-in-India verification.
       </p>
 
-      <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginBottom: 48 }}>
+      <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
         <button onClick={onExplore}
           style={{
-            padding: '15px 32px', borderRadius: 12, fontSize: 15, fontWeight: 800, fontFamily: font, cursor: 'pointer',
-            background: 'white', border: 'none', color: T.navy,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.25)', transition: 'all 0.2s',
+            padding: '14px 30px', borderRadius: 10, fontSize: 14, fontWeight: 800, fontFamily: font, cursor: 'pointer',
+            background: `linear-gradient(135deg, ${T.orange} 0%, ${T.orangeDark} 100%)`,
+            border: 'none', color: 'white',
+            boxShadow: `0 8px 24px ${T.orange}50`, transition: 'all 0.2s',
             display: 'flex', alignItems: 'center', gap: 8,
           }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,0.3)'; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.25)'; }}
-        >📋 Explore Active Tenders →</button>
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; }}
+        >
+          <span>📋</span>
+          <span>Explore Open Tenders</span>
+          <span>→</span>
+        </button>
 
         <button onClick={onLogin}
           style={{
-            padding: '15px 32px', borderRadius: 12, fontSize: 15, fontWeight: 700, fontFamily: font, cursor: 'pointer',
-            background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.2)', color: 'white',
-            transition: 'all 0.2s',
+            padding: '14px 28px', borderRadius: 10, fontSize: 14, fontWeight: 800, fontFamily: font, cursor: 'pointer',
+            background: 'white', border: 'none', color: T.navy,
+            boxShadow: '0 4px 16px rgba(0,0,0,0.2)', transition: 'all 0.2s',
+            display: 'flex', alignItems: 'center', gap: 8,
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-        >🔒 Officer Login</button>
-      </div>
-
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 28, display: 'flex', justifyContent: 'center', gap: 32, flexWrap: 'wrap' }}>
-        {['GFR 2017 Compliant', 'Sovereign Data Residency', 'Parichay SSO Auth', 'CERT-In Guidelines'].map(l => (
-          <span key={l} style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', fontFamily: font, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: T.emerald, display: 'inline-block' }} />{l}
-          </span>
-        ))}
+          onMouseEnter={e => { e.currentTarget.style.background = '#f8fafc'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'white'; }}
+        >
+          <span>🛡️</span>
+          <span>Officer Evaluation Login</span>
+        </button>
       </div>
     </div>
   </section>
 );
 
-/* ─── FOOTER ─────────────────────────────────────────────────── */
+/* ─── FOOTER WITH GemxAI SOVEREIGN BRANDING & OFFICIAL GeM STAR ── */
 const Footer: React.FC = () => (
-  <footer style={{ background: '#0f172a', color: '#94a3b8', fontFamily: font }}>
-    <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '10px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 1280, margin: '0 auto' }}>
-      <span style={{ fontSize: 11, display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span style={{ width: 7, height: 7, borderRadius: '50%', background: T.emerald, display: 'inline-block' }} />
-        <strong style={{ color: '#e2e8f0' }}>Helpdesk: 1800-419-3436</strong> | Mon–Sat 9:00 AM – 6:00 PM IST
-      </span>
-      <span style={{ fontSize: 11 }}>📧 support-gem-ai@gov.in</span>
-    </div>
+  <footer style={{ background: '#09152b', color: '#94a3b8', fontFamily: font }}>
+    <div style={{
+      height: 3,
+      background: `linear-gradient(90deg, ${T.orange} 0%, ${T.orange} 33.33%, #ffffff 33.33%, #ffffff 66.66%, ${T.green} 66.66%, ${T.green} 100%)`,
+    }} />
 
-    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '56px 24px 32px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
+    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '50px 24px 28px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 38 }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-            <div style={{ width: 34, height: 34, borderRadius: 9, background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 13, fontWeight: 800 }}>G</div>
-            <span style={{ color: 'white', fontWeight: 800, fontSize: 16 }}>GeM AI Portal</span>
+          <div style={{ marginBottom: 14 }}>
+            <GemLogo size={42} showText textColor="#ffffff" subtextColor="#94a3b8" />
           </div>
-          <p style={{ fontSize: 13, lineHeight: 1.7, color: '#64748b', maxWidth: 280 }}>
-            AI-Powered Integrated Bid Compliance Verification Platform for public procurement under Government of India's procurement reform initiative.
+          <p style={{ fontSize: 13, lineHeight: 1.7, color: '#64748b', maxWidth: 300 }}>
+            AI-Powered Forensic Bid Compliance Verification Platform designed in alignment with GeM architecture, General Financial Rules (GFR 2017), and Public Procurement Order 2017.
           </p>
           <p style={{ fontSize: 11, color: '#475569', marginTop: 12 }}>
-            Department of Commerce<br />Ministry of Commerce & Industry
+            National Public Procurement System<br />
+            Department of Commerce · Ministry of Commerce & Industry
           </p>
         </div>
 
         {[
-          { heading: 'For Bidders', links: ['Search Tenders', 'Bid Guidelines', 'MSME Exemptions', 'Pre-Submission Checklist', 'Udyam Registration'] },
-          { heading: 'For Officers', links: ['Evaluation Workflow', 'AI Compliance Matrix', 'GFR 2017 Reference', 'Audit Trail Records', 'Committee Portal'] },
-          { heading: 'Information', links: ['Terms of Use', 'Privacy Policy', 'Accessibility', 'Disclaimers', 'Hyperlinking Policy'] },
+          { heading: 'Bidder Workspace', links: ['Search Live Tenders', 'Statutory Document Checklist', 'Make in India Class-I Rules', 'MSME Exemption Guidelines', 'Submission Status'] },
+          { heading: 'Officer Console', links: ['Tender Evaluation Rosters', '10-Stage AI Verification', 'Forensic Evidence Viewer', 'DSC Token Signing', 'CVC Audit Logs'] },
+          { heading: 'Compliance', links: ['General Financial Rules 2017', 'Public Procurement Order 2017', 'NIC Security Directives', 'Terms & Privacy', 'Helpdesk: 1800-419-3436'] },
         ].map(({ heading, links }) => (
           <div key={heading}>
-            <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#64748b', marginBottom: 16 }}>{heading}</div>
+            <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.orange, marginBottom: 14 }}>{heading}</div>
             {links.map(l => (
-              <a key={l} href="#" style={{ display: 'block', fontSize: 13, color: '#64748b', padding: '5px 0', textDecoration: 'none', transition: 'color 0.15s' }}
+              <a key={l} href="#" style={{ display: 'block', fontSize: 13, color: '#64748b', padding: '4px 0', textDecoration: 'none', transition: 'color 0.15s' }}
                 onMouseEnter={e => e.currentTarget.style.color = 'white'}
                 onMouseLeave={e => e.currentTarget.style.color = '#64748b'}
               >{l}</a>
@@ -1034,102 +1038,55 @@ const Footer: React.FC = () => (
         ))}
       </div>
 
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, color: '#475569' }}>
-        <span>🇮🇳 भारत सरकार | Government of India · GeM AI Tender Evaluation Portal</span>
-        <span>Last Updated: 04 Sep 2026</span>
-        <span>© 2026 GeM AI Portal. All rights reserved.</span>
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, color: '#475569' }}>
+        <span>🇮🇳 भारत सरकार | Government of India · GemxAI Sovereign Platform</span>
+        <span>© 2026 GemxAI. All rights reserved.</span>
       </div>
     </div>
   </footer>
 );
 
-/* ─── MODALS ─────────────────────────────────────────────────── */
-const OfficerLoginModal: React.FC<{ onClose: () => void; onAuthSuccess: () => void }> = ({ onClose, onAuthSuccess }) => (
-  <div onClick={onClose} style={{
-    position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15,23,42,0.6)',
-    backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
-    animation: 'fadeIn 0.2s ease',
-  }}>
-    <div onClick={e => e.stopPropagation()} style={{
-      background: 'white', borderRadius: 20, width: '100%', maxWidth: 440, overflow: 'hidden',
-      boxShadow: '0 32px 80px rgba(0,0,0,0.25)',
-      animation: 'slideUp 0.25s ease',
-    }}>
-      <div style={{ background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`, padding: '24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', fontFamily: font, marginBottom: 4 }}>Secure Government Access</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: 'white', fontFamily: fontSerif }}>Officer Authentication</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontFamily: font, marginTop: 4 }}>Tender Evaluation Committee Access</div>
-        </div>
-        <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', cursor: 'pointer', width: 32, height: 32, borderRadius: 8, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
-      </div>
-
-      <div style={{ padding: '24px 28px' }}>
-        <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 10, padding: '12px 16px', display: 'flex', gap: 10, marginBottom: 20 }}>
-          <span>🔒</span>
-          <span style={{ fontSize: 12, color: '#1e40af', fontFamily: font }}>Authorized Government & PSU Officers only. Multi-factor Parichay SSO authentication enforced.</span>
-        </div>
-
-        {[['Official Gov / PSU Email ID', 'eval.officer@cpcl.gov.in'], ['Department & Role Designation', 'Chief Procurement Manager — Mechanical']].map(([label, val]) => (
-          <div key={label} style={{ marginBottom: 16 }}>
-            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: T.inkMuted, letterSpacing: '0.06em', textTransform: 'uppercase', fontFamily: font, marginBottom: 6 }}>{label}</label>
-            <input readOnly defaultValue={val} style={{ width: '100%', padding: '10px 14px', border: `1.5px solid ${T.border}`, borderRadius: 9, fontSize: 14, fontFamily: font, color: T.ink, background: T.surfaceAlt, boxSizing: 'border-box' }} />
-          </div>
-        ))}
-
-        <button
-          onClick={onAuthSuccess}
-          style={{
-            width: '100%', padding: '13px', borderRadius: 10, fontSize: 14, fontWeight: 800, fontFamily: font,
-            background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`, border: 'none', color: 'white', cursor: 'pointer',
-            boxShadow: `0 8px 24px ${T.navy}35`, marginTop: 4, transition: 'all 0.2s',
-          }}
-        >🔒 Authenticate via Parichay SSO</button>
-
-        <p style={{ fontSize: 11, textAlign: 'center', color: T.inkFaint, fontFamily: font, marginTop: 14 }}>Secured by NIC · GFR 2017 Audited · CERT-In Compliant</p>
-      </div>
-    </div>
-  </div>
-);
-
+/* ─── TENDER DETAILS MODAL ───────────────────────────────────── */
 const TenderDetailModal: React.FC<{ tender: typeof tenders[0]; onClose: () => void; onSubmit: () => void }> = ({ tender, onClose, onSubmit }) => (
   <div onClick={onClose} style={{
-    position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15,23,42,0.6)',
+    position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15,23,42,0.65)',
     backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
   }}>
     <div onClick={e => e.stopPropagation()} style={{
-      background: 'white', borderRadius: 20, width: '100%', maxWidth: 640, overflow: 'hidden',
+      background: 'white', borderRadius: 20, width: '100%', maxWidth: 660, overflow: 'hidden',
       boxShadow: '0 32px 80px rgba(0,0,0,0.25)', maxHeight: '85vh', display: 'flex', flexDirection: 'column',
     }}>
-      <div style={{ background: '#0f172a', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'start', flexShrink: 0 }}>
+      <div style={{ background: T.navy, padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'start', flexShrink: 0, borderBottom: `3px solid ${T.orange}` }}>
         <div>
-          <span style={{ fontFamily: fontMono, fontSize: 10, color: T.tealLight, fontWeight: 700 }}>{tender.ref}</span>
-          <div style={{ fontSize: 16, fontWeight: 700, color: 'white', fontFamily: font, marginTop: 4, lineHeight: 1.4 }}>{tender.title}</div>
+          <span style={{ fontFamily: fontMono, fontSize: 11, color: T.orangeLight, fontWeight: 800 }}>{tender.ref}</span>
+          <div style={{ fontSize: 17, fontWeight: 800, color: 'white', fontFamily: fontHead, marginTop: 4, lineHeight: 1.4 }}>{tender.title}</div>
         </div>
-        <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', cursor: 'pointer', width: 32, height: 32, borderRadius: 8, fontSize: 16, marginLeft: 16, flexShrink: 0 }}>✕</button>
+        <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', cursor: 'pointer', width: 32, height: 32, borderRadius: 8, fontSize: 16, marginLeft: 16 }}>✕</button>
       </div>
 
-      <div style={{ padding: '20px 24px', overflowY: 'auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, marginBottom: 20, background: T.surfaceAlt, padding: 16, borderRadius: 12, border: `1px solid ${T.border}`, fontSize: 12, fontFamily: font }}>
-          <div><span style={{ color: T.inkFaint }}>Organization</span><br /><strong style={{ color: T.ink }}>{tender.org}</strong></div>
-          <div><span style={{ color: T.inkFaint }}>Est. Value</span><br /><strong style={{ color: T.emerald, fontSize: 15 }}>{tender.val}</strong></div>
-          <div><span style={{ color: T.inkFaint }}>Closing Date</span><br /><strong style={{ color: '#be123c' }}>{tender.close}</strong></div>
-          <div><span style={{ color: T.inkFaint }}>Location</span><br /><strong style={{ color: T.ink }}>{tender.location}</strong></div>
+      <div style={{ padding: '22px 24px', overflowY: 'auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, marginBottom: 20, background: T.surfaceWarm, padding: 16, borderRadius: 12, border: `1px solid ${T.orangeBorder}`, fontSize: 12, fontFamily: font }}>
+          <div><span style={{ color: T.inkMuted, fontSize: 11, fontWeight: 600 }}>Issuing PSU / Dept</span><br /><strong style={{ color: T.ink }}>{tender.org}</strong></div>
+          <div><span style={{ color: T.inkMuted, fontSize: 11, fontWeight: 600 }}>Estimated Value</span><br /><strong style={{ color: T.green, fontSize: 15, fontWeight: 900 }}>{tender.val}</strong></div>
+          <div><span style={{ color: T.inkMuted, fontSize: 11, fontWeight: 600 }}>Closing Deadline</span><br /><strong style={{ color: '#dc2626' }}>{tender.close}</strong></div>
+          <div><span style={{ color: T.inkMuted, fontSize: 11, fontWeight: 600 }}>Location</span><br /><strong style={{ color: T.ink }}>{tender.location}</strong></div>
         </div>
 
-        <div style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.navy, fontFamily: font, marginBottom: 12 }}>Mandatory Statutory Checklist</div>
+        <div style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.orange, fontFamily: font, marginBottom: 12 }}>
+          Mandatory Statutory Upload Checklist
+        </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {[
-            ['GST Registration & 3-Year Filings', 'Valid GSTIN with GSTR-3B filings current up to latest tax period. Zero active notices.'],
-            ['Udyam Registration Certificate', 'Verified MSME status for EMD exemption under Rule 170 of GFR 2017.'],
-            ['Financial Turnover & Audited Balance Sheets', 'Min. average annual turnover exceeding 30% of tender value for last 3 fiscal years.'],
-            ['Make in India — Class-I / Class-II Supplier', 'Minimum 50% local value addition certificate signed by statutory auditor.'],
+            ['GST Registration & GSTR-3B Tax Filings', 'Valid active GSTIN with returns filed for previous 24 consecutive months.'],
+            ['Udyam Registration Certificate', 'Verified MSME enterprise classification for EMD waiver under GFR Rule 170.'],
+            ['Audited Balance Sheets & CA Turnover Certificate', 'Minimum average annual turnover exceeding threshold criteria for past 3 fiscal years.'],
+            ['Make in India Declaration (PPO 2017)', 'Mandatory domestic local content certificate with audited manufacturing origin breakdown.'],
           ].map(([title, desc]) => (
             <div key={title} style={{ display: 'flex', gap: 12, padding: '12px 14px', borderRadius: 10, border: `1px solid ${T.border}`, alignItems: 'start' }}>
-              <span style={{ color: T.emerald, fontSize: 16, marginTop: 1, flexShrink: 0 }}>✅</span>
+              <span style={{ color: T.green, fontSize: 16, flexShrink: 0 }}>✅</span>
               <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: T.ink, fontFamily: font }}>{title}</div>
-                <div style={{ fontSize: 12, color: T.inkMuted, fontFamily: font, marginTop: 3 }}>{desc}</div>
+                <div style={{ fontSize: 13, fontWeight: 800, color: T.ink, fontFamily: fontHead }}>{title}</div>
+                <div style={{ fontSize: 12, color: T.inkMuted, fontFamily: font, marginTop: 2 }}>{desc}</div>
               </div>
             </div>
           ))}
@@ -1137,31 +1094,39 @@ const TenderDetailModal: React.FC<{ tender: typeof tenders[0]; onClose: () => vo
       </div>
 
       <div style={{ padding: '16px 24px', borderTop: `1px solid ${T.border}`, display: 'flex', justifyContent: 'flex-end', gap: 12, flexShrink: 0 }}>
-        <button onClick={onClose} style={{ padding: '9px 20px', borderRadius: 9, fontSize: 13, fontWeight: 600, fontFamily: font, border: `1.5px solid ${T.border}`, background: 'white', color: T.ink, cursor: 'pointer' }}>Close</button>
+        <button onClick={onClose} style={{ padding: '10px 20px', borderRadius: 9, fontSize: 13, fontWeight: 700, fontFamily: font, border: `1.5px solid ${T.border}`, background: 'white', color: T.ink, cursor: 'pointer' }}>Close</button>
         <button onClick={onSubmit}
-          style={{ padding: '9px 20px', borderRadius: 9, fontSize: 13, fontWeight: 700, fontFamily: font, border: 'none', background: `linear-gradient(135deg, ${T.navy}, ${T.navyLight})`, color: 'white', cursor: 'pointer', boxShadow: `0 4px 16px ${T.navy}30` }}
-        >Proceed to Submission →</button>
+          style={{
+            padding: '10px 22px', borderRadius: 9, fontSize: 13, fontWeight: 800, fontFamily: font, border: 'none',
+            background: `linear-gradient(135deg, ${T.orange} 0%, ${T.orangeDark} 100%)`, color: 'white', cursor: 'pointer',
+            boxShadow: `0 4px 16px ${T.orange}40`,
+          }}
+        >
+          Proceed to Document Upload →
+        </button>
       </div>
     </div>
   </div>
 );
 
-/* ─── MAIN HOME PAGE ─────────────────────────────────────────── */
+/* ─── MAIN HOME PAGE EXPORT ──────────────────────────────────── */
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useApp();
-  const [officerModal, setOfficerModal] = useState(false);
   const [selectedTender, setSelectedTender] = useState<typeof tenders[0] | null>(null);
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  const openOfficer = () => setOfficerModal(true);
-  const openTenders = () => scrollTo('tenders');
 
-  const handleOfficerSuccess = async () => {
-    setOfficerModal(false);
-    await login('procurement.officer@cpcl.gov.in', 'DemoPass', ROLES.OFFICER);
-    navigate('/officer/dashboard');
+  // Officer Login directly navigates to the 2nd screenshot (/login in Officer mode)
+  const handleOfficerLogin = () => {
+    navigate('/login?role=officer', { state: { role: ROLES.OFFICER } });
   };
+
+  const handlePortalLogin = () => {
+    navigate('/login?role=bidder', { state: { role: ROLES.BIDDER } });
+  };
+
+  const openTenders = () => scrollTo('tenders');
 
   const handleTenderSubmit = async () => {
     setSelectedTender(null);
@@ -1172,29 +1137,23 @@ export const HomePage: React.FC = () => {
   return (
     <div style={{ minHeight: '100vh', background: 'white' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,400;0,700;0,900;1,300&display=swap');
-        @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: none } }
-        @keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: 0.4 } }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         input { outline: none; }
       `}</style>
 
       <TopBar />
-      <Navbar onOfficerLogin={openOfficer} onExploreTenders={openTenders} onPortalLogin={() => navigate('/login')} />
-      <HeroSection onExplore={openTenders} onLogin={openOfficer} />
+      <Navbar onOfficerLogin={handleOfficerLogin} onExploreTenders={openTenders} onPortalLogin={handlePortalLogin} />
+      <HeroSection onExplore={openTenders} onLogin={handleOfficerLogin} />
       <StatsSection />
-      <JourneySection onBidder={openTenders} onOfficer={openOfficer} />
+      <JourneySection onBidder={openTenders} onOfficer={handleOfficerLogin} />
       <AIProcessSection />
       <BenefitsSection />
-      <ImpactSection />
-      <EcosystemSection />
       <TendersSection onSelect={setSelectedTender} />
       <TrustSection />
-      <FinalCTA onExplore={openTenders} onLogin={openOfficer} />
+      <FinalCTA onExplore={openTenders} onLogin={handleOfficerLogin} />
       <Footer />
 
-      {officerModal && <OfficerLoginModal onClose={() => setOfficerModal(false)} onAuthSuccess={handleOfficerSuccess} />}
       {selectedTender && <TenderDetailModal tender={selectedTender} onClose={() => setSelectedTender(null)} onSubmit={handleTenderSubmit} />}
     </div>
   );

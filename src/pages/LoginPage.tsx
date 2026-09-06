@@ -1,20 +1,36 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { ROLES, UserRole } from "../services/authService";
 import { C, F } from "../tokens";
+import { GemLogo } from "../components/GemLogo";
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, showToast } = useApp();
 
-  const [role, setRole] = useState<UserRole>(ROLES.BIDDER);
-  const [username, setUsername] = useState("tenders@abcengineering.com");
-  const [password, setPassword] = useState("Demo@GeM2026");
+  const [role, setRole] = useState<UserRole>(() => {
+    const params = new URLSearchParams(window.location.hash.split("?")[1] || window.location.search);
+    return params.get("role") === "officer" ? ROLES.OFFICER : ROLES.BIDDER;
+  });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [captchaText, setCaptchaText] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const hashQuery = window.location.hash.includes("?") ? window.location.hash.split("?")[1] : "";
+    const params = new URLSearchParams(hashQuery || location.search);
+    const qRole = params.get("role");
+    if (qRole === "officer" || (location.state as any)?.role === ROLES.OFFICER) {
+      setRole(ROLES.OFFICER);
+    } else if (qRole === "bidder" || (location.state as any)?.role === ROLES.BIDDER) {
+      setRole(ROLES.BIDDER);
+    }
+  }, [location]);
 
   // Generate textured captcha
   const generateCaptcha = () => {
@@ -24,7 +40,7 @@ export const LoginPage: React.FC = () => {
       text += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     setCaptchaText(text);
-    setCaptchaInput(text); // auto-fill for demo convenience
+    setCaptchaInput("");
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -81,13 +97,6 @@ export const LoginPage: React.FC = () => {
 
   const handleRoleChange = (newRole: UserRole) => {
     setRole(newRole);
-    if (newRole === ROLES.OFFICER) {
-      setUsername("procurement.officer@cpcl.gov.in");
-      setPassword("Officer#2026");
-    } else {
-      setUsername("tenders@abcengineering.com");
-      setPassword("Demo@GeM2026");
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -144,16 +153,8 @@ export const LoginPage: React.FC = () => {
           }}
         >
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
-              <span style={{ fontSize: 28 }}>🇮🇳</span>
-              <div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: C.navyDark, letterSpacing: "-0.02em" }}>
-                  GeM <span style={{ color: C.teal }}>SENTINEL</span>
-                </div>
-                <div style={{ fontSize: 11, color: C.inkFaint, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                  Government e-Marketplace Verification
-                </div>
-              </div>
+            <div style={{ marginBottom: 26 }}>
+              <GemLogo size={44} showText textColor={C.navyDark} />
             </div>
 
             {/* Vector Graphic */}
@@ -392,7 +393,7 @@ export const LoginPage: React.FC = () => {
                     type="text"
                     value={captchaInput}
                     onChange={e => setCaptchaInput(e.target.value)}
-                    placeholder="Captcha"
+                    placeholder="Enter Captcha"
                     maxLength={6}
                     required
                     style={{

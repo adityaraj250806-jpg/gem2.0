@@ -25,6 +25,7 @@ Thumbs.db
 *.sln
 *.sw?
 *.tsbuildinfo
+Untitled*
 .env
 .env.*
 !.env.example
