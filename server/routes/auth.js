@@ -33,19 +33,17 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    // Strict role isolation: an account created as Officer cannot be used for Bidder and vice-versa
+    const query = { email: email.toLowerCase().trim() };
+    if (role) {
+      query.role = role.toUpperCase();
+    }
+
+    const user = await User.findOne(query);
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid credentials. User not found."
-      });
-    }
-
-    // If a specific role was requested, verify it matches
-    if (role && user.role !== role) {
-      return res.status(403).json({
-        success: false,
-        message: `Account is registered as ${user.role}, not ${role}. Please switch tabs.`
+        message: "No account exists with these credentials."
       });
     }
 
@@ -53,7 +51,7 @@ router.post("/login", async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: "Invalid password."
+        message: "Invalid password. Please check your credentials."
       });
     }
 
@@ -114,7 +112,7 @@ router.post("/register", async (req, res) => {
     if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: "An account with this email already exists."
+        message: "An account with this email already exists. An email can only be registered once."
       });
     }
 

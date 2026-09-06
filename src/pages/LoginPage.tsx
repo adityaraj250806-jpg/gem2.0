@@ -24,7 +24,14 @@ export const LoginPage: React.FC = () => {
   const [captchaText, setCaptchaText] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [nameTouched, setNameTouched] = useState(false);
+  const [emailTouched, setEmailTouched] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Real-time validation checks
+  const nameHasInvalidChars = name.trim().length > 0 && !/^[A-Za-z\s.'-]+$/.test(name);
+  const emailMissingAt = username.trim().length > 0 && !username.includes("@");
+  const emailInvalidFormat = username.trim().length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username.trim());
 
   useEffect(() => {
     const hashQuery = window.location.hash.includes("?") ? window.location.hash.split("?")[1] : "";
@@ -99,48 +106,85 @@ export const LoginPage: React.FC = () => {
 
   useEffect(() => {
     generateCaptcha();
-  }, [role]);
+  }, []);
+
+  const resetForm = () => {
+    setUsername("");
+    setPassword("");
+    setName("");
+    setOrgName("");
+    setGstin("");
+    setCaptchaInput("");
+    setNameTouched(false);
+    setEmailTouched(false);
+    setTimeout(() => generateCaptcha(), 50);
+  };
 
   const handleRoleChange = (newRole: UserRole) => {
     setRole(newRole);
+    resetForm();
+  };
+
+  const handleModeChange = (targetMode: boolean) => {
+    setIsRegisterMode(targetMode);
+    resetForm();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const cleanEmail = username.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // 1. If Register Mode, validate Name first
+    if (isRegisterMode) {
+      if (!name.trim()) {
+        showToast(role === ROLES.OFFICER ? "Please enter Officer Full Name." : "Please enter Authorized Signatory Name.", "danger");
+        return;
+      }
+      if (!/^[A-Za-z\s.'-]+$/.test(name.trim())) {
+        showToast("Only alphabets are allowed in the Name field.", "danger");
+        return;
+      }
+    }
+
+    // 2. Validate Email - Explicitly check for '@'
+    if (!cleanEmail) {
+      showToast(isRegisterMode ? "Please enter an official email ID." : "Please enter your email ID.", "danger");
+      return;
+    }
+    if (!cleanEmail.includes("@")) {
+      showToast("Email address must contain an '@' symbol (e.g. user@domain.com).", "danger");
+      return;
+    }
+    if (!emailRegex.test(cleanEmail)) {
+      showToast("Please enter a valid email address with domain (e.g. user@domain.com).", "danger");
+      return;
+    }
+
+    // 3. Validate Password
+    if (!password.trim()) {
+      showToast("Please enter your password.", "danger");
+      return;
+    }
+    if (isRegisterMode && password.length < 6) {
+      showToast("Password must be at least 6 characters long.", "danger");
+      return;
+    }
+
+    // 4. Validate Captcha
+    if (!captchaInput.trim()) {
+      showToast("Please enter the Captcha code shown.", "danger");
+      return;
+    }
     if (captchaInput.trim().toUpperCase() !== captchaText.toUpperCase()) {
       showToast("Invalid Captcha. Please enter the characters shown.", "danger");
       generateCaptcha();
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const cleanEmail = username.trim();
-
-    if (!cleanEmail) {
-      showToast(isRegisterMode ? "Please enter an official email ID." : "Please enter your email ID.", "danger");
-      return;
-    }
-
-    if (!emailRegex.test(cleanEmail)) {
-      showToast("Please enter a valid email address with '@' and domain (e.g. user@domain.com).", "danger");
-      return;
-    }
-
+    // 5. Submit to backend
     if (isRegisterMode) {
-      if (!name.trim()) {
-        showToast(role === ROLES.OFFICER ? "Please enter Officer Full Name." : "Please enter Authorized Signatory Name.", "danger");
-        return;
-      }
-      const nameRegex = /^[A-Za-z\s.'-]+$/;
-      if (!nameRegex.test(name.trim())) {
-        showToast("Name should only contain alphabetic letters and spaces.", "danger");
-        return;
-      }
-      if (password.length < 6) {
-        showToast("Password must be at least 6 characters long.", "danger");
-        return;
-      }
-
       try {
         setIsSubmitting(true);
         await register({
@@ -157,11 +201,6 @@ export const LoginPage: React.FC = () => {
       } finally {
         setIsSubmitting(false);
       }
-      return;
-    }
-
-    if (!password.trim()) {
-      showToast("Please enter your password.", "danger");
       return;
     }
 
@@ -309,7 +348,7 @@ export const LoginPage: React.FC = () => {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginTop: 14, background: "#f1f5f9", padding: 4, borderRadius: 10 }}>
                 <button
                   type="button"
-                  onClick={() => setIsRegisterMode(false)}
+                  onClick={() => handleModeChange(false)}
                   style={{
                     padding: "8px 12px",
                     borderRadius: 7,
@@ -327,7 +366,7 @@ export const LoginPage: React.FC = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setIsRegisterMode(true)}
+                  onClick={() => handleModeChange(true)}
                   style={{
                     padding: "8px 12px",
                     borderRadius: 7,
@@ -408,7 +447,7 @@ export const LoginPage: React.FC = () => {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit}>
+            <form noValidate autoComplete="off" onSubmit={handleSubmit}>
               {isRegisterMode && (
                 <>
                   <div style={{ marginBottom: 14 }}>
@@ -418,25 +457,28 @@ export const LoginPage: React.FC = () => {
                     <input
                       type="text"
                       value={name}
-                      onChange={e => {
-                        const val = e.target.value;
-                        if (/^[A-Za-z\s.'-]*$/.test(val)) {
-                          setName(val);
-                        }
-                      }}
+                      onChange={e => setName(e.target.value)}
+                      onBlur={() => setNameTouched(true)}
                       placeholder={role === ROLES.OFFICER ? "e.g. Dr. K. S. Ramanathan" : "e.g. Rajesh Kumar"}
                       required
                       style={{
                         width: "100%",
                         padding: "9px 13px",
-                        border: `1.5px solid ${C.border}`,
+                        border: `1.5px solid ${nameHasInvalidChars ? "#dc2626" : C.border}`,
                         borderRadius: 8,
                         fontSize: 13,
                         color: C.ink,
                         outline: "none",
-                        boxSizing: "border-box"
+                        boxSizing: "border-box",
+                        background: nameHasInvalidChars ? "#fef2f2" : "#ffffff",
+                        transition: "all 0.2s"
                       }}
                     />
+                    {nameHasInvalidChars && (
+                      <div style={{ color: "#dc2626", fontSize: 11, fontWeight: 600, marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
+                        <span>⚠️ Only alphabets are allowed (no numbers or special characters)</span>
+                      </div>
+                    )}
                   </div>
 
                   <div style={{ marginBottom: 14 }}>
@@ -497,22 +539,36 @@ export const LoginPage: React.FC = () => {
                     : "Username / Email ID"} <span style={{ color: C.crimson }}>*</span>
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
+                  onBlur={() => setEmailTouched(true)}
+                  autoComplete="off"
                   placeholder={role === ROLES.OFFICER ? "e.g. officer@cpcl.gov.in" : "e.g. tenders@company.com"}
                   required
                   style={{
                     width: "100%",
                     padding: "9px 13px",
-                    border: `1.5px solid ${C.border}`,
+                    border: `1.5px solid ${(emailTouched || username.length > 3) && emailInvalidFormat ? "#dc2626" : C.border}`,
                     borderRadius: 8,
                     fontSize: 13,
                     color: C.ink,
                     outline: "none",
-                    boxSizing: "border-box"
+                    boxSizing: "border-box",
+                    background: (emailTouched || username.length > 3) && emailInvalidFormat ? "#fef2f2" : "#ffffff",
+                    transition: "all 0.2s"
                   }}
                 />
+                {(emailTouched || username.length > 3) && emailMissingAt && (
+                  <div style={{ color: "#dc2626", fontSize: 11, fontWeight: 600, marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
+                    <span>⚠️ Email address must contain an '@' symbol (e.g. user@domain.com)</span>
+                  </div>
+                )}
+                {(emailTouched || username.length > 3) && !emailMissingAt && emailInvalidFormat && (
+                  <div style={{ color: "#dc2626", fontSize: 11, fontWeight: 600, marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
+                    <span>⚠️ Please enter a complete domain (e.g. user@domain.com)</span>
+                  </div>
+                )}
               </div>
 
               <div style={{ marginBottom: 14 }}>
@@ -529,6 +585,7 @@ export const LoginPage: React.FC = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
+                    autoComplete={isRegisterMode ? "new-password" : "current-password"}
                     placeholder={isRegisterMode ? "Create a secure password" : "Enter Password"}
                     required
                     style={{
@@ -593,6 +650,7 @@ export const LoginPage: React.FC = () => {
                     maxLength={6}
                     autoCapitalize="none"
                     autoCorrect="off"
+                    autoComplete="off"
                     spellCheck={false}
                     required
                     style={{
@@ -660,7 +718,7 @@ export const LoginPage: React.FC = () => {
               <div style={{ textAlign: "center", marginTop: 14 }}>
                 <button
                   type="button"
-                  onClick={() => setIsRegisterMode(!isRegisterMode)}
+                  onClick={() => handleModeChange(!isRegisterMode)}
                   style={{
                     background: "transparent",
                     border: "none",
