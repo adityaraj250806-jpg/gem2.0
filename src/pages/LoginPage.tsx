@@ -77,17 +77,18 @@ export const LoginPage: React.FC = () => {
       ctx.stroke();
     }
 
-    // Draw characters
-    const startX = 14;
-    const letterSpacing = 20;
+    // Draw characters with centered slots so characters never clip or override borders
     ctx.font = "bold 20px 'Courier New', monospace, sans-serif";
     ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+
+    const slotWidth = canvas.width / text.length;
 
     for (let i = 0; i < text.length; i++) {
       ctx.save();
-      const x = startX + i * letterSpacing;
-      const y = canvas.height / 2 + (Math.random() * 6 - 3);
-      const angle = (Math.random() * 20 - 10) * (Math.PI / 180);
+      const x = slotWidth * i + slotWidth / 2;
+      const y = canvas.height / 2 + (Math.random() * 4 - 2);
+      const angle = (Math.random() * 14 - 7) * (Math.PI / 180);
       ctx.translate(x, y);
       ctx.rotate(angle);
       ctx.fillStyle = i % 2 === 0 ? "#0f172a" : "#1e3a8a";
@@ -106,9 +107,22 @@ export const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (captchaInput.toUpperCase() !== captchaText.toUpperCase()) {
+    if (captchaInput.trim().toUpperCase() !== captchaText.toUpperCase()) {
       showToast("Invalid Captcha. Please enter the characters shown.", "danger");
       generateCaptcha();
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const cleanEmail = username.trim();
+
+    if (!cleanEmail) {
+      showToast(isRegisterMode ? "Please enter an official email ID." : "Please enter your email ID.", "danger");
+      return;
+    }
+
+    if (!emailRegex.test(cleanEmail)) {
+      showToast("Please enter a valid email address with '@' and domain (e.g. user@domain.com).", "danger");
       return;
     }
 
@@ -117,8 +131,9 @@ export const LoginPage: React.FC = () => {
         showToast(role === ROLES.OFFICER ? "Please enter Officer Full Name." : "Please enter Authorized Signatory Name.", "danger");
         return;
       }
-      if (!username.trim()) {
-        showToast("Please enter an official email ID.", "danger");
+      const nameRegex = /^[A-Za-z\s.'-]+$/;
+      if (!nameRegex.test(name.trim())) {
+        showToast("Name should only contain alphabetic letters and spaces.", "danger");
         return;
       }
       if (password.length < 6) {
@@ -129,7 +144,7 @@ export const LoginPage: React.FC = () => {
       try {
         setIsSubmitting(true);
         await register({
-          email: username.trim(),
+          email: cleanEmail,
           password: password.trim(),
           name: name.trim(),
           role,
@@ -145,9 +160,14 @@ export const LoginPage: React.FC = () => {
       return;
     }
 
+    if (!password.trim()) {
+      showToast("Please enter your password.", "danger");
+      return;
+    }
+
     try {
       setIsSubmitting(true);
-      await login(username, password, role);
+      await login(cleanEmail, password, role);
       navigate(role === ROLES.OFFICER ? "/officer/dashboard" : "/bidder/dashboard");
     } catch (err: any) {
       showToast(err.message || "Login failed. Please check your credentials.", "danger");
@@ -398,7 +418,12 @@ export const LoginPage: React.FC = () => {
                     <input
                       type="text"
                       value={name}
-                      onChange={e => setName(e.target.value)}
+                      onChange={e => {
+                        const val = e.target.value;
+                        if (/^[A-Za-z\s.'-]*$/.test(val)) {
+                          setName(val);
+                        }
+                      }}
                       placeholder={role === ROLES.OFFICER ? "e.g. Dr. K. S. Ramanathan" : "e.g. Rajesh Kumar"}
                       required
                       style={{
@@ -543,12 +568,12 @@ export const LoginPage: React.FC = () => {
                 </label>
                 <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                   <div style={{ display: "flex", alignItems: "center", border: `1px solid ${C.border}`, borderRadius: 8, overflow: "hidden", background: "#f8fafc" }}>
-                    <canvas ref={canvasRef} width={120} height={36} style={{ display: "block" }} />
+                    <canvas ref={canvasRef} width={144} height={38} style={{ display: "block" }} />
                     <button
                       type="button"
                       onClick={generateCaptcha}
                       style={{
-                        padding: "7px 9px",
+                        padding: "8px 10px",
                         background: "transparent",
                         border: "none",
                         borderLeft: `1px solid ${C.border}`,
@@ -566,6 +591,9 @@ export const LoginPage: React.FC = () => {
                     onChange={e => setCaptchaInput(e.target.value)}
                     placeholder="Enter Captcha"
                     maxLength={6}
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
                     required
                     style={{
                       flex: 1,
@@ -576,7 +604,6 @@ export const LoginPage: React.FC = () => {
                       fontFamily: F.mono,
                       fontWeight: 700,
                       letterSpacing: 2,
-                      textTransform: "uppercase",
                       boxSizing: "border-box"
                     }}
                   />

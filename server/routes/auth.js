@@ -25,6 +25,14 @@ router.post("/login", async (req, res) => {
       });
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a valid email address with '@' and domain."
+      });
+    }
+
     const user = await User.findOne({ email: email.toLowerCase().trim() });
     if (!user) {
       return res.status(401).json({
@@ -83,6 +91,22 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Name, email, and password are required."
+      });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address containing '@' and domain."
+      });
+    }
+
+    const nameRegex = /^[A-Za-z\s.'-]+$/;
+    if (!nameRegex.test(name.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: "Name should only contain alphabetic letters and spaces."
       });
     }
 
