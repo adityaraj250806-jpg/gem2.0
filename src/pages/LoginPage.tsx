@@ -8,17 +8,22 @@ import { GemLogo } from "../components/GemLogo";
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, showToast } = useApp();
+  const { login, register, showToast } = useApp();
 
   const [role, setRole] = useState<UserRole>(() => {
     const params = new URLSearchParams(window.location.hash.split("?")[1] || window.location.search);
     return params.get("role") === "officer" ? ROLES.OFFICER : ROLES.BIDDER;
   });
+  const [isRegisterMode, setIsRegisterMode] = useState(false);
+  const [name, setName] = useState("");
+  const [orgName, setOrgName] = useState("");
+  const [gstin, setGstin] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [captchaText, setCaptchaText] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -107,11 +112,47 @@ export const LoginPage: React.FC = () => {
       return;
     }
 
+    if (isRegisterMode) {
+      if (!name.trim()) {
+        showToast(role === ROLES.OFFICER ? "Please enter Officer Full Name." : "Please enter Authorized Signatory Name.", "danger");
+        return;
+      }
+      if (!username.trim()) {
+        showToast("Please enter an official email ID.", "danger");
+        return;
+      }
+      if (password.length < 6) {
+        showToast("Password must be at least 6 characters long.", "danger");
+        return;
+      }
+
+      try {
+        setIsSubmitting(true);
+        await register({
+          email: username.trim(),
+          password: password.trim(),
+          name: name.trim(),
+          role,
+          orgName: orgName.trim() || (role === ROLES.OFFICER ? "Chennai Petroleum Corp Ltd" : "Private Vendor Ltd"),
+          gstin: gstin.trim()
+        });
+        navigate(role === ROLES.OFFICER ? "/officer/dashboard" : "/bidder/dashboard");
+      } catch (err: any) {
+        showToast(err.message || "Registration failed. Please check your details.", "danger");
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
     try {
+      setIsSubmitting(true);
       await login(username, password, role);
       navigate(role === ROLES.OFFICER ? "/officer/dashboard" : "/bidder/dashboard");
     } catch (err: any) {
       showToast(err.message || "Login failed. Please check your credentials.", "danger");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -234,9 +275,55 @@ export const LoginPage: React.FC = () => {
         {/* RIGHT PANEL: Form */}
         <div style={{ padding: "36px 36px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <div>
-            <div style={{ marginBottom: 20 }}>
-              <h2 style={{ fontSize: 24, fontWeight: 800, color: C.ink, marginBottom: 4 }}>Portal Login</h2>
-              <p style={{ fontSize: 13, color: C.inkMuted }}>Government e-Marketplace Integrated Verification System</p>
+            <div style={{ marginBottom: 16 }}>
+              <h2 style={{ fontSize: 24, fontWeight: 800, color: C.ink, marginBottom: 4 }}>
+                {isRegisterMode ? "Create New ID" : "Portal Login"}
+              </h2>
+              <p style={{ fontSize: 13, color: C.inkMuted }}>
+                {isRegisterMode 
+                  ? "Register official credentials directly into the cloud database" 
+                  : "Government e-Marketplace Integrated Verification System"}
+              </p>
+
+              {/* Mode Toggle: Sign In vs Create ID */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginTop: 14, background: "#f1f5f9", padding: 4, borderRadius: 10 }}>
+                <button
+                  type="button"
+                  onClick={() => setIsRegisterMode(false)}
+                  style={{
+                    padding: "8px 12px",
+                    borderRadius: 7,
+                    border: "none",
+                    background: !isRegisterMode ? "#ffffff" : "transparent",
+                    color: !isRegisterMode ? C.navy : C.inkMuted,
+                    fontWeight: 700,
+                    fontSize: 12,
+                    cursor: "pointer",
+                    boxShadow: !isRegisterMode ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+                    transition: "all 0.15s"
+                  }}
+                >
+                  🔐 Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsRegisterMode(true)}
+                  style={{
+                    padding: "8px 12px",
+                    borderRadius: 7,
+                    border: "none",
+                    background: isRegisterMode ? C.gemOrange : "transparent",
+                    color: isRegisterMode ? "#ffffff" : C.inkMuted,
+                    fontWeight: 700,
+                    fontSize: 12,
+                    cursor: "pointer",
+                    boxShadow: isRegisterMode ? "0 2px 6px rgba(243,112,33,0.3)" : "none",
+                    transition: "all 0.15s"
+                  }}
+                >
+                  ✨ Create ID (Register)
+                </button>
+              </div>
             </div>
 
             {/* Role Switcher Tabs */}
@@ -248,7 +335,7 @@ export const LoginPage: React.FC = () => {
                 background: "#f1f5f9",
                 padding: 4,
                 borderRadius: 10,
-                marginBottom: 24
+                marginBottom: 20
               }}
             >
               <button
@@ -272,7 +359,7 @@ export const LoginPage: React.FC = () => {
                 }}
               >
                 <span>🏢</span>
-                <span>Bidder / Vendor</span>
+                <span>{isRegisterMode ? "Register as Bidder" : "Bidder / Vendor"}</span>
               </button>
 
               <button
@@ -296,28 +383,106 @@ export const LoginPage: React.FC = () => {
                 }}
               >
                 <span>🛡️</span>
-                <span>Procurement Officer</span>
+                <span>{isRegisterMode ? "Register as Officer" : "Procurement Officer"}</span>
               </button>
             </div>
 
             {/* Form */}
             <form onSubmit={handleSubmit}>
-              <div style={{ marginBottom: 16 }}>
-                <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: C.ink, marginBottom: 6 }}>
-                  Username / Email ID <span style={{ color: C.crimson }}>*</span>
+              {isRegisterMode && (
+                <>
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: C.ink, marginBottom: 5 }}>
+                      {role === ROLES.OFFICER ? "Officer Full Name" : "Authorized Signatory / Bidder Name"} <span style={{ color: C.crimson }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      placeholder={role === ROLES.OFFICER ? "e.g. Dr. K. S. Ramanathan" : "e.g. Rajesh Kumar"}
+                      required
+                      style={{
+                        width: "100%",
+                        padding: "9px 13px",
+                        border: `1.5px solid ${C.border}`,
+                        borderRadius: 8,
+                        fontSize: 13,
+                        color: C.ink,
+                        outline: "none",
+                        boxSizing: "border-box"
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: C.ink, marginBottom: 5 }}>
+                      {role === ROLES.OFFICER ? "Ministry / PSU Department" : "Company / Firm Legal Name"} <span style={{ color: C.crimson }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={orgName}
+                      onChange={e => setOrgName(e.target.value)}
+                      placeholder={role === ROLES.OFFICER ? "e.g. Chennai Petroleum Corp Ltd / CPCL" : "e.g. ABC Engineering Ltd"}
+                      required
+                      style={{
+                        width: "100%",
+                        padding: "9px 13px",
+                        border: `1.5px solid ${C.border}`,
+                        borderRadius: 8,
+                        fontSize: 13,
+                        color: C.ink,
+                        outline: "none",
+                        boxSizing: "border-box"
+                      }}
+                    />
+                  </div>
+
+                  {role === ROLES.BIDDER && (
+                    <div style={{ marginBottom: 14 }}>
+                      <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: C.ink, marginBottom: 5 }}>
+                        GSTIN Number <span style={{ fontSize: 11, color: C.inkFaint, fontWeight: 500 }}>(Optional for GeM verification)</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={gstin}
+                        onChange={e => setGstin(e.target.value.toUpperCase())}
+                        placeholder="e.g. 33AABCA1234F1Z5"
+                        maxLength={15}
+                        style={{
+                          width: "100%",
+                          padding: "9px 13px",
+                          border: `1.5px solid ${C.border}`,
+                          borderRadius: 8,
+                          fontSize: 13,
+                          fontFamily: F.mono,
+                          color: C.ink,
+                          outline: "none",
+                          boxSizing: "border-box"
+                        }}
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: C.ink, marginBottom: 5 }}>
+                  {isRegisterMode 
+                    ? (role === ROLES.OFFICER ? "Official Department Email ID" : "Business Email ID") 
+                    : "Username / Email ID"} <span style={{ color: C.crimson }}>*</span>
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
-                  placeholder="Enter Registered Email or User ID"
+                  placeholder={role === ROLES.OFFICER ? "e.g. officer@cpcl.gov.in" : "e.g. tenders@company.com"}
                   required
                   style={{
                     width: "100%",
-                    padding: "10px 14px",
+                    padding: "9px 13px",
                     border: `1.5px solid ${C.border}`,
                     borderRadius: 8,
-                    fontSize: 14,
+                    fontSize: 13,
                     color: C.ink,
                     outline: "none",
                     boxSizing: "border-box"
@@ -325,26 +490,28 @@ export const LoginPage: React.FC = () => {
                 />
               </div>
 
-              <div style={{ marginBottom: 16 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+              <div style={{ marginBottom: 14 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
                   <label style={{ fontSize: 12, fontWeight: 700, color: C.ink }}>
-                    Password <span style={{ color: C.crimson }}>*</span>
+                    {isRegisterMode ? "Create Password (min 6 characters)" : "Password"} <span style={{ color: C.crimson }}>*</span>
                   </label>
-                  <a href="#/login" style={{ fontSize: 12, color: C.navy, fontWeight: 600 }}>Forgot Password?</a>
+                  {!isRegisterMode && (
+                    <a href="#/login" style={{ fontSize: 12, color: C.navy, fontWeight: 600 }}>Forgot Password?</a>
+                  )}
                 </div>
                 <div style={{ position: "relative" }}>
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    placeholder="Enter Password"
+                    placeholder={isRegisterMode ? "Create a secure password" : "Enter Password"}
                     required
                     style={{
                       width: "100%",
-                      padding: "10px 40px 10px 14px",
+                      padding: "9px 40px 9px 13px",
                       border: `1.5px solid ${C.border}`,
                       borderRadius: 8,
-                      fontSize: 14,
+                      fontSize: 13,
                       color: C.ink,
                       outline: "none",
                       boxSizing: "border-box"
@@ -370,23 +537,23 @@ export const LoginPage: React.FC = () => {
               </div>
 
               {/* Captcha */}
-              <div style={{ marginBottom: 20 }}>
-                <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: C.ink, marginBottom: 6 }}>
+              <div style={{ marginBottom: 18 }}>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: C.ink, marginBottom: 5 }}>
                   Enter Captcha <span style={{ color: C.crimson }}>*</span>
                 </label>
-                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                   <div style={{ display: "flex", alignItems: "center", border: `1px solid ${C.border}`, borderRadius: 8, overflow: "hidden", background: "#f8fafc" }}>
-                    <canvas ref={canvasRef} width={130} height={38} style={{ display: "block" }} />
+                    <canvas ref={canvasRef} width={120} height={36} style={{ display: "block" }} />
                     <button
                       type="button"
                       onClick={generateCaptcha}
                       style={{
-                        padding: "8px 10px",
+                        padding: "7px 9px",
                         background: "transparent",
                         border: "none",
                         borderLeft: `1px solid ${C.border}`,
                         cursor: "pointer",
-                        fontSize: 14
+                        fontSize: 13
                       }}
                       title="Regenerate Captcha"
                     >
@@ -402,10 +569,10 @@ export const LoginPage: React.FC = () => {
                     required
                     style={{
                       flex: 1,
-                      padding: "10px 12px",
+                      padding: "9px 12px",
                       border: `1.5px solid ${C.border}`,
                       borderRadius: 8,
-                      fontSize: 14,
+                      fontSize: 13,
                       fontFamily: F.mono,
                       fontWeight: 700,
                       letterSpacing: 2,
@@ -417,12 +584,12 @@ export const LoginPage: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
+              <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
                 <button
                   type="button"
                   onClick={() => navigate("/home")}
                   style={{
-                    padding: "11px 18px",
+                    padding: "10px 16px",
                     borderRadius: 8,
                     border: `1.5px solid ${C.border}`,
                     background: "#ffffff",
@@ -436,20 +603,50 @@ export const LoginPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   style={{
                     flex: 1,
-                    padding: "11px 20px",
+                    padding: "10px 20px",
                     borderRadius: 8,
                     border: "none",
-                    background: `linear-gradient(135deg, ${C.navy}, ${C.navyLight})`,
+                    background: isRegisterMode
+                      ? `linear-gradient(135deg, ${C.gemOrange}, ${C.gemOrangeDark})`
+                      : `linear-gradient(135deg, ${C.navy}, ${C.navyLight})`,
                     color: "#ffffff",
                     fontWeight: 700,
                     fontSize: 14,
-                    cursor: "pointer",
-                    boxShadow: `0 4px 12px ${C.navy}40`
+                    cursor: isSubmitting ? "not-allowed" : "pointer",
+                    boxShadow: isRegisterMode ? `0 4px 12px ${C.gemOrange}40` : `0 4px 12px ${C.navy}40`,
+                    opacity: isSubmitting ? 0.7 : 1,
+                    transition: "all 0.15s"
                   }}
                 >
-                  Secure Login →
+                  {isSubmitting 
+                    ? "Processing..." 
+                    : isRegisterMode 
+                      ? `✨ Create ${role === ROLES.OFFICER ? "Officer" : "Bidder"} ID →` 
+                      : "Secure Login →"}
+                </button>
+              </div>
+
+              {/* Toggle text link */}
+              <div style={{ textAlign: "center", marginTop: 14 }}>
+                <button
+                  type="button"
+                  onClick={() => setIsRegisterMode(!isRegisterMode)}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    color: C.navy,
+                    fontWeight: 600,
+                    fontSize: 12,
+                    cursor: "pointer",
+                    textDecoration: "underline"
+                  }}
+                >
+                  {isRegisterMode 
+                    ? "Already have an ID? Switch to Sign In" 
+                    : "Need a new account? Create a Bidder or Officer ID here"}
                 </button>
               </div>
             </form>
