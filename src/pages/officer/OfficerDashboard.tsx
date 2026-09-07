@@ -131,16 +131,24 @@ export const OfficerDashboard: React.FC = () => {
               <Link
                 to={`/officer/tenders/${t.id}/bidders`}
                 style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
                   padding: "9px 20px",
                   borderRadius: 6,
                   background: C.navy,
                   color: "#ffffff",
                   fontSize: 13,
                   fontWeight: 700,
-                  textDecoration: "none"
+                  textDecoration: "none",
+                  whiteSpace: "nowrap",
+                  boxShadow: "0 2px 4px rgba(11,61,145,0.2)",
+                  transition: "all 0.15s ease"
                 }}
               >
-                OPEN EVALUATION →
+                <span>OPEN EVALUATION</span>
+                <span style={{ fontSize: 14, lineHeight: 1 }}>→</span>
               </Link>
             </div>
           </div>

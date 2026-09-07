@@ -137,20 +137,28 @@ export const OfficerBidders: React.FC = () => {
                       {b.status}
                     </span>
                   </td>
-                  <td style={{ padding: "14px 18px", textAlign: "right" }}>
+                  <td style={{ padding: "14px 18px", textAlign: "right", whiteSpace: "nowrap" }}>
                     <Link
                       to={`/officer/bidders/${b.id}/documents`}
                       style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 6,
                         padding: "6px 14px",
                         borderRadius: 6,
                         background: C.navy,
                         color: "#ffffff",
                         fontSize: 12,
                         fontWeight: 700,
-                        textDecoration: "none"
+                        textDecoration: "none",
+                        whiteSpace: "nowrap",
+                        boxShadow: "0 2px 4px rgba(11,61,145,0.2)",
+                        transition: "all 0.15s ease"
                       }}
                     >
-                      VIEW →
+                      <span>VIEW</span>
+                      <span style={{ fontSize: 13, lineHeight: 1 }}>→</span>
                     </Link>
                   </td>
                 </tr>
