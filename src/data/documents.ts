@@ -22,14 +22,19 @@ export const mockDocuments: Record<string, DocumentItem[]> = {
       verified: true,
       category: "Statutory / Tax",
       content: {
-        registrationNumber: "33AABCA1234F1Z8",
-        legalName: "ABC ENGINEERING LIMITED",
-        tradeName: "ABC FLOW SOLUTIONS",
-        dateOfLiability: "01/07/2017",
-        validity: "Active / Verified",
-        jurisdiction: "Range-IV, Division-II, Chennai Central",
+        registrationNumber: "37AABCA1234F1Z5",
+        legalName: "ABC ENGINEERING PRIVATE LIMITED",
+        tradeName: "ABC ENGINEERING PRIVATE LIMITED",
+        constitutionOfBusiness: "Private Limited Company",
+        principalAddress: "Plot No. 14-B, Ambattur Industrial Estate, Chennai, Tamil Nadu - 600058",
+        dateOfLiability: "03/02/2018",
+        validity: "Active / Regular",
         typeOfTaxpayer: "Regular",
-        signatory: "Commissioner of Commercial Taxes, Tamil Nadu"
+        approvingState: "Andhra Pradesh",
+        officerName: "varigonda girija",
+        officerDesignation: "GST Officer",
+        jurisdiction: "CHITTOOR-I",
+        issueDate: "11/04/2018"
       }
     },
     {
@@ -57,13 +62,26 @@ export const mockDocuments: Record<string, DocumentItem[]> = {
       verified: true,
       category: "Enterprise Classification",
       content: {
-        udyamNumber: "UDYAM-TN-02-0045892",
-        enterpriseName: "ABC ENGINEERING LIMITED",
-        classification: "Medium Enterprise (Manufacturing)",
-        majorActivity: "Manufacture of valves, industrial flow components and high pressure fittings (NIC Code: 28120)",
-        dateOfIncorporation: "14/05/2004",
-        investmentInPlant: "₹24.80 Crores",
-        turnover: "₹68.40 Crores"
+        udyamNumber: "UDYAM-KR-03-0278313",
+        enterpriseName: "ABHINAM ENTERPRISES",
+        classificationType: "Micro",
+        classificationYear: "2023-24",
+        classificationDate: "26/06/2023",
+        majorActivityBanner: "SERVICES",
+        socialCategory: "GENERAL",
+        flatDoorBlock: "NO.60",
+        premisesBuilding: "G3 SAISUCHIN APPARTMENT",
+        villageTown: "VASANTHPURA",
+        block: "MARUTHI LAYOUT",
+        roadStreetLane: "BANGALORE",
+        city: "BANGALORE",
+        state: "KARNATAKA",
+        district: "BENGALURU (URBAN) , Pin 560061",
+        mobile: "9880572411",
+        email: "VINAY.ASSOCI@GMAIL.COM",
+        dateOfIncorporation: "15/06/2017",
+        dateOfCommencement: "15/06/2017",
+        dateOfUdyamRegistration: "26/06/2023"
       }
     },
     {
@@ -75,12 +93,16 @@ export const mockDocuments: Record<string, DocumentItem[]> = {
       verified: true,
       category: "Financial / Compliance",
       content: {
-        assessmentYear: "2025-26",
-        filingDate: "31/07/2025",
-        acknowledgementNo: "982347102938472",
-        grossTotalIncome: "₹14,92,40,000",
-        taxPaid: "₹3,72,10,000",
-        formType: "ITR-6 (Companies other than claiming exemption under sec 11)"
+        assessmentYear: "2020-21",
+        panNumber: "AABCA1234F",
+        name: "ABHINAM ENTERPRISES",
+        address: "NO.60, G3 SAISUCHIN APPARTMENT, VASANTHPURA, BANGALORE - 560061",
+        status: "Individual",
+        formType: "ITR-3",
+        acknowledgementNo: "849201948192039",
+        businessLoss: "675484",
+        totalIncome: "160850",
+        taxPaid: "9500"
       }
     },
     {
@@ -92,12 +114,12 @@ export const mockDocuments: Record<string, DocumentItem[]> = {
       verified: true,
       category: "Financial Compliance",
       content: {
-        financialYear: "FY 2024-2025",
-        netWorth: "₹42.30 Crores",
-        operatingRevenue: "₹68.40 Crores",
-        ebitda: "₹11.20 Crores",
-        caFirm: "M/s Ramanathan & Associates, Chartered Accountants",
-        caUdin: "25042318AAAAAB8892"
+        enterpriseName: "M/S INDUSTRIAL FURNACES",
+        address: "PLOT NO. 116 GALI NO. 6 KRISHNA COLONY , SECTOR-25, BALLABGARH, FARIDABAD",
+        caFirm: "AMKN & CO, Chartered Accountants (FRN: 032712C)",
+        caPartner: "CA NITIN KAUSHIK (Partner)",
+        caMembershipNo: "558996",
+        caUdin: "23558996BGSVMJ272"
       }
     },
     {
@@ -109,8 +131,11 @@ export const mockDocuments: Record<string, DocumentItem[]> = {
       verified: true,
       category: "Labor & Social Security",
       content: {
-        establishmentCode: "TN/MAS/0048291/000",
-        establishmentName: "ABC ENGINEERING LIMITED",
+        refNo: "DL/CPM/0029103/000/18293",
+        intimationDate: "17/08/2023",
+        establishmentName: "M/S INDUSTRIAL FURNACES",
+        establishmentCode: "APHYD0089201000",
+        panNumber: "AABCA1234F",
         activeContributingMembers: "248 Employees",
         ecrFilingStatus: "Up to date (ECR filed for July 2026)",
         electronicChallanNo: "TRRN: 312260800921"
