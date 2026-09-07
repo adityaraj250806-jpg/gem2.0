@@ -66,8 +66,8 @@ export const OfficerBidderDocs: React.FC = () => {
           </div>
         </div>
 
-        <span style={{ padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, background: "#f1f5f9", color: C.ink }}>
-          Package: 10 of 10 Uploaded
+        <span style={{ padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, background: docs.length === 10 ? "#f0fdf4" : "#fffbeb", color: docs.length === 10 ? C.emerald : C.amber }}>
+          Package: {docs.length} of 10 Uploaded
         </span>
       </div>
 

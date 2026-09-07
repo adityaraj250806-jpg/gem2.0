@@ -23,7 +23,7 @@ export const seedDatabase = async () => {
       });
       await officer.save();
 
-      // 2. Registered Bidder
+      // 2. Registered Bidder - ABC Engineering
       const bidder = new User({
         email: "tenders@abcengineering.com",
         password: "Demo@GeM2026",
@@ -36,9 +36,23 @@ export const seedDatabase = async () => {
       });
       await bidder.save();
 
+      // 3. New Dedicated Sovereign Bidder - Kavach Engineering
+      const kavachBidder = new User({
+        email: "bidder@kavach.in",
+        password: "Kavach@2026",
+        name: "Kavach Engineering & Power Systems Pvt Ltd",
+        role: "BIDDER",
+        roleTitle: "Registered Sovereign Bidder",
+        orgName: "Kavach Engineering & Power Systems Pvt Ltd (Bangalore)",
+        gstin: "29AABCK7788P1ZR",
+        avatarInitial: "K"
+      });
+      await kavachBidder.save();
+
       console.log("✅ Default users created successfully:");
       console.log("   - Officer: procurement.officer@cpcl.gov.in / Officer#2026");
       console.log("   - Bidder: tenders@abcengineering.com / Demo@GeM2026");
+      console.log("   - Kavach Bidder: bidder@kavach.in / Kavach@2026");
     }
 
     const tenderCount = await Tender.countDocuments();

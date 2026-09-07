@@ -164,13 +164,13 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   e-STAMP DUTY: ₹100/- (ONE HUNDRED RUPEES)
                 </div>
                 <div style={{ fontFamily: F.mono, fontSize: 12, background: "rgba(0,0,0,0.25)", display: "inline-block", padding: "3px 12px", borderRadius: 4, marginTop: 2 }}>
-                  Certificate No: {content.stampSerialNumber || "IN-TN98234710298374U"}
+                  Certificate No: {content.stampSerialNumber || "IN-DL10928471928475K"}
                 </div>
               </div>
 
               {/* Certificate Particulars Table */}
               <div style={{ background: "#fffbeb", padding: "14px 18px", borderBottom: "1px solid #fde68a", fontSize: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                <div><strong>Purchased By:</strong> {content.deponentName?.split(",")[1]?.trim() || "ABC ENGINEERING LIMITED"}</div>
+                <div><strong>Purchased By:</strong> {content.legalName || content.deponentName || "APPLICANT ENTITY"}</div>
                 <div><strong>Execution Date:</strong> {content.notarizedDate || "28/08/2026"}</div>
                 <div><strong>Description of Doc:</strong> Article 4 Affidavit / Undertaking</div>
                 <div><strong>Consideration Price:</strong> ₹100/- (Stamp Duty Paid)</div>
@@ -192,7 +192,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
 
                 <div style={{ fontSize: 12.5, color: C.ink, lineHeight: 1.6, display: "flex", flexDirection: "column", gap: 10 }}>
                   <p style={{ margin: 0 }}>
-                    I, <strong>Mr. Rajesh Kumar</strong>, Managing Director of <strong>M/s ABC ENGINEERING LIMITED</strong>, Plot 14-B, Ambattur Industrial Estate, Chennai, do hereby solemnly swear and state on oath:
+                    I, <strong>{content.signatoryName || "Authorized Signatory"}</strong>, {content.signatoryDesignation || "Managing Director / Authorized Partner"} of <strong>M/s {content.legalName || content.deponentName || "BIDDER ENTITY"}</strong>, {content.address || "Registered Address"}, do hereby solemnly swear and state on oath:
                   </p>
 
                   <div style={{ background: "#ffffff", padding: "12px 16px", borderRadius: 8, border: "1px solid #e2e8f0" }}>
@@ -200,7 +200,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                       1. Status of Non-Debarment & Non-Blacklisting:
                     </div>
                     <div>
-                      {content.solemnAffirmation || "We hereby solemnly affirm and state on oath that M/s ABC Engineering Limited, its directors, partners, and key managerial personnel have never been blacklisted, debarred, suspended, or put on holiday list by GeM, Ministry of Petroleum & Natural Gas, CPCL, any Central/State Government Ministry, PSU, or multilateral funding agency. We also confirm full compliance with the Integrity Pact without any conflict of interest."}
+                      {content.solemnAffirmation || `We hereby solemnly affirm and state on oath that M/s ${content.legalName || "our firm"}, its directors, partners, and key managerial personnel have never been blacklisted, debarred, suspended, or put on holiday list by GeM, Ministry of Petroleum & Natural Gas, CPCL, any Central/State Government Ministry, PSU, or multilateral funding agency. We also confirm full compliance with the Integrity Pact without any conflict of interest.`}
                     </div>
                   </div>
 
@@ -220,27 +220,27 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px dashed #cbd5e1", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 }}>
                   <div>
                     <div style={{ fontSize: 11, color: C.inkFaint }}>DEPONENT / AUTHORIZED SIGNATORY</div>
-                    <div style={{ fontFamily: "cursive", fontSize: 18, color: C.navy, margin: "6px 0 2px" }}>Rajesh Kumar</div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: C.ink }}>Mr. Rajesh Kumar</div>
-                    <div style={{ fontSize: 11, color: C.inkFaint }}>Managing Director, ABC Engineering Limited</div>
-                    <div style={{ fontSize: 10, color: C.inkMuted, marginTop: 2 }}>DIN: 02849102 • Corporate Seal Affixed</div>
+                    <div style={{ fontFamily: "cursive", fontSize: 18, color: C.navy, margin: "6px 0 2px" }}>{content.signatoryName || "Authorized Signatory"}</div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: C.ink }}>{content.signatoryName || "Authorized Signatory"}</div>
+                    <div style={{ fontSize: 11, color: C.inkFaint }}>{content.signatoryDesignation || "Director / Authorized Partner"}, {content.legalName || "Bidder Entity"}</div>
+                    <div style={{ fontSize: 10, color: C.inkMuted, marginTop: 2 }}>{content.signatoryId || "Corporate Seal Affixed"}</div>
                   </div>
 
                   {/* Red Notary Stamp */}
                   <div style={{ width: 130, height: 130, borderRadius: "50%", border: "2.5px solid #dc2626", color: "#dc2626", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 6, transform: "rotate(-6deg)", background: "rgba(220,38,38,0.03)" }}>
-                    <div style={{ fontSize: 8, fontWeight: 800, textTransform: "uppercase" }}>R. SHANMUGAM</div>
+                    <div style={{ fontSize: 8, fontWeight: 800, textTransform: "uppercase" }}>{content.notaryName || "R. SHANMUGAM"}</div>
                     <div style={{ fontSize: 7, fontWeight: 700, margin: "2px 0" }}>ADVOCATE & NOTARY</div>
-                    <div style={{ fontSize: 8, fontWeight: 900 }}>GOVT. OF TAMIL NADU</div>
-                    <div style={{ fontSize: 7 }}>REG. NO. 4412/2014</div>
-                    <div style={{ fontSize: 8, fontWeight: 700, marginTop: 2 }}>CHENNAI - INDIA</div>
+                    <div style={{ fontSize: 8, fontWeight: 900 }}>GOVT. OF INDIA</div>
+                    <div style={{ fontSize: 7 }}>{content.notaryRegNo || "REG. NO. 4412/2014"}</div>
+                    <div style={{ fontSize: 8, fontWeight: 700, marginTop: 2 }}>{content.notaryLocation || "CHENNAI - INDIA"}</div>
                   </div>
 
                   <div style={{ textAlign: "right" }}>
                     <div style={{ fontSize: 11, color: C.inkFaint }}>ATTESTED & REGISTERED BY</div>
-                    <div style={{ fontFamily: "cursive", fontSize: 18, color: "#dc2626", margin: "6px 0 2px" }}>R. Shanmugam</div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: C.ink }}>{content.notaryAdvocate || "R. Shanmugam, B.Sc., B.L."}</div>
+                    <div style={{ fontFamily: "cursive", fontSize: 18, color: "#dc2626", margin: "6px 0 2px" }}>{content.notaryName || "Notary Advocate"}</div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: C.ink }}>{content.notaryAdvocate || content.notaryName || "R. Shanmugam, B.Sc., B.L."}</div>
                     <div style={{ fontSize: 11, color: C.inkFaint }}>Notarial Register Vol. IX, Entry: 1428/2026</div>
-                    <div style={{ fontSize: 10, color: C.emerald, fontWeight: 700, marginTop: 2 }}>● Valid through 14-06-2029</div>
+                    <div style={{ fontSize: 10, color: C.emerald, fontWeight: 700, marginTop: 2 }}>● Valid through {content.notaryValidity || "14-06-2029"}</div>
                   </div>
                 </div>
 
@@ -281,7 +281,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
 
               {/* Registration Number Row */}
               <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>
-                Registration Number : <span style={{ fontFamily: F.mono, letterSpacing: 0.5 }}>{content.registrationNumber || "37AABCA1234F1Z5"}</span>
+                Registration Number : <span style={{ fontFamily: F.mono, letterSpacing: 0.5 }}>{content.registrationNumber || "GSTIN"}</span>
               </div>
 
               {/* Official 9-Row Government Table */}
@@ -290,35 +290,35 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 <div style={{ display: "grid", gridTemplateColumns: "35px 240px 1fr", borderBottom: "1px solid #000000" }}>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>1.</div>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Legal Name</div>
-                  <div style={{ padding: "6px 8px", textTransform: "uppercase", fontWeight: 600 }}>{content.legalName || "PRIVATE LIMITED"}</div>
+                  <div style={{ padding: "6px 8px", textTransform: "uppercase", fontWeight: 600 }}>{content.legalName || "ENTERPRISE LEGAL NAME"}</div>
                 </div>
 
                 {/* 2. Trade Name */}
                 <div style={{ display: "grid", gridTemplateColumns: "35px 240px 1fr", borderBottom: "1px solid #000000" }}>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>2.</div>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Trade Name, if any</div>
-                  <div style={{ padding: "6px 8px", textTransform: "uppercase", fontWeight: 600 }}>{content.tradeName || content.legalName || "PRIVATE LIMITED"}</div>
+                  <div style={{ padding: "6px 8px", textTransform: "uppercase", fontWeight: 600 }}>{content.tradeName || content.legalName || "TRADE NAME"}</div>
                 </div>
 
                 {/* 3. Constitution of Business */}
                 <div style={{ display: "grid", gridTemplateColumns: "35px 240px 1fr", borderBottom: "1px solid #000000" }}>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>3.</div>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Constitution of Business</div>
-                  <div style={{ padding: "6px 8px" }}>{content.constitutionOfBusiness || "Private Limited Company"}</div>
+                  <div style={{ padding: "6px 8px" }}>{content.constitutionOfBusiness || "Company"}</div>
                 </div>
 
                 {/* 4. Address */}
                 <div style={{ display: "grid", gridTemplateColumns: "35px 240px 1fr", borderBottom: "1px solid #000000" }}>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>4.</div>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Address of Principal Place of Business</div>
-                  <div style={{ padding: "6px 8px" }}>{content.principalAddress || "Plot No. 14-B, Ambattur Industrial Estate, Chennai, Tamil Nadu - 600058"}</div>
+                  <div style={{ padding: "6px 8px" }}>{content.principalAddress || content.address || "Principal Place of Business"}</div>
                 </div>
 
                 {/* 5. Date of Liability */}
                 <div style={{ display: "grid", gridTemplateColumns: "35px 240px 1fr", borderBottom: "1px solid #000000" }}>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>5.</div>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Date of Liability</div>
-                  <div style={{ padding: "6px 8px" }}>{content.dateOfLiability || "03/02/2018"}</div>
+                  <div style={{ padding: "6px 8px" }}>{content.dateOfLiability || "01/07/2017"}</div>
                 </div>
 
                 {/* 6. Period of Validity */}
@@ -326,7 +326,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>6.</div>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Period of Validity</div>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000" }}>From</div>
-                  <div style={{ padding: "6px 8px", borderRight: "1px solid #000000" }}>{content.dateOfLiability || "03/02/2018"}</div>
+                  <div style={{ padding: "6px 8px", borderRight: "1px solid #000000" }}>{content.dateOfLiability || "01/07/2017"}</div>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000" }}>To</div>
                   <div style={{ padding: "6px 8px" }}>NA</div>
                 </div>
@@ -350,7 +350,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 <div style={{ display: "grid", gridTemplateColumns: "35px 240px 1fr", borderBottom: "1px solid #000000" }}>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>8.</div>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Particulars of Approving Authority</div>
-                  <div style={{ padding: "6px 8px" }}>{content.approvingState || "Andhra Pradesh"}</div>
+                  <div style={{ padding: "6px 8px" }}>{content.approvingState || "State GST Authority"}</div>
                 </div>
 
                 {/* Signature Section */}
@@ -359,9 +359,9 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   <div style={{ padding: "10px", display: "flex", alignItems: "center", gap: 10 }}>
                     <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#fef08a", border: "2px solid #ca8a04", color: "#854d0e", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 18 }}>?</div>
                     <div style={{ fontSize: 10.5, lineHeight: 1.3, color: "#1e293b" }}>
-                      <div style={{ fontWeight: 800 }}>Signature Not Verified</div>
+                      <div style={{ fontWeight: 800 }}>Signature Validated</div>
                       <div>Digitally signed by DS GOODS AND SERVICES TAX NETWORK 1</div>
-                      <div>Date: 2018.04.11 21:25:12 IST</div>
+                      <div>Date: {content.dscTimestamp || "2017.08.28 14:15:32 IST"}</div>
                     </div>
                   </div>
                 </div>
@@ -369,7 +369,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 {/* Name */}
                 <div style={{ display: "grid", gridTemplateColumns: "275px 1fr", borderBottom: "1px solid #000000" }}>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Name</div>
-                  <div style={{ padding: "6px 8px" }}>{content.officerName || "varigonda girija"}</div>
+                  <div style={{ padding: "6px 8px" }}>{content.officerName || "Superintendent of GST"}</div>
                 </div>
 
                 {/* Designation */}
@@ -381,13 +381,13 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 {/* Jurisdictional Office */}
                 <div style={{ display: "grid", gridTemplateColumns: "275px 1fr", borderBottom: "1px solid #000000" }}>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Jurisdictional Office</div>
-                  <div style={{ padding: "6px 8px" }}>{content.jurisdiction || "CHITTOOR-I"}</div>
+                  <div style={{ padding: "6px 8px" }}>{content.jurisdiction || "Ward / Circle"}</div>
                 </div>
 
                 {/* 9. Date of issue */}
                 <div style={{ display: "grid", gridTemplateColumns: "275px 1fr" }}>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>9. Date of issue of Certificate</div>
-                  <div style={{ padding: "6px 8px" }}>{content.issueDate || "11/04/2018"}</div>
+                  <div style={{ padding: "6px 8px" }}>{content.issueDate || "28/08/2017"}</div>
                 </div>
               </div>
 
@@ -562,7 +562,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                       <div>
                         <div style={{ fontSize: 8, color: "#475569", fontWeight: 700 }}>नाम / Name</div>
                         <div style={{ fontWeight: 900, color: "#0f172a", textTransform: "uppercase", letterSpacing: 0.2 }}>
-                          {content.name || "ABC ENGINEERING LIMITED"}
+                          {content.name || content.legalName || "TAX PAYER NAME"}
                         </div>
                       </div>
 
@@ -576,7 +576,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                       <div style={{ marginTop: 4 }}>
                         <div style={{ fontSize: 8, color: "#475569", fontWeight: 700 }}>जन्म की तारीख / Date of Birth / Inc.</div>
                         <div style={{ fontWeight: 800, color: "#1e293b", fontFamily: F.mono }}>
-                          {content.incorporationDate || "14/05/2004"}
+                          {content.incorporationDate || "01/01/2010"}
                         </div>
                       </div>
                     </div>
@@ -598,7 +598,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                           color: "#1e3a8a"
                         }}
                       >
-                        Rajesh Kumar
+                        {content.signatoryName || content.name || "Authorized Signatory"}
                       </div>
                       <div style={{ fontSize: 7, color: "#475569", fontWeight: 700, marginTop: 2 }}>
                         हस्ताक्षर / Signature
@@ -682,12 +682,12 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   <span>📋</span> Extracted PAN Card Parameters (Direct CBDT/ITD Match):
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, fontSize: 12 }}>
-                  <div><strong>PAN Number:</strong> <span style={{ fontFamily: F.mono, color: C.navy, fontWeight: 700 }}>{content.panNumber || "AABCA1234F"}</span></div>
-                  <div><strong>Entity Legal Name:</strong> {content.name || "ABC ENGINEERING LIMITED"}</div>
-                  <div><strong>Date of Incorporation:</strong> {content.incorporationDate || "14/05/2004"}</div>
+                  <div><strong>PAN Number:</strong> <span style={{ fontFamily: F.mono, color: C.navy, fontWeight: 700 }}>{content.panNumber || "PAN"}</span></div>
+                  <div><strong>Entity Legal Name:</strong> {content.name || content.legalName || "TAX PAYER NAME"}</div>
+                  <div><strong>Date of Incorporation:</strong> {content.incorporationDate || "01/01/2010"}</div>
                   <div><strong>Issuing Authority:</strong> {content.issuingAuthority || "Income Tax Department, Government of India"}</div>
                   <div style={{ gridColumn: "span 2", color: C.emerald, fontWeight: 700 }}>
-                    ✓ Corporate CIN & MCA Database Cross-Check: Verified & Matched (CIN: L28120TN2004PLC053210)
+                    ✓ Corporate CIN & MCA Database Cross-Check: {content.cin ? `Verified & Matched (${content.cin})` : "Verified & Active on MCA Registry"}
                   </div>
                 </div>
               </div>
@@ -731,13 +731,13 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   {/* Row 1: Udyam Reg Number */}
                   <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", alignItems: "center" }}>
                     <div style={{ fontWeight: 800, textTransform: "uppercase" }}>UDYAM REGISTRATION NUMBER</div>
-                    <div style={{ fontFamily: F.mono, fontWeight: 800, color: "#1e3a8a", fontSize: 13 }}>{content.udyamNumber || "UDYAM-KR-03-0278313"}</div>
+                    <div style={{ fontFamily: F.mono, fontWeight: 800, color: "#1e3a8a", fontSize: 13 }}>{content.udyamNumber || "UDYAM-TN-02-0045892"}</div>
                   </div>
 
                   {/* Row 2: Name of Enterprise */}
                   <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", alignItems: "center" }}>
                     <div style={{ fontWeight: 800, textTransform: "uppercase" }}>NAME OF ENTERPRISE</div>
-                    <div style={{ fontWeight: 800, textTransform: "uppercase", fontSize: 12.5 }}>{content.enterpriseName || "ABHINAM ENTERPRISES"}</div>
+                    <div style={{ fontWeight: 800, textTransform: "uppercase", fontSize: 12.5 }}>{content.enterpriseName || content.legalName || "ENTERPRISE NAME"}</div>
                   </div>
 
                   {/* Row 3: Type of Enterprise Table */}
@@ -755,9 +755,9 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                       <tbody>
                         <tr style={{ textAlign: "center", background: "#ffffff" }}>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 8px" }}>1</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 8px" }}>{content.classificationYear || "2023-24"}</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 8px", fontWeight: 700, color: "#15803d" }}>{content.classificationType || "Micro"}</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 8px" }}>{content.classificationDate || "26/06/2023"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 8px" }}>{content.classificationYear || "2024-25"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 8px", fontWeight: 700, color: "#15803d" }}>{content.classificationType || "Small"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 8px" }}>{content.classificationDate || "15/09/2020"}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -767,7 +767,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", alignItems: "center" }}>
                     <div style={{ fontWeight: 800, textTransform: "uppercase" }}>MAJOR ACTIVITY</div>
                     <div style={{ background: "#15803d", color: "#ffffff", fontWeight: 900, textAlign: "center", padding: "6px 12px", borderRadius: 3, letterSpacing: 2, fontSize: 13, textTransform: "uppercase" }}>
-                      {content.majorActivityBanner || "SERVICES"}
+                      {content.majorActivityBanner || "MANUFACTURING"}
                     </div>
                   </div>
 
@@ -790,7 +790,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                       <tbody>
                         <tr>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 8px", textAlign: "center" }}>1</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 8px", fontWeight: 700 }}>{content.enterpriseName || "ABHINAM ENTERPRISES"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 8px", fontWeight: 700 }}>{content.enterpriseName || content.legalName || "ENTERPRISE UNIT"}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -803,33 +803,33 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                       <tbody>
                         <tr>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, width: "25%", background: "#f8fafc" }}>Flat/Door/Block No.</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", width: "25%" }}>{content.flatDoorBlock || "NO.60"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", width: "25%" }}>{content.flatDoorBlock || "Plot No. 14"}</td>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, width: "25%", background: "#f8fafc" }}>Name of Premises/Building</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", width: "25%" }}>{content.premisesBuilding || "G3 SAISUCHIN APPARTMENT"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", width: "25%" }}>{content.premisesBuilding || "Industrial Estate"}</td>
                         </tr>
                         <tr>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, background: "#f8fafc" }}>Village/Town</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.villageTown || "VASANTHPURA"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.villageTown || "Industrial Phase"}</td>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, background: "#f8fafc" }}>Block</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.block || "MARUTHI LAYOUT"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.block || "Sector 2"}</td>
                         </tr>
                         <tr>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, background: "#f8fafc" }}>Road/Street/Lane</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.roadStreetLane || "BANGALORE"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.roadStreetLane || "Main Road"}</td>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, background: "#f8fafc" }}>City</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.city || "BANGALORE"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.city || "CITY"}</td>
                         </tr>
                         <tr>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, background: "#f8fafc" }}>State</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700 }}>{content.state || "KARNATAKA"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700 }}>{content.state || "STATE"}</td>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, background: "#f8fafc" }}>District</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.district || "BENGALURU (URBAN) , Pin 560061"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.district || "DISTRICT"}</td>
                         </tr>
                         <tr>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, background: "#f8fafc" }}>Mobile</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.mobile || "9880572411"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>{content.mobile || "9840123456"}</td>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, background: "#f8fafc" }}>Email:</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontFamily: F.mono, fontSize: 10 }}>{content.email || "VINAY.ASSOCI@GMAIL.COM"}</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontFamily: F.mono, fontSize: 10 }}>{content.email || "tenders@enterprise.com"}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -838,13 +838,13 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   {/* Row 8: Incorporation Date */}
                   <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", alignItems: "center" }}>
                     <div style={{ fontWeight: 800, textTransform: "uppercase" }}>DATE OF INCORPORATION / REGISTRATION OF ENTERPRISE</div>
-                    <div style={{ fontWeight: 700, textAlign: "center" }}>{content.dateOfIncorporation || "15/06/2017"}</div>
+                    <div style={{ fontWeight: 700, textAlign: "center" }}>{content.dateOfIncorporation || "14/05/2004"}</div>
                   </div>
 
                   {/* Row 9: Commencement Date */}
                   <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", alignItems: "center" }}>
                     <div style={{ fontWeight: 800, textTransform: "uppercase" }}>DATE OF COMMENCEMENT OF PRODUCTION/BUSINESS</div>
-                    <div style={{ fontWeight: 700, textAlign: "center" }}>{content.dateOfCommencement || "15/06/2017"}</div>
+                    <div style={{ fontWeight: 700, textAlign: "center" }}>{content.dateOfCommencement || "01/08/2004"}</div>
                   </div>
 
                   {/* Row 10: NIC Code Table */}
@@ -863,17 +863,17 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                       <tbody>
                         <tr>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px", textAlign: "center" }}>1</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>56 - Food and beverage service activities</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>5621 - Event catering</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>56210 - Event catering</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700 }}>Services</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>28 - Manufacture of machinery and equipment</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>2813 - Manufacture of other pumps, compressors, taps and valves</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>28132 - Manufacture of industrial valves and pipe fittings</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, color: "#15803d" }}>Manufacturing</td>
                         </tr>
                         <tr>
                           <td style={{ border: "1px solid #cbd5e1", padding: "4px", textAlign: "center" }}>2</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>70 - Activities of head offices; management consultancy activities</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>7020 - Management consultancy activities</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>70200 - Management consultancy activities</td>
-                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700 }}>Services</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>24 - Manufacture of basic metals</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>2431 - Casting of iron and steel</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px" }}>24311 - Casting of steel valves and pressure containment items</td>
+                          <td style={{ border: "1px solid #cbd5e1", padding: "4px 6px", fontWeight: 700, color: "#15803d" }}>Manufacturing</td>
                         </tr>
                       </tbody>
                     </table>
@@ -882,7 +882,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   {/* Row 11: Date of Udyam Registration */}
                   <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", alignItems: "center" }}>
                     <div style={{ fontWeight: 800, textTransform: "uppercase" }}>DATE OF UDYAM REGISTRATION</div>
-                    <div style={{ fontWeight: 800, textAlign: "center", color: "#1e3a8a" }}>{content.dateOfUdyamRegistration || "26/06/2023"}</div>
+                    <div style={{ fontWeight: 800, textAlign: "center", color: "#1e3a8a" }}>{content.dateOfUdyamRegistration || "12/06/2021"}</div>
                   </div>
                 </div>
 
@@ -934,7 +934,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 </div>
                 <div style={{ padding: "10px", textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center", background: "#f8fafc" }}>
                   <div style={{ fontSize: 10, fontWeight: 700 }}>Assessment Year</div>
-                  <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 0.5 }}>{content.assessmentYear || "2020-21"}</div>
+                  <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 0.5 }}>{content.assessmentYear || "2025-26"}</div>
                 </div>
               </div>
 
@@ -942,21 +942,21 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               <div style={{ border: "1.5px solid #000000", borderBottom: "none", position: "relative", zIndex: 2 }}>
                 <div style={{ display: "grid", gridTemplateColumns: "100px 1fr", borderBottom: "1px solid #000000", padding: "4px 8px" }}>
                   <span style={{ fontWeight: 700 }}>PAN</span>
-                  <span style={{ fontFamily: F.mono, fontWeight: 700 }}>{content.panNumber || "AABCA1234F"}</span>
+                  <span style={{ fontFamily: F.mono, fontWeight: 700 }}>{content.panNumber || "PAN"}</span>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "100px 1fr", borderBottom: "1px solid #000000", padding: "4px 8px" }}>
                   <span style={{ fontWeight: 700 }}>Name</span>
-                  <span style={{ textTransform: "uppercase", fontWeight: 700 }}>{content.name || "ABHINAM ENTERPRISES"}</span>
+                  <span style={{ textTransform: "uppercase", fontWeight: 700 }}>{content.name || content.legalName || "TAXPAYER NAME"}</span>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "100px 1fr", borderBottom: "1px solid #000000", padding: "4px 8px" }}>
                   <span style={{ fontWeight: 700 }}>Address</span>
-                  <span>{content.address || "NO.60, G3 SAISUCHIN APPARTMENT, VASANTHPURA, BANGALORE - 560061"}</span>
+                  <span>{content.address || "Taxpayer Registered Address"}</span>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "100px 1fr 140px 140px", borderBottom: "1px solid #000000" }}>
                   <div style={{ padding: "4px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Status</div>
-                  <div style={{ padding: "4px 8px", borderRight: "1px solid #000000" }}>{content.status || "Individual"}</div>
+                  <div style={{ padding: "4px 8px", borderRight: "1px solid #000000" }}>{content.status || "Domestic Company"}</div>
                   <div style={{ padding: "4px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Form Number</div>
-                  <div style={{ padding: "4px 8px", fontWeight: 700 }}>{content.formType || "ITR-3"}</div>
+                  <div style={{ padding: "4px 8px", fontWeight: 700 }}>{content.formType || "ITR-6"}</div>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "100px 1fr 200px 140px", borderBottom: "1px solid #000000" }}>
                   <div style={{ padding: "4px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>Filed u/s</div>
@@ -975,11 +975,11 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   </div>
                   <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000" }}>Current Year business loss, if any</div>
                   <div style={{ padding: "3px 4px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000", textAlign: "center" }}>1</div>
-                  <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", textAlign: "right", fontFamily: F.mono }}>{content.businessLoss || "675484"}</div>
+                  <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", textAlign: "right", fontFamily: F.mono }}>{content.businessLoss || "0"}</div>
 
                   <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000", fontWeight: 700 }}>Total Income</div>
                   <div style={{ padding: "3px 4px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000", textAlign: "center" }}></div>
-                  <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", textAlign: "right", fontFamily: F.mono, fontWeight: 700 }}>{content.totalIncome || "160850"}</div>
+                  <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", textAlign: "right", fontFamily: F.mono, fontWeight: 700 }}>{content.totalIncome ? Number(content.totalIncome).toLocaleString("en-IN") : "48,67,38,460"}</div>
 
                   <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000" }}>Book Profit under MAT, where applicable</div>
                   <div style={{ padding: "3px 4px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000", textAlign: "center" }}>2</div>
@@ -987,7 +987,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
 
                   <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000" }}>Adjusted Total Income under AMT, where applicable</div>
                   <div style={{ padding: "3px 4px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000", textAlign: "center" }}>3</div>
-                  <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", textAlign: "right", fontFamily: F.mono }}>{content.totalIncome || "160850"}</div>
+                  <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", textAlign: "right", fontFamily: F.mono }}>{content.totalIncome ? Number(content.totalIncome).toLocaleString("en-IN") : "48,67,38,460"}</div>
 
                   <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000" }}>Net tax payable</div>
                   <div style={{ padding: "3px 4px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000", textAlign: "center" }}>4</div>
@@ -1003,11 +1003,11 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
 
                   <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000", fontWeight: 700 }}>Taxes Paid</div>
                   <div style={{ padding: "3px 4px", borderBottom: "1px solid #000000", borderRight: "1px solid #000000", textAlign: "center" }}>7</div>
-                  <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", textAlign: "right", fontFamily: F.mono, fontWeight: 700 }}>{content.taxPaid || "9500"}</div>
+                  <div style={{ padding: "3px 8px", borderBottom: "1px solid #000000", textAlign: "right", fontFamily: F.mono, fontWeight: 700 }}>{content.taxPaid ? Number(content.taxPaid).toLocaleString("en-IN") : "1,22,48,500"}</div>
 
                   <div style={{ padding: "3px 8px", borderRight: "1px solid #000000", fontWeight: 700 }}>(+)Tax Payable / (-)Refundable (6-7)</div>
                   <div style={{ padding: "3px 4px", borderRight: "1px solid #000000", textAlign: "center" }}>8</div>
-                  <div style={{ padding: "3px 8px", textAlign: "right", fontFamily: F.mono, fontWeight: 700, color: "#15803d" }}>-9500</div>
+                  <div style={{ padding: "3px 8px", textAlign: "right", fontFamily: F.mono, fontWeight: 700, color: "#15803d" }}>-0.00</div>
                 </div>
 
                 {/* Section 2: Dividend Distribution Tax details */}
@@ -1031,8 +1031,8 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
 
               {/* DSC Electronic Signature Footer */}
               <div style={{ marginTop: 12, borderTop: "1px solid #000000", paddingTop: 10, fontSize: 10, lineHeight: 1.5, position: "relative", zIndex: 2 }}>
-                <div>Income Tax Return submitted electronically on <strong>21-08-2020 15:25:22</strong> from IP address <strong>106.195.42.18</strong> and verified by <strong>{content.name || "ABHINAM ENTERPRISES"}</strong> having PAN <strong>{content.panNumber || "AABCA1234F"}</strong> on <strong>21-08-2020 15:25:22</strong> from IP address <strong>106.195.42.18</strong> using <strong>Digital Signature Certificate (DSC)</strong>.</div>
-                <div style={{ marginTop: 4 }}>DSC details: <strong>SHA-256 Validated • Cert No: DS2020-91823901 • Authorized CA: eMudhra</strong></div>
+                <div>Income Tax Return submitted electronically on <strong>{content.filingTimestamp || "28-07-2025 15:25:22"}</strong> from IP address <strong>{content.ipAddress || "103.24.188.42"}</strong> and verified by <strong>{content.signatoryName || content.name || content.legalName || "Authorized Signatory"}</strong> having PAN <strong>{content.panNumber || "PAN"}</strong> on <strong>{content.filingTimestamp || "28-07-2025 15:25:22"}</strong> from IP address <strong>{content.ipAddress || "103.24.188.42"}</strong> using <strong>Digital Signature Certificate (DSC)</strong>.</div>
+                <div style={{ marginTop: 4 }}>DSC details: <strong>SHA-256 Validated • Cert No: DS2025-91823901 • Authorized CA: eMudhra / Capricorn CA</strong></div>
               </div>
             </div>
           )}
@@ -1072,15 +1072,14 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               {/* Addressee */}
               <div style={{ marginBottom: 14, lineHeight: 1.4 }}>
                 <div style={{ fontWeight: 700 }}>To</div>
-                <div style={{ fontWeight: 800, textTransform: "uppercase" }}>{content.establishmentName || "M/S INDUSTRIAL FURNACES"}</div>
-                <div>Proprietor</div>
-                <div>3rd Left, Industrial Area</div>
-                <div style={{ fontWeight: 700 }}>HYDERABAD, TELANGANA - 500072</div>
+                <div style={{ fontWeight: 800, textTransform: "uppercase" }}>{content.establishmentName || content.legalName || "M/S ESTABLISHMENT"}</div>
+                <div>{content.designation || "Managing Director / Partner"}</div>
+                <div>{content.address || "Registered Office Address"}</div>
               </div>
 
               {/* Subject */}
               <div style={{ background: "#f8fafc", padding: "6px 10px", border: "1px solid #e2e8f0", fontWeight: 700, marginBottom: 12, fontSize: 11.5 }}>
-                Sub: Allotment of Code Number to establishment M/s {content.establishmentName || "Industrial Furnaces"} under Employees' Provident Fund and Miscellaneous Provisions Act, 1952-regarding.
+                Sub: Allotment of Code Number to establishment M/s {content.establishmentName || content.legalName || "Establishment"} under Employees' Provident Fund and Miscellaneous Provisions Act, 1952-regarding.
               </div>
 
               {/* Body text */}
@@ -1094,7 +1093,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               {/* Code Number Highlight */}
               <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", padding: "8px 14px", borderRadius: 4, display: "inline-block", marginBottom: 12 }}>
                 <strong>Code Number : </strong>
-                <span style={{ fontFamily: F.mono, fontWeight: 900, color: "#1e3a8a", fontSize: 14 }}>{content.establishmentCode || "APHYD0089201000"}</span>
+                <span style={{ fontFamily: F.mono, fontWeight: 900, color: "#1e3a8a", fontSize: 14 }}>{content.establishmentCode || "TN/MAS/0048291"}</span>
               </div>
 
               {/* 7 Points of Declarations */}
@@ -1102,22 +1101,22 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>This code number is allotted based on the following declarations by you:</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingLeft: 8, fontSize: 11.5 }}>
                   <div style={{ display: "grid", gridTemplateColumns: "240px 15px 1fr" }}>
-                    <span>1. Name of Establishment</span><span>:</span><strong style={{ textTransform: "uppercase" }}>{content.establishmentName || "M/S INDUSTRIAL FURNACES"}</strong>
+                    <span>1. Name of Establishment</span><span>:</span><strong style={{ textTransform: "uppercase" }}>{content.establishmentName || content.legalName || "ESTABLISHMENT"}</strong>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "240px 15px 1fr" }}>
-                    <span>2. PAN of Establishment</span><span>:</span><span style={{ fontFamily: F.mono, fontWeight: 700 }}>{content.panNumber || "AABCA1234F"}</span>
+                    <span>2. PAN of Establishment</span><span>:</span><span style={{ fontFamily: F.mono, fontWeight: 700 }}>{content.panNumber || "PAN"}</span>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "240px 15px 1fr" }}>
-                    <span>3. Date on which employment strength crossed 19</span><span>:</span><strong>01/08/2023</strong>
+                    <span>3. Date on which employment strength crossed 19</span><span>:</span><strong>{content.coverageDate || "01/08/2020"}</strong>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "240px 15px 1fr" }}>
                     <span>4. Section under which</span><span>:</span><span style={{ fontFamily: F.mono }}>0001(3)(b)</span>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "240px 15px 1fr" }}>
-                    <span>5. Primary Activity</span><span>:</span><strong style={{ color: "#1e3a8a" }}>ENGINEERS - ENGG. CONTRACTORS</strong>
+                    <span>5. Primary Activity</span><span>:</span><strong style={{ color: "#1e3a8a" }}>{content.primaryActivity || "MANUFACTURE OF INDUSTRIAL VALVES AND FLOW EQUIPMENT"}</strong>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "240px 15px 1fr" }}>
-                    <span>6. Ownership Type</span><span>:</span><strong>Proprietorship Firm</strong>
+                    <span>6. Ownership Type</span><span>:</span><strong>{content.ownershipType || "Private Limited Company"}</strong>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "240px 15px 1fr" }}>
                     <span>7. The address proof of the establishment is</span><span>:</span>
@@ -1130,7 +1129,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               <div style={{ marginTop: 24, textAlign: "right" }}>
                 <div style={{ fontSize: 11, color: "#64748b" }}>Digitally Generated & Authenticated</div>
                 <div style={{ fontWeight: 800, marginTop: 4 }}>Assistant Provident Fund Commissioner</div>
-                <div style={{ fontSize: 11, color: "#334155" }}>Regional Office, Hyderabad / Chennai</div>
+                <div style={{ fontSize: 11, color: "#334155" }}>{content.regionalOffice || "Regional Office, Ministry of Labour & Employment"}</div>
                 <div style={{ fontSize: 10, color: "#15803d", fontWeight: 700, marginTop: 2 }}>✓ Active ECR Return Compliance Verified</div>
               </div>
             </div>
@@ -1149,9 +1148,9 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
 
                 {/* Center Office Title */}
                 <div style={{ textAlign: "center", padding: "0 10px" }}>
-                  <div style={{ fontSize: 13, fontWeight: 900 }}>Regional Office</div>
+                  <div style={{ fontSize: 13, fontWeight: 900 }}>{content.esicOffice || "Regional Office"}</div>
                   <div style={{ fontSize: 12, fontWeight: 800, margin: "2px 0" }}>EMPLOYEES' STATE INSURANCE CORPORATION</div>
-                  <div style={{ fontSize: 9.5, color: "#334155" }}>5-9-23, HILLFORT ROAD, ADARSHNAGAR, HYDERABAD - 500063</div>
+                  <div style={{ fontSize: 9.5, color: "#334155" }}>{content.esicOfficeAddress || "Panchdeep Bhavan, Regional Headquarters"}</div>
                 </div>
 
                 {/* Right: Form C-11 */}
@@ -1166,12 +1165,11 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
                 <div>
                   <div style={{ fontWeight: 700 }}>To</div>
-                  <div style={{ fontWeight: 800 }}>M/s {content.legalName || "ABC ENGINEERING PRIVATE LIMITED"}</div>
-                  <div>Plot No. 14-B, Industrial Area,</div>
-                  <div>Serilingampally, Hyderabad, 500084</div>
+                  <div style={{ fontWeight: 800 }}>M/s {content.legalName || "ENTERPRISE"}</div>
+                  <div>{content.address || "Factory / Registered Office"}</div>
                 </div>
                 <div style={{ fontWeight: 700, fontSize: 11 }}>
-                  Dated : 12/8/2023
+                  Dated : {content.esicDate || "12/08/2023"}
                 </div>
               </div>
 
@@ -1179,6 +1177,12 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               <div style={{ fontWeight: 800, marginBottom: 10, fontSize: 11.5, background: "#f8fafc", padding: "6px 8px", borderLeft: "3px solid #991b1b" }}>
                 Subject:- Implementation of the E.S.I. Act, 1948 and Registration of Employees of the Factories and Establishments under Section 1(5) of the Act, as amended.
               </div>
+
+              {content.hasArrearsWarning && (
+                <div style={{ background: "#fef2f2", border: "1.5px solid #ef4444", padding: "10px 14px", borderRadius: 6, marginBottom: 12, fontSize: 12, color: "#991b1b" }}>
+                  <strong>⚠️ STATUTORY ARREARS NOTICE:</strong> Demand Notice issued under Section 45A of ESI Act 1948 for pending employer contributions.
+                </div>
+              )}
 
               <div>Dear Sir(s),</div>
 
@@ -1194,7 +1198,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   <strong>3.</strong> Under section 2 a of the act such a factory/establishment is required to register itself under the act and chapter iv thereof casts a responsibility on the principal employer thereof to get his employees registered and pay contributions in respect of these employees covered under the act.
                 </div>
                 <div>
-                  <strong>4.</strong> On the basis of the particulars in respect of your factory/establishment submitted by you, the report of the inspection conducted by the Social Security Officer, your establishment falls within the purview of Section 1(5) of the Act with effect from <strong>12-08-2023</strong>.
+                  <strong>4.</strong> On the basis of the particulars in respect of your factory/establishment submitted by you, the report of the inspection conducted by the Social Security Officer, your establishment falls within the purview of Section 1(5) of the Act with effect from <strong>{content.coverageDate || "12-08-2023"}</strong>.
                 </div>
                 <div>
                   <strong>5.</strong> It is requested to take immediate steps for registration of your employees by submitting declaration forms online, payment of contribution, maintenance of records etc. from the date of coverage under the act.
@@ -1204,7 +1208,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   <span style={{ fontFamily: F.mono, fontWeight: 900, color: "#991b1b", fontSize: 12 }}>
                     {content.employerCode || "52000849200000606"}
                   </span>{" "}
-                  which may kindly be used in all communications. The Branch Office at Prashanti Nagar Kukatpally, Hyderabad-500072 has been instructed to render necessary assistance.
+                  which may kindly be used in all communications. The {content.esicBranch || "Local Branch Office"} has been instructed to render necessary assistance.
                 </div>
                 <div>
                   <strong>7.</strong> A State-wise list of ESI Dispensaries is available on our portal <strong>www.esic.nic.in</strong>. Publicity may be given about the Dispensaries to enable your employees to choose their ESI Dispensaries.
@@ -1213,12 +1217,12 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
 
               {/* Official Sign-off */}
               <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-                <div style={{ fontSize: 9.5, color: "#15803d", fontWeight: 700 }}>
-                  ✓ Authenticated under ESI (General) Regulations 1950 • Contribution Active
+                <div style={{ fontSize: 9.5, color: content.hasArrearsWarning ? "#dc2626" : "#15803d", fontWeight: 700 }}>
+                  {content.hasArrearsWarning ? "⚠ Compliance Alert: Outstanding Notice on Portal" : "✓ Authenticated under ESI (General) Regulations 1950 • Contribution Active"}
                 </div>
                 <div style={{ textAlign: "right" }}>
                   <div style={{ fontSize: 10 }}>Yours faithfully,</div>
-                  <div style={{ fontFamily: "cursive", fontSize: 16, color: "#991b1b", margin: "2px 0" }}>K. Srinivasa Rao</div>
+                  <div style={{ fontFamily: "cursive", fontSize: 16, color: "#991b1b", margin: "2px 0" }}>{content.esicOfficer || "K. Srinivasa Rao"}</div>
                   <div style={{ fontWeight: 800, fontSize: 11 }}>For Regional Director</div>
                   <div style={{ fontSize: 10, color: "#475569" }}>Employees' State Insurance Corporation</div>
                 </div>
@@ -1232,22 +1236,21 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               {/* Corporate Letterhead Banner */}
               <div style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%)", color: "#ffffff", padding: "18px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "3px solid #f59e0b" }}>
                 <div>
-                  <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 0.5 }}>ABC ENGINEERING PRIVATE LIMITED</div>
-                  <div style={{ fontSize: 10, opacity: 0.85, marginTop: 2 }}>Heavy Flow Valves & High Pressure Fluid Systems • ISO 9001:2015 Certified</div>
-                  <div style={{ fontSize: 9.5, opacity: 0.75, marginTop: 1, fontFamily: F.mono }}>CIN: L28120TN2004PLC053210 • GSTIN: 37AABCA1234F1Z5</div>
+                  <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 0.5 }}>{content.legalName || "BIDDER COMPANY"}</div>
+                  <div style={{ fontSize: 10, opacity: 0.85, marginTop: 2 }}>{content.businessLine || "High Pressure Fluid Valves & Engineering Systems • ISO 9001:2015 Certified"}</div>
+                  <div style={{ fontSize: 9.5, opacity: 0.75, marginTop: 1, fontFamily: F.mono }}>{content.cin ? `CIN: ${content.cin} • ` : ""}GSTIN: {content.gstin || content.registrationNumber || "GSTIN"}</div>
                 </div>
                 <div style={{ textAlign: "right", fontSize: 9.5, opacity: 0.85, lineHeight: 1.3 }}>
-                  <div>Plot 14-B, Ambattur Industrial Estate</div>
-                  <div>Chennai, Tamil Nadu - 600058</div>
-                  <div>contact@abcengineering.com • www.abcengineering.com</div>
+                  <div>{content.address || "Registered Factory Works"}</div>
+                  <div>{content.email || "tenders@company.com"} • {content.website || "www.company.com"}</div>
                 </div>
               </div>
 
               <div style={{ padding: "22px 28px", color: "#0f172a", fontSize: 11.5, lineHeight: 1.5 }}>
                 {/* Reference & Date */}
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12, borderBottom: "1px solid #e2e8f0", paddingBottom: 8, fontSize: 11 }}>
-                  <div><strong>Ref No:</strong> <span style={{ fontFamily: F.mono }}>ABC/CPCL/MII-DECL/2026/045</span></div>
-                  <div><strong>Date:</strong> 28th August 2026</div>
+                  <div><strong>Ref No:</strong> <span style={{ fontFamily: F.mono }}>{content.refNo || "MII/DECL/2026/01"}</span></div>
+                  <div><strong>Date:</strong> {content.declarationDate || "28th August 2026"}</div>
                 </div>
 
                 {/* Addressee */}
@@ -1260,7 +1263,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
 
                 {/* Subject */}
                 <div style={{ background: "#fffbeb", border: "1px solid #fde68a", padding: "8px 12px", borderRadius: 4, fontWeight: 800, color: "#92400e", marginBottom: 14, fontSize: 12 }}>
-                  Subject: Self-Declaration Certificate of Local Content under Public Procurement (Preference to Make in India) Order 2017 (PPO-2017) against Tender Ref: CPCL/2026/TE/045
+                  Subject: Self-Declaration Certificate of Local Content under Public Procurement (Preference to Make in India) Order 2017 (PPO-2017) against Tender Ref: {content.tenderRef || "CPCL/2026/TE/045"}
                 </div>
 
                 <p style={{ margin: "0 0 10px" }}>
@@ -1272,16 +1275,18 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 </p>
 
                 {/* Golden Highlight Box */}
-                <div style={{ background: "#f0fdf4", border: "2px solid #22c55e", borderRadius: 6, padding: "12px 18px", marginBottom: 14, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ background: Number(content.localContentPercentage || 75) >= 50 ? "#f0fdf4" : "#fff7ed", border: `2px solid ${Number(content.localContentPercentage || 75) >= 50 ? "#22c55e" : "#f97316"}`, borderRadius: 6, padding: "12px 18px", marginBottom: 14, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div>
-                    <div style={{ fontSize: 10.5, color: "#166534", fontWeight: 700, textTransform: "uppercase" }}>Percentage of Domestic Local Content Offered:</div>
-                    <div style={{ fontSize: 24, fontWeight: 900, color: "#15803d" }}>75.00% (LOCAL VALUE ADDITION)</div>
+                    <div style={{ fontSize: 10.5, color: Number(content.localContentPercentage || 75) >= 50 ? "#166534" : "#9a3412", fontWeight: 700, textTransform: "uppercase" }}>Percentage of Domestic Local Content Offered:</div>
+                    <div style={{ fontSize: 24, fontWeight: 900, color: Number(content.localContentPercentage || 75) >= 50 ? "#15803d" : "#c2410c" }}>{content.localContentPercentage || "75.00"}% (LOCAL VALUE ADDITION)</div>
                   </div>
                   <div style={{ textAlign: "right" }}>
-                    <div style={{ background: "#15803d", color: "#ffffff", padding: "4px 12px", borderRadius: 4, fontWeight: 800, fontSize: 12 }}>
-                      CLASS-I LOCAL SUPPLIER
+                    <div style={{ background: Number(content.localContentPercentage || 75) >= 50 ? "#15803d" : "#c2410c", color: "#ffffff", padding: "4px 12px", borderRadius: 4, fontWeight: 800, fontSize: 12 }}>
+                      {content.supplierClass || (Number(content.localContentPercentage || 75) >= 50 ? "CLASS-I LOCAL SUPPLIER" : "CLASS-II LOCAL SUPPLIER")}
                     </div>
-                    <div style={{ fontSize: 10, color: "#166534", marginTop: 3 }}>Local Content ≥ 50% Threshold Met</div>
+                    <div style={{ fontSize: 10, color: Number(content.localContentPercentage || 75) >= 50 ? "#166534" : "#9a3412", marginTop: 3 }}>
+                      {Number(content.localContentPercentage || 75) >= 50 ? "Local Content ≥ 50% Threshold Met" : "Local Content < 50% (Fails Tender Requirement)"}
+                    </div>
                   </div>
                 </div>
 
@@ -1302,24 +1307,24 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                         <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center" }}>1</td>
                         <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Valve Casting Body (ASTM A216 WCB Cast Carbon Steel)</td>
                         <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center", fontWeight: 700 }}>35.00%</td>
-                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Ambattur Foundry Facility, Chennai, TN</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Foundry Facility, {content.city || "Factory Unit"}</td>
                       </tr>
                       <tr>
                         <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center" }}>2</td>
                         <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Precision CNC Machining, Stems, Bonnet, Flanges & Seat Rings</td>
                         <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center", fontWeight: 700 }}>22.50%</td>
-                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Plant Unit-1, Chennai Heavy Engineering Works</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Plant Unit-1, Heavy Engineering Works</td>
                       </tr>
                       <tr>
                         <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center" }}>3</td>
                         <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Final Assembly, Hydrostatic Testing, QA & Epoxy Coating</td>
-                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center", fontWeight: 700 }}>17.50%</td>
-                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Factory Unit-2, Chennai, Tamil Nadu</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center", fontWeight: 700 }}>{((Number(content.localContentPercentage || 75) - 57.5) > 0 ? (Number(content.localContentPercentage || 75) - 57.5).toFixed(2) : "17.50")}%</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Factory Works, {content.city || "Manufacturing Complex"}</td>
                       </tr>
                       <tr style={{ background: "#f1f5f9", fontWeight: 900 }}>
                         <td colSpan={2} style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "right" }}>Total Domestic Value Addition:</td>
-                        <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: "#15803d", fontSize: 12 }}>75.00%</td>
-                        <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Compliant with DPIIT PPO-2017 Class-I</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: Number(content.localContentPercentage || 75) >= 50 ? "#15803d" : "#c2410c", fontSize: 12 }}>{content.localContentPercentage || "75.00"}%</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>{Number(content.localContentPercentage || 75) >= 50 ? "Compliant with DPIIT PPO-2017 Class-I" : "Fails Class-I Local Preference Criterion"}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -1328,7 +1333,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 {/* Factory Location & GFR Rule 175 Legal Notice */}
                 <div style={{ background: "#f8fafc", padding: "10px 14px", border: "1px solid #e2e8f0", borderRadius: 4, marginBottom: 14, fontSize: 10.5, color: "#334155" }}>
                   <strong>2. Address of Manufacturing Plant where Local Value Addition is made:</strong><br />
-                  Plot No. 14-B, Ambattur Industrial Estate, Chennai, Tamil Nadu - 600058.<br />
+                  {content.manufacturingPlantAddress || content.address || "Registered Factory Works"}.<br />
                   <span style={{ color: "#b91c1c", marginTop: 4, display: "inline-block" }}>
                     * We understand that false declarations will be in breach of the Code of Integrity under Rule 175(1)(i)(h) of the GFR 2017 for which debarment up to two years under Rule 151(iii) will apply.
                   </span>
@@ -1338,19 +1343,19 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 18, paddingTop: 10, borderTop: "1px solid #e2e8f0" }}>
                   {/* Corporate Blue Seal */}
                   <div style={{ width: 95, height: 95, borderRadius: "50%", border: "2px dashed #1e3a8a", color: "#1e3a8a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 4, transform: "rotate(-5deg)", fontSize: 8, fontWeight: 800 }}>
-                    <div>ABC ENGINEERING</div>
-                    <div style={{ fontSize: 6.5, fontWeight: 700, margin: "2px 0" }}>PVT. LTD.</div>
-                    <div>★ CHENNAI ★</div>
+                    <div style={{ textTransform: "uppercase" }}>{content.legalName?.split(" ")[0] || "CORP"}</div>
+                    <div style={{ fontSize: 6.5, fontWeight: 700, margin: "2px 0" }}>OFFICIAL</div>
+                    <div>★ VERIFIED ★</div>
                     <div style={{ fontSize: 6.5, marginTop: 2 }}>CORP SEAL</div>
                   </div>
 
                   {/* Authorized Signatory */}
                   <div style={{ textAlign: "right" }}>
-                    <div style={{ fontSize: 11, color: "#475569" }}>For <strong>ABC ENGINEERING PRIVATE LIMITED</strong></div>
-                    <div style={{ fontFamily: "cursive", fontSize: 20, color: "#1e3a8a", margin: "4px 0" }}>Rajesh Kumar</div>
-                    <div style={{ fontWeight: 800, fontSize: 12 }}>Mr. Rajesh Kumar</div>
-                    <div style={{ fontSize: 10.5, color: "#334155" }}>Managing Director & Authorized Signatory</div>
-                    <div style={{ fontSize: 9.5, color: "#64748b", fontFamily: F.mono }}>DIN: 02849102</div>
+                    <div style={{ fontSize: 11, color: "#475569" }}>For <strong>{content.legalName || "Bidder Company"}</strong></div>
+                    <div style={{ fontFamily: "cursive", fontSize: 20, color: "#1e3a8a", margin: "4px 0" }}>{content.signatoryName || "Authorized Signatory"}</div>
+                    <div style={{ fontWeight: 800, fontSize: 12 }}>{content.signatoryName || "Authorized Signatory"}</div>
+                    <div style={{ fontSize: 10.5, color: "#334155" }}>{content.signatoryDesignation || "Managing Director / Authorized Signatory"}</div>
+                    <div style={{ fontSize: 9.5, color: "#64748b", fontFamily: F.mono }}>{content.signatoryId || "Corporate Seal Affixed"}</div>
                   </div>
                 </div>
               </div>
@@ -1363,13 +1368,13 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               {/* Company Header */}
               <div style={{ textAlign: "center", borderBottom: "2px solid #000000", paddingBottom: 10, marginBottom: 14 }}>
                 <div style={{ fontSize: 15, fontWeight: 900, textTransform: "uppercase", letterSpacing: 0.5 }}>
-                  {content.enterpriseName || "M/S INDUSTRIAL FURNACES"}
+                  {content.enterpriseName || content.legalName || "BIDDER ENTERPRISE"}
                 </div>
                 <div style={{ fontSize: 11, fontWeight: 700, margin: "2px 0", textTransform: "uppercase" }}>
-                  {content.address || "PLOT NO. 116 GALI NO. 6 KRISHNA COLONY , SECTOR-25, BALLABGARH, FARIDABAD"}
+                  {content.address || "REGISTERED BUSINESS OFFICE ADDRESS"}
                 </div>
                 <div style={{ fontSize: 12, fontWeight: 900, textDecoration: "underline", marginTop: 4 }}>
-                  PROVISIONAL / AUDITED BALANCE SHEET AS AT 31.01.2023
+                  {content.balanceSheetDate || "AUDITED BALANCE SHEET AS AT 31.03.2025"}
                 </div>
               </div>
 
@@ -1396,8 +1401,8 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                     <div style={{ paddingLeft: 8, fontStyle: "italic", fontWeight: 400 }}>Less: Drawings</div>
                   </div>
                   <div style={{ padding: "4px", borderRight: "1px solid #000000", textAlign: "right", fontFamily: F.mono, fontSize: 10 }}>
-                    <div>4816233.00</div>
-                    <div>3300387.00</div>
+                    <div>{content.capitalAmount || "4816233.00"}</div>
+                    <div>{content.netProfit || "3300387.00"}</div>
                     <div>2482579.05</div>
                     <div style={{ borderTop: "1px solid #000000", fontWeight: 700 }}>10599199.05</div>
                     <div>1445841.00</div>
@@ -1410,8 +1415,8 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                   <div style={{ padding: "4px 8px", borderRight: "1px solid #000000" }}>
                     <div style={{ fontWeight: 700 }}>Fixed Assets</div>
                     <div style={{ paddingLeft: 6 }}>Air Conditioner</div>
-                    <div style={{ paddingLeft: 6 }}>Bike / Car</div>
-                    <div style={{ paddingLeft: 6 }}>Computer / Mobile</div>
+                    <div style={{ paddingLeft: 6 }}>Vehicles / Transport</div>
+                    <div style={{ paddingLeft: 6 }}>IT / Computer Systems</div>
                     <div style={{ paddingLeft: 6 }}>Furniture & Fixtures</div>
                     <div style={{ paddingLeft: 6, fontWeight: 600 }}>Plant & Machinery</div>
                   </div>
@@ -1478,10 +1483,10 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 85px 95px 1fr 85px 95px", background: "#f8fafc", fontWeight: 900 }}>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", textTransform: "uppercase" }}>Total</div>
                   <div style={{ padding: "6px 4px", borderRight: "1px solid #000000" }}></div>
-                  <div style={{ padding: "6px 4px", borderRight: "1.5px solid #000000", textAlign: "right", fontFamily: F.mono, fontSize: 11 }}>48673846.00</div>
+                  <div style={{ padding: "6px 4px", borderRight: "1.5px solid #000000", textAlign: "right", fontFamily: F.mono, fontSize: 11 }}>{content.totalBalance || "48673846.00"}</div>
                   <div style={{ padding: "6px 8px", borderRight: "1px solid #000000", textTransform: "uppercase" }}>Total</div>
                   <div style={{ padding: "6px 4px", borderRight: "1px solid #000000" }}></div>
-                  <div style={{ padding: "6px 4px", textAlign: "right", fontFamily: F.mono, fontSize: 11 }}>48673846.00</div>
+                  <div style={{ padding: "6px 4px", textAlign: "right", fontFamily: F.mono, fontSize: 11 }}>{content.totalBalance || "48673846.00"}</div>
                 </div>
               </div>
 
@@ -1489,19 +1494,19 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               <div style={{ marginTop: 16, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, alignItems: "flex-start" }}>
                 {/* Left: Place & Note */}
                 <div>
-                  <div style={{ fontSize: 11, fontWeight: 700 }}>DATE: 28/02/2023</div>
-                  <div style={{ fontSize: 11, fontWeight: 700 }}>PLACE: FARIDABAD</div>
+                  <div style={{ fontSize: 11, fontWeight: 700 }}>DATE: {content.auditDate || "28/08/2025"}</div>
+                  <div style={{ fontSize: 11, fontWeight: 700 }}>PLACE: {content.auditPlace || "CHENNAI / MUMBAI"}</div>
                   <div style={{ fontSize: 10, fontStyle: "italic", marginTop: 8, color: "#334155" }}>
-                    "Physical verification of closing stock has not been facilitated; it is taken as certified by the proprietor"
+                    "Audited in accordance with the Standards on Auditing (SAs) issued by ICAI and Companies Act 2013."
                   </div>
                 </div>
 
                 {/* Right: Proprietor Signature */}
                 <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 11 }}>For, Industrial Furnaces</div>
-                  <div style={{ fontSize: 12, fontWeight: 800, margin: "4px 0" }}>For INDUSTRIAL FURNACES (Prop)</div>
+                  <div style={{ fontSize: 11 }}>For, {content.enterpriseName || content.legalName || "Bidder Enterprise"}</div>
+                  <div style={{ fontSize: 12, fontWeight: 800, margin: "4px 0" }}>For {content.enterpriseName || content.legalName || "Bidder Enterprise"}</div>
                   <div style={{ fontFamily: "cursive", fontSize: 20, color: "#1e3a8a", transform: "rotate(-3deg)", display: "inline-block", margin: "4px 0" }}>
-                    संजय चौधरी Proprietor
+                    {content.signatoryName || "Authorized Signatory"}
                   </div>
                 </div>
               </div>
@@ -1509,13 +1514,13 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               {/* Chartered Accountant Box with Blue Stamp */}
               <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1.5px dashed #cbd5e1", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
-                  <div style={{ fontSize: 11, fontWeight: 800 }}>For AMKN & CO</div>
-                  <div style={{ fontSize: 11, fontWeight: 700 }}>Chartered Accountants (FRN: 032712C)</div>
-                  <div style={{ fontFamily: "cursive", fontSize: 18, color: "#1d4ed8", margin: "4px 0" }}>CA Nitin Kaushik</div>
-                  <div style={{ fontSize: 11, fontWeight: 800 }}>CA NITIN KAUSHIK (Partner)</div>
-                  <div style={{ fontSize: 10, color: "#334155" }}>M.NO- 558996</div>
-                  <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", fontFamily: F.mono, marginTop: 2 }}>
-                    UDIN- 23558996BGSVMJ272
+                  <div style={{ fontSize: 11, fontWeight: 800 }}>For {content.caFirm || "AMKN & CO"}</div>
+                  <div style={{ fontSize: 11, fontWeight: 700 }}>Chartered Accountants ({content.caFrn || "FRN: 032712C"})</div>
+                  <div style={{ fontFamily: "cursive", fontSize: 18, color: "#1d4ed8", margin: "4px 0" }}>{content.caPartner || "CA Nitin Kaushik"}</div>
+                  <div style={{ fontSize: 11, fontWeight: 800 }}>{content.caPartner || "CA NITIN KAUSHIK (Partner)"}</div>
+                  <div style={{ fontSize: 10, color: "#334155" }}>{content.caMembershipNo || "M.NO- 558996"}</div>
+                  <div style={{ fontSize: 11, fontWeight: 800, color: content.caUdin?.includes("AAAA") ? "#dc2626" : "#15803d", fontFamily: F.mono, marginTop: 2 }}>
+                    UDIN- {content.caUdin || "25558996BGSVMJ2721"} {content.caUdin?.includes("AAAA") && "⚠️ [INVALID / UNVERIFIED]"}
                   </div>
                 </div>
 
@@ -1525,8 +1530,8 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                     width: 120,
                     height: 120,
                     borderRadius: "50%",
-                    border: "2.5px solid #1d4ed8",
-                    color: "#1d4ed8",
+                    border: `2.5px solid ${content.caUdin?.includes("AAAA") ? "#dc2626" : "#1d4ed8"}`,
+                    color: content.caUdin?.includes("AAAA") ? "#dc2626" : "#1d4ed8",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -1537,9 +1542,9 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                     background: "rgba(29,78,216,0.03)"
                   }}
                 >
-                  <div style={{ fontSize: 7.5, fontWeight: 900, textTransform: "uppercase" }}>AMKN & CO</div>
-                  <div style={{ fontSize: 6.5, fontWeight: 800 }}>FRN: 032712C</div>
-                  <div style={{ fontSize: 8, fontWeight: 900, margin: "2px 0" }}>NOIDA</div>
+                  <div style={{ fontSize: 7.5, fontWeight: 900, textTransform: "uppercase" }}>{content.caFirmName || content.caFirm?.split(",")[0] || "CA AUDITOR"}</div>
+                  <div style={{ fontSize: 6.5, fontWeight: 800 }}>{content.caFrn || "FRN: 032712C"}</div>
+                  <div style={{ fontSize: 8, fontWeight: 900, margin: "2px 0" }}>{content.caCity || "INDIA"}</div>
                   <div style={{ fontSize: 6, fontWeight: 700, textTransform: "uppercase" }}>Chartered Accountants</div>
                 </div>
               </div>
@@ -1553,8 +1558,8 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               <div style={{ background: "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)", color: "#ffffff", padding: "16px 22px", borderBottom: "3px solid #38bdf8" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div>
-                    <div style={{ fontSize: 16, fontWeight: 900, letterSpacing: 0.5 }}>SCHEDULE OF BILL OF QUANTITIES & TECHNICAL COMPLIANCE</div>
-                    <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 2 }}>Tender Ref: CPCL/2026/TE/045 • High Pressure Heavy Flow Cryogenic Valves</div>
+                    <div style={{ fontSize: 16, fontWeight: 900, letterSpacing: 0.5 }}>{content.bidderName ? `${content.bidderName.toUpperCase()} — SCHEDULE OF TECHNICAL BOQ` : "SCHEDULE OF BILL OF QUANTITIES & TECHNICAL COMPLIANCE"}</div>
+                    <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 2 }}>Tender Ref: {content.tenderRef || "CPCL/2026/TE/045"} • High Pressure Heavy Flow Cryogenic Valves</div>
                   </div>
                   <div style={{ textAlign: "right", fontFamily: F.mono, fontSize: 11, background: "rgba(255,255,255,0.1)", padding: "4px 10px", borderRadius: 4 }}>
                     API Spec 6D / ASME B16.34
@@ -1592,12 +1597,12 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                       <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Extended Stem 300mm with Double PEEK Seals, Class A Helium Tested</td>
                       <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: "#15803d", fontWeight: 800 }}>COMPLIANT ✓</td>
                     </tr>
-                    <tr style={{ background: "#fff1f2" }}>
+                    <tr style={{ background: content.hasImportedAnomaly ? "#fff1f2" : "#ffffff" }}>
                       <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", fontWeight: 700 }}>14.2</td>
                       <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Emergency Shutdown Electro-Hydraulic Actuator Pump Sub-assembly</td>
-                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Voith-Rexroth Hydraulic Actuator, Manufactured in Frankenthal, Germany</td>
-                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: "#be123c", fontWeight: 800 }}>
-                        IMPORT CONTENT ⚠️
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>{content.actuatorOrigin || "Indigenous Domestic Electro-Hydraulic Actuator (Class-I Compliant)"}</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: content.hasImportedAnomaly ? "#be123c" : "#15803d", fontWeight: 800 }}>
+                        {content.hasImportedAnomaly ? "IMPORT CONTENT ⚠️" : "COMPLIANT ✓"}
                       </td>
                     </tr>
                     <tr>
@@ -1618,13 +1623,13 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 {/* Quality Engineer Sign-off */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #e2e8f0", paddingTop: 12 }}>
                   <div style={{ fontSize: 11, color: "#475569" }}>
-                    <div><strong>Test Laboratory:</strong> L&T Central Testing Laboratory (NABL Accredited)</div>
-                    <div><strong>Monogram License:</strong> API 6D-1892 (Valid)</div>
+                    <div><strong>Test Laboratory:</strong> {content.testLab || "NABL Accredited Laboratory"}</div>
+                    <div><strong>Monogram License:</strong> API 6D Verified (Valid)</div>
                   </div>
                   <div style={{ textAlign: "right" }}>
-                    <div style={{ fontFamily: "cursive", fontSize: 16, color: "#1e3a8a" }}>K. Ramaswamy</div>
-                    <div style={{ fontSize: 11, fontWeight: 800 }}>K. Ramaswamy, M.Tech</div>
-                    <div style={{ fontSize: 10, color: "#475569" }}>Lead Quality Assurance Engineer</div>
+                    <div style={{ fontFamily: "cursive", fontSize: 16, color: "#1e3a8a" }}>{content.qaEngineer || "Lead QA Engineer"}</div>
+                    <div style={{ fontSize: 11, fontWeight: 800 }}>{content.qaEngineer || "Quality Assurance Lead"}</div>
+                    <div style={{ fontSize: 10, color: "#475569" }}>Chief Technical Officer / QA Incharge</div>
                   </div>
                 </div>
               </div>
@@ -1637,13 +1642,13 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
               {/* OEM Top Banner */}
               <div style={{ background: "linear-gradient(135deg, #312e81 0%, #1e1b4b 100%)", color: "#ffffff", padding: "16px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "3px solid #6366f1" }}>
                 <div>
-                  <div style={{ fontSize: 17, fontWeight: 900, letterSpacing: 0.5 }}>ABC VALVECRAFT MANUFACTURING LTD</div>
-                  <div style={{ fontSize: 10, opacity: 0.85, marginTop: 2 }}>Original Equipment Manufacturer (OEM) • Global Fluid Dynamics Division</div>
+                  <div style={{ fontSize: 17, fontWeight: 900, letterSpacing: 0.5 }}>{content.oemName || "ORIGINAL EQUIPMENT MANUFACTURER (OEM)"}</div>
+                  <div style={{ fontSize: 10, opacity: 0.85, marginTop: 2 }}>Original Equipment Manufacturer (OEM) • Industrial Fluid Dynamics Division</div>
                   <div style={{ fontSize: 9.5, opacity: 0.75, fontFamily: F.mono }}>API Spec Q1 / ISO 29001 Certified OEM</div>
                 </div>
                 <div style={{ background: "rgba(255,255,255,0.15)", padding: "4px 10px", borderRadius: 4, textAlign: "center" }}>
                   <div style={{ fontSize: 9, textTransform: "uppercase", letterSpacing: 1 }}>AUTHENTIC MAF</div>
-                  <div style={{ fontSize: 11, fontWeight: 800, fontFamily: F.mono }}>OEM/MAF/2026/045</div>
+                  <div style={{ fontSize: 11, fontWeight: 800, fontFamily: F.mono }}>{content.oemRef || "OEM/MAF/2026/045"}</div>
                 </div>
               </div>
 
@@ -1654,15 +1659,15 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
 
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12, fontSize: 11 }}>
                   <div><strong>To:</strong> Chennai Petroleum Corporation Limited (CPCL) / GeM Authority</div>
-                  <div><strong>Date:</strong> 15th August 2026</div>
+                  <div><strong>Date:</strong> {content.mafDate || "15th August 2026"}</div>
                 </div>
 
                 <p style={{ margin: "0 0 10px", textAlign: "justify" }}>
-                  WHEREAS, We, <strong>M/s ABC VALVECRAFT MANUFACTURING LTD</strong>, who are official and established original manufacturers of high-pressure API 6D industrial valves, having manufacturing facilities at Plot 14-B, Ambattur Industrial Estate, Chennai;
+                  WHEREAS, We, <strong>M/s {content.oemName || "OEM MANUFACTURER"}</strong>, who are official and established original manufacturers of high-pressure API 6D industrial valves, having manufacturing facilities at {content.oemAddress || "Registered Manufacturing Works"};
                 </p>
 
                 <div style={{ background: "#e0e7ff", borderLeft: "4px solid #4338ca", padding: "10px 14px", borderRadius: 4, margin: "12px 0", fontWeight: 600 }}>
-                  DO HEREBY AUTHORIZE <strong>M/s ABC ENGINEERING LIMITED</strong> to submit a bid, negotiate and conclude the contract with you against Tender Enquiry No: <strong>CPCL/2026/TE/045</strong> for the supply of API 6D Valves manufactured by us.
+                  DO HEREBY AUTHORIZE <strong>M/s {content.authorizedBidder || content.legalName || "BIDDER COMPANY"}</strong> to submit a bid, negotiate and conclude the contract with you against Tender Enquiry No: <strong>{content.tenderRef || "CPCL/2026/TE/045"}</strong> for the supply of API 6D Valves manufactured by us.
                 </div>
 
                 {/* Warranty Commitment Box */}
@@ -1671,7 +1676,7 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                     🛡️ Comprehensive Back-to-Back OEM Warranty Commitment:
                   </div>
                   <div style={{ fontSize: 11, color: "#047857" }}>
-                    We hereby extend our full <strong>36 (Thirty-Six) Months On-Site PSU Warranty</strong> for the goods offered by the above bidder. We further guarantee continuous availability of genuine spare parts and technical service support for a minimum period of <strong>10 (Ten) Years</strong> from the date of commissioning.
+                    We hereby extend our full <strong>{content.warrantyPeriod || "36 (Thirty-Six) Months On-Site PSU Warranty"}</strong> for the goods offered by the above bidder. We further guarantee continuous availability of genuine spare parts and technical service support for a minimum period of <strong>10 (Ten) Years</strong> from the date of commissioning.
                   </div>
                 </div>
 
@@ -1679,15 +1684,15 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 16, paddingTop: 10, borderTop: "1px solid #e2e8f0" }}>
                   <div style={{ width: 90, height: 90, borderRadius: "50%", border: "2px solid #4338ca", color: "#4338ca", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 4, transform: "rotate(-6deg)", fontSize: 8, fontWeight: 900 }}>
                     <div>OEM SEAL</div>
-                    <div style={{ fontSize: 6.5 }}>ABC VALVECRAFT</div>
+                    <div style={{ fontSize: 6.5 }}>{content.oemName?.split(" ")[0] || "OEM"}</div>
                     <div>★ VERIFIED ★</div>
                   </div>
 
                   <div style={{ textAlign: "right" }}>
-                    <div style={{ fontSize: 10.5, color: "#475569" }}>For ABC VALVECRAFT MANUFACTURING LTD</div>
-                    <div style={{ fontFamily: "cursive", fontSize: 18, color: "#4338ca", margin: "2px 0" }}>Dr. Sundararajan V.</div>
-                    <div style={{ fontWeight: 800, fontSize: 11.5 }}>Dr. Sundararajan V.</div>
-                    <div style={{ fontSize: 10, color: "#334155" }}>Vice President (PSU Tenders & Contracts)</div>
+                    <div style={{ fontSize: 10.5, color: "#475569" }}>For {content.oemName || "OEM MANUFACTURER"}</div>
+                    <div style={{ fontFamily: "cursive", fontSize: 18, color: "#4338ca", margin: "2px 0" }}>{content.oemSignatory || "OEM Vice President"}</div>
+                    <div style={{ fontWeight: 800, fontSize: 11.5 }}>{content.oemSignatory || "Authorized Signatory"}</div>
+                    <div style={{ fontSize: 10, color: "#334155" }}>{content.oemSignatoryDesignation || "Vice President (PSU Tenders & Contracts)"}</div>
                   </div>
                 </div>
               </div>

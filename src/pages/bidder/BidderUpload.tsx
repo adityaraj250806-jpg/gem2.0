@@ -55,14 +55,18 @@ export const BidderUpload: React.FC = () => {
   // File input refs for each document slot
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
+  const isKavach = user?.email?.toLowerCase().includes("kavach") || user?.name?.toLowerCase().includes("kavach");
+  const currentBidderId = isKavach ? "BID-005" : "BID-001";
+  const defaultTenderId = isKavach ? "ONGC-2026-TE-088" : "CPCL-2026-TE-045";
+
   useEffect(() => {
-    const tenderId = id || "CPCL-2026-TE-045";
+    const tenderId = id || defaultTenderId;
     tenderService.getTenderById(tenderId).then(t => {
       if (t) setTender(t);
       else tenderService.getAllTenders().then(list => setTender(list[0]));
     });
 
-    documentService.getDocumentsByBidder("BID-001").then(savedDocs => {
+    documentService.getDocumentsByBidder(currentBidderId).then(savedDocs => {
       const initial: DocStateItem[] = STATUTORY_REQUIREMENTS.map(r => {
         const found = savedDocs.find(d => d.id === r.id);
         const hasExisting = !!found && !!found.fileName;
@@ -90,7 +94,7 @@ export const BidderUpload: React.FC = () => {
 
       setDocItems(initial);
     });
-  }, [id]);
+  }, [id, currentBidderId, defaultTenderId]);
 
   // Open native Windows file selector dialog for a specific document
   const triggerFileDialog = (docId: string) => {
@@ -189,7 +193,7 @@ export const BidderUpload: React.FC = () => {
 
     const dataUrl = generateValidPdfDataUrl(demo);
 
-    await documentService.uploadDocument("BID-001", docId, {
+    await documentService.uploadDocument(currentBidderId, docId, {
       name: demo.fileName,
       size: demo.fileSize.includes("MB") ? parseFloat(demo.fileSize) * 1024 * 1024 : parseFloat(demo.fileSize) * 1024,
       fileDataUrl: dataUrl
@@ -302,13 +306,17 @@ export const BidderUpload: React.FC = () => {
   const handleSubmitBid = async () => {
     if (!tender) return;
     setSubmitting(true);
+    const bidderName = user?.name || (isKavach ? "Kavach Engineering & Power Systems Pvt Ltd" : "ABC Engineering Ltd");
+    const specificBidderId = isKavach ? "BID-005" : undefined;
+
     const res = await documentService.submitBid(
       tender.id,
       tender.referenceNumber,
-      user?.name || "ABC Engineering Ltd",
+      bidderName,
       docItems,
       tender.title,
-      tender.department
+      tender.department,
+      specificBidderId
     );
     setSubmitting(false);
 

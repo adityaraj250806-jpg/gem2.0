@@ -30,20 +30,33 @@ export class DocumentService {
       const stored = localStorage.getItem(STORAGE_KEY_DOCS);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed["BID-001"]) {
-          const defaultList = mockDocuments["BID-001"] || [];
-          defaultList.forEach(defDoc => {
-            if (!parsed["BID-001"].some((d: DocumentItem) => d.id === defDoc.id)) {
-              parsed["BID-001"].push(JSON.parse(JSON.stringify(defDoc)));
-            }
-          });
-        }
+        // Ensure all mock bidders exist in storage
+        Object.keys(mockDocuments).forEach(bidderId => {
+          if (!parsed[bidderId] || !Array.isArray(parsed[bidderId]) || parsed[bidderId].length === 0) {
+            parsed[bidderId] = JSON.parse(JSON.stringify(mockDocuments[bidderId]));
+          } else {
+            // Ensure every mock document exists and its content is updated
+            const defaultList = mockDocuments[bidderId] || [];
+            defaultList.forEach(defDoc => {
+              const existingIndex = parsed[bidderId].findIndex((d: DocumentItem) => d.id === defDoc.id);
+              if (existingIndex === -1) {
+                parsed[bidderId].push(JSON.parse(JSON.stringify(defDoc)));
+              } else if (!parsed[bidderId][existingIndex].content || Object.keys(parsed[bidderId][existingIndex].content || {}).length < 5) {
+                parsed[bidderId][existingIndex].content = JSON.parse(JSON.stringify(defDoc.content || {}));
+              }
+            });
+          }
+        });
         return parsed;
       }
     } catch (e) {
       console.warn("Error reading stored documents:", e);
     }
-    return JSON.parse(JSON.stringify(mockDocuments));
+    const fresh = JSON.parse(JSON.stringify(mockDocuments));
+    try {
+      localStorage.setItem(STORAGE_KEY_DOCS, JSON.stringify(fresh));
+    } catch (e) {}
+    return fresh;
   }
 
   saveDocuments(): void {
@@ -88,7 +101,7 @@ export class DocumentService {
   async getDocumentsByBidder(bidderId = "BID-001"): Promise<DocumentItem[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
-        const docs = this.documents[bidderId] || this.documents["BID-001"] || [];
+        const docs = this.documents[bidderId] || mockDocuments[bidderId] || this.documents["BID-001"] || [];
         resolve(JSON.parse(JSON.stringify(docs)));
       }, 50);
     });
@@ -147,11 +160,12 @@ export class DocumentService {
     bidderName = "ABC Engineering Ltd",
     documentsList?: any[],
     tenderTitle?: string,
-    department?: string
+    department?: string,
+    specificBidderId?: string
   ): Promise<{ success: boolean; submission: SubmittedBid; bidderId: string }> {
     const randomNum = Math.floor(100 + Math.random() * 900);
-    const newBidId = `BID-002${randomNum}`;
-    const uploadedDocs = documentsList && documentsList.length > 0 ? documentsList : (this.documents["BID-001"] || []);
+    const newBidId = specificBidderId || `BID-002${randomNum}`;
+    const uploadedDocs = documentsList && documentsList.length > 0 ? documentsList : (this.documents[newBidId] || this.documents["BID-001"] || []);
 
     // Format and store documents under this new bidderId
     const formattedDocs: DocumentItem[] = uploadedDocs.map((item: any, idx: number) => {
@@ -181,13 +195,15 @@ export class DocumentService {
     });
 
     this.documents[newBidId] = formattedDocs;
-    this.documents["BID-001"] = formattedDocs; // Also sync to default bidder profile
+    if (!specificBidderId) {
+      this.documents["BID-001"] = formattedDocs; // Also sync to default bidder profile
+    }
     this.saveDocuments();
 
     // Register bidder into bidderService for real-time visibility in officer portal
     await bidderService.registerBidder({
       id: newBidId,
-      bidIdCode: `GEM/2026/BID/${randomNum}`,
+      bidIdCode: specificBidderId ? specificBidderId.replace(/[^0-9]/g, "") || "005" : `GEM/2026/BID/${randomNum}`,
       bidderName: bidderName,
       tenderId: tenderId,
       tenderRef: tenderRef || tenderId,

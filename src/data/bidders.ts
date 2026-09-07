@@ -232,5 +232,29 @@ export const mockBidders: Bidder[] = [
     gstin: "27AABCL1234N1ZT",
     pan: "AABCL1234N",
     udyamNumber: "UDYAM-MH-01-0012345"
+  },
+  {
+    id: "BID-005",
+    bidIdCode: "005",
+    bidderName: "Kavach Engineering & Power Systems Pvt Ltd",
+    tenderId: "ONGC-2026-TE-088",
+    tenderRef: "ONGC/2026/TE/088",
+    submittedAt: "07 Sep 2026, 04:45 PM",
+    documentsSubmitted: "10 / 10",
+    documentsCount: 10,
+    status: "Submitted",
+    aiStatus: "NOT_RUN",
+    complianceScore: null,
+    riskLevel: null,
+    aiAdvisory: null,
+    officerDecision: null,
+    officerRemarks: null,
+    officerDecisionDate: null,
+    contactPerson: "Vikramaditya Singhania (Head of Tendering)",
+    email: "bidder@kavach.in",
+    phone: "+91 98200 44552",
+    gstin: "29AABCK7788P1ZR",
+    pan: "AABCK7788P",
+    udyamNumber: "UDYAM-KR-03-0067123"
   }
 ];

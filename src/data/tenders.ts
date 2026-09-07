@@ -306,5 +306,68 @@ export const mockTenders: Tender[] = [
       "Turnover exceeding ₹50 Crores"
     ],
     requiredDocuments: []
+  },
+  {
+    id: "ONGC-2026-TE-088",
+    referenceNumber: "ONGC/2026/TE/088",
+    title: "Cryogenic Gas Turbine Actuators & Control Skids",
+    department: "ONGC (Oil and Natural Gas Corporation)",
+    issuingAuthority: "ONGC Western Offshore Asset / Mehsana Complex",
+    category: "Process Automation & Flow Machinery",
+    tenderType: "Open Sovereign Tender (National Competitive Bidding)",
+    closingDate: "25 Oct 2026",
+    submissionDeadline: "2026-10-25T15:00:00+05:30",
+    emdAmount: "₹22,00,000",
+    estimatedValue: "₹18,50,00,000",
+    biddersCount: 1,
+    documentsCount: 10,
+    status: "Open for Bidding",
+    officerStatus: "Active",
+    notice: {
+      nitNumber: "NIT/ONGC/WEST/2026/CRYO-088",
+      gemBidNumber: "GEM/2026/B/904812",
+      publishedDate: "05 Sep 2026",
+      bidOpeningDate: "26 Oct 2026, 11:30 AM IST",
+      location: "ONGC Hazira Gas Processing Complex & Offshore Platform Complex, Gujarat / Mumbai Offshore",
+      deliveryPeriod: "120 Days from Letter of Award (LOA)",
+      contractType: "Turnkey Supply, Integration & Commissioning Contract",
+      scopeSummary: "Engineering, indigenous manufacturing, factory acceptance testing, and delivery of 24 sets of High-Pressure Electro-Hydraulic Cryogenic Gas Actuator Skids with SIL-3 fail-safe electronic controllers for offshore natural gas fractionation units.",
+      technicalRequirements: [
+        "Cryogenic temperature rating: Serviceable from -196°C to +80°C under 300 Bar pressure",
+        "Functional Safety Certification: IEC 61508 SIL-3 certified by TUV / Exida",
+        "API 6D / ISO 15156 sour gas compliance with NACE MR0175 metallurgical certification",
+        "Complete technical datasheets, component bills of material, and GA engineering drawings"
+      ],
+      financialEligibility: [
+        "Minimum 3-Year Average Annual Financial Turnover of ₹12.00 Crores (FY 2022-23, 2023-24, 2024-25)",
+        "Net worth must be positive as on 31st March 2025 attested with valid ICAI UDIN",
+        "Proven prior execution of at least 1 similar cryogenic actuator package of value not less than ₹7.40 Cr to any Central/State PSU"
+      ],
+      statutoryMandates: [
+        "Public Procurement (Preference to Make in India) Order 2017: Mandatory Class-I Local Supplier (Minimum 50% domestic local content)",
+        "Statutory Labor Clearances: Zero default notices or arrears under EPFO Act 1952 and ESIC Act 1948",
+        "Mandatory Non-Blacklisting / Debarment Affidavit on ₹100 non-judicial stamp paper"
+      ],
+      emdExemption: "EMD of ₹22,00,000 is 100% exempt for valid MSME / Udyam registered enterprises with Class-I Local Supplier status."
+    },
+    eligibilityCriteria: [
+      "Minimum Average Annual Turnover of ₹12.00 Crores over last 3 financial years",
+      "Class-I Local Supplier under Make in India Order (>= 50% domestic value addition)",
+      "IEC 61508 SIL-3 Certified Cryogenic Control Skids",
+      "Active GSTIN and corporate PAN registration with verified tax filings",
+      "Clean statutory labor compliance with no pending demand notices (EPFO / ESIC)"
+    ],
+    requiredDocuments: [
+      { id: "doc-gst", name: "GST Registration Certificate", required: true, defaultFile: "GST_Certificate_29AABCK7788P1ZR.pdf" },
+      { id: "doc-pan", name: "PAN Card", required: true, defaultFile: "PAN_Card_AABCK7788P.pdf" },
+      { id: "doc-udyam", name: "Udyam / MSME Certificate", required: true, defaultFile: "Udyam_Registration_UDYAM-KR-03-0067123.pdf" },
+      { id: "doc-itr", name: "Income Tax Return (ITR-6)", required: true, defaultFile: "ITR6_Acknowledgement_AY2025_26.pdf" },
+      { id: "doc-epfo", name: "EPFO & ESIC Certificate", required: true, defaultFile: "EPFO_ESIC_Combined_Compliance.pdf" },
+      { id: "doc-mii", name: "Make in India Declaration", required: true, defaultFile: "Make_in_India_Declaration_Kavach.pdf" },
+      { id: "doc-balance-sheet", name: "Audited Balance Sheet & CA Audit", required: true, defaultFile: "Audited_Financial_Statement_FY25.pdf" },
+      { id: "doc-boq", name: "Technical BOQ Compliance", required: true, defaultFile: "Technical_BOQ_Cryogenic_Skids.pdf" },
+      { id: "doc-oem", name: "OEM Authorization Letter", required: true, defaultFile: "OEM_Authorization_Letter_Kavach.pdf" },
+      { id: "doc-undertaking", name: "Non-Blacklisting Undertaking", required: true, defaultFile: "Non_Blacklisting_Integrity_Affidavit.pdf" }
+    ]
   }
 ];

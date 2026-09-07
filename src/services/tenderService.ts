@@ -14,7 +14,13 @@ export class TenderService {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length >= mockTenders.length) {
+        if (Array.isArray(parsed)) {
+          mockTenders.forEach(mt => {
+            const idx = parsed.findIndex((p: Tender) => p.id === mt.id);
+            if (idx === -1) {
+              parsed.push(JSON.parse(JSON.stringify(mt)));
+            }
+          });
           return parsed;
         }
       }

@@ -1,80 +1,135 @@
-# GemxAI — AI-Powered Bid Compliance Verification Platform
+# GemxAI — AI-Powered Sovereign Bid Compliance & Forensic Verification Platform
 
-> **GeM AI Tender Evaluation Portal**  
-> Integrated Bid Compliance Verification & Forensic Triangulation Platform inspired by the Government e-Marketplace (GeM) and Mercell enterprise procurement standards.
-
----
-
-## 🏛️ Overview
-
-**GemxAI** is a modern, full-featured procurement and technical tender evaluation portal built with **React 18, Vite 6, and TypeScript**. It provides dual-role workflows for both **Registered Bidders** and **Tender Evaluation Officers**, featuring automated multi-stage forensic compliance checking, cross-document inconsistency detection (e.g. Make-in-India vs. Technical BOQ), and human-in-the-loop governance under GFR 2017 standards.
+> **GeM 4.0 AI Tender Evaluation Portal**  
+> Integrated Bid Compliance Verification, Ground-Truth Registry Triangulation & Forensic Evidence Platform built strictly in alignment with the **General Financial Rules (GFR 2017)** and **Public Procurement (Preference to Make in India) Order 2017**.
 
 ---
 
-## 🚀 Key Features
+## 🏛️ Executive Overview
 
-### 🏢 Bidder Portal
-- **Tender Discovery**: Explore PSU tenders by category, issuing authority, and closing date.
-- **Tender Specifications**: Review eligibility criteria, EMD escrow, and mandatory statutory requirements.
-- **Statutory Document Checklist**: Real-time upload checklist for 10 statutory documents (GST, PAN, Udyam MSME, ITR, EPFO/ESIC, Make in India, Balance Sheets, Technical BOQ, OEM Authorization, Non-Blacklisting).
-- **Bid Submission Tracking**: Track submitted enterprise bids with unique cryptographic submission IDs.
+**GemxAI** is an enterprise-grade sovereign procurement and technical tender evaluation platform built with **React 18, Vite 6, and TypeScript**, backed by an **Express / MongoDB** persistence engine. 
 
-### 🛡️ Procurement Officer Console
-- **Tender Overview & Bidder Rosters**: High-level metrics (`ACTIVE 08`, `PENDING 24`, `COMPLETED 41`) and bidder lists per tender.
-- **On-Demand AI Verification**: AI verification strictly requires officer initiation — avoiding automated bias before manual document review.
-- **10-Stage Forensic Processing**: Real-time progress monitoring across OCR, QR checksums, Udyam Databank API, GSTN returns, PAN/ITR reconciliation, and Blacklisting checks.
-- **AI Scorecard & Anomaly Detection**: 13-point compliance matrix with score generation (e.g. `82/100`, `LOW RISK`, 96% AI confidence).
-- **Side-by-Side Evidence Viewer**: Forensic cross-referencing comparing statutory declarations (e.g. 75% local content claim) against component origin in Technical BOQ (e.g. imported German assembly).
-- **Human-in-the-Loop Decision Recording**: Formal qualification, disqualification, or statutory clarification notices with DSC token signing.
+Designed for both **Registered Bidders** and **Tender Evaluation Officers (TIA/TEC)**, the platform eliminates manual document verification overhead by automating multi-stage forensic compliance checking, external government registry cross-referencing, and cross-document mathematical triangulation (e.g. Make-in-India % claims vs. technical BOQ imported bills of materials).
+
+---
+
+## 🚀 Key Modules & Architecture
+
+### 1. 🏢 Sovereign Bidder Workspace
+- **Tender Discovery & Details:** Search and filter public PSU tenders across ONGC, CPCL, IOCL, GAIL, and HPCL. Review Pre-Qualification Criteria (PQC), delivery schedules, and statutory clauses.
+- **10-Point Statutory Upload Checklist:** Dynamic document submission gateway enforcing all 10 mandatory certificates:
+  1. GST Registration Certificate (Form REG-06) & GSTR-3B
+  2. Permanent Account Number (PAN) Card
+  3. Udyam / MSME Certificate (GFR EMD waiver)
+  4. Income Tax Return (ITR-6 / ITR-V)
+  5. EPFO & ESIC Combined Social Security Certificate
+  6. Make in India (PPO 2017) Statutory Declaration
+  7. Audited Balance Sheet & CA Turnover Certificate (with ICAI UDIN)
+  8. Technical BOQ Line-Item Specification Compliance
+  9. OEM Authorization / Manufacturing License
+  10. Non-Blacklisting & Integrity Undertaking (e-Stamp Affidavit)
+- **Document Previews & Authentic Artifacts:** Full-fidelity modal viewer rendering official government seals, digital signatures (DSC), QR verification tags, and notarized e-stamps.
+- **Bid Submission Engine:** Immediate cryptographic bid generation synced directly to the Tender Evaluation Committee (TEC) console.
+
+### 2. 🛡️ Procurement Officer Evaluation Console
+- **Tender Oversight:** View all submitted bidders, package completion ratios, and compliance statuses.
+- **On-Demand AI Verification:** AI auditing strictly requires officer initiation — preventing premature bias and preserving human-in-the-loop governance.
+- **10-Stage Automated Forensic Audit Engine:**
+  - *Stage 1:* Document Ingestion & Geometry Extraction
+  - *Stage 2:* Multimodal OCR & Layout Analysis
+  - *Stage 3:* QR Code Cryptographic Checksums
+  - *Stage 4:* MSME Udyam Databank API Verification
+  - *Stage 5:* CBIC GSTN Active Status & Filing History Verification
+  - *Stage 6:* CBDT Corporate PAN & ITR Verification
+  - *Stage 7:* EPFO & ESIC Labor Welfare & Arrears Audit
+  - *Stage 8:* CPPP & GeM Central Debarment / Holiday-Listing Check
+  - *Stage 9:* Make in India Cross-Document Mathematical Triangulation
+  - *Stage 10:* Final Compliance Score (0–100) & Risk Classification
+- **Automated Forensic Audit Scorecard:** High-visibility compliance score, risk level badge (`LOW RISK`, `HIGH RISK`, `REJECT`), and detailed parameter checklists.
+- **Official TEC Decision Recording:** Formal record of qualification, disqualification, or clarification notice issuance with digital signature verification.
+
+### 3. 🔍 Live Multi-Error Evidence Inspector (Split-Screen View)
+- **Live Discrepancy Selector Ribbon:** Instantly switch between all detected flaws in real-time (e.g. Anomaly 1, Anomaly 2, Anomaly 3).
+- **Dual-Pane Side-by-Side Comparison:**
+  - **Left Viewport (Primary Document Excerpt):** What the bidder submitted in their PDF with yellow glowing text highlights.
+  - **Right Viewport (Government Registry / Tender NIT Rule):** The official ground-truth registry or tender specification clause disproving the bidder's claim.
+- **Forensic Reasoning Engine:** Deep contextual explanations detailing statutory non-conformance under GFR 2017 rules.
+- **All-Discrepancies Comparative Matrix:** Summary table outlining every parameter, finding type, and severity.
+
+### 4. 🏛️ Master Government & Regulatory Ground-Truth Databank (`govtRegistry.ts`)
+Simulates official Central and State Government databases for real-time triangulation:
+- **CBIC GST Portal:** Verifies active status, regular taxpayer class, and GSTR-1/3B filing defaults.
+- **CBDT Income Tax Portal:** Reconciles gross taxable turnovers and e-filing acknowledgement numbers.
+- **Ministry of MSME:** Confirms Udyam registration perpetual validity and manufacturing classification.
+- **EPFO Unified Portal:** Validates active ECR employee counts and statutory contributions.
+- **ESIC Portal:** Flags outstanding Section 45A demand notices and arrears.
+- **ICAI UDIN Registry:** Validates practicing Chartered Accountant membership numbers and firm registrations.
+- **CPPP Debarment Register:** Centralized blacklisting and debarment checks.
+
+---
+
+## 🎯 Live Internal Evaluation Demo Flow (Quick Guide)
+
+A brand new tender and dedicated bidder have been seeded for instant, flawless demonstration during presentations and evaluations:
+
+### 🔑 Demo Credentials
+| Role | Email / Username | Password | Entity Name |
+| :--- | :--- | :--- | :--- |
+| **New Bidder** | **`bidder@kavach.in`** | **`Kavach@2026`** | **Kavach Engineering & Power Systems Pvt Ltd** (`BID-005`) |
+| **Demo Bidder** | `tenders@abcengineering.com` | `Demo@GeM2026` | ABC Engineering Ltd (`BID-001`) |
+| **Officer** | `procurement.officer@cpcl.gov.in` | `Officer#2026` | Dr. K. S. Ramanathan (Chief Procurement Officer) |
+
+### 📋 Step-by-Step Walkthrough
+1. **Login:** Go to `/login` and click the **"🚀 Kavach Engineering (New Bidder)"** card or enter `bidder@kavach.in` / `Kavach@2026`.
+2. **Select Tender:** Open **`ONGC-2026-TE-088`** (*Cryogenic Gas Turbine Actuators & Control Skids*).
+3. **Upload Documents:** Navigate to the statutory upload section, view the authentic certificates, and click **Submit Tender Bid**.
+4. **Switch to Officer:** Log in as **Procurement Officer** and open tender `ONGC-2026-TE-088`.
+5. **Inspect & Verify:** Select **Kavach Engineering (`BID-005`)**, inspect the document package, and click **✨ RUN AI VERIFICATION**.
+6. **Watch Real-Time Scanning:** The 10-stage AI verification pipeline executes dynamically.
+7. **Inspect Scorecard (68/100 • HIGH RISK):** View the 3 detected anomalies:
+   - *Anomaly 1:* Audited 3-year turnover of ₹10.50 Cr fails mandatory ₹12.00 Cr PQC floor.
+   - *Anomaly 2:* Claimed 80% local content directly contradicted by BOQ Line 8.4 specifying imported Swiss servo actuator (44% of unit value).
+   - *Anomaly 3:* Active ESIC Section 45A Statutory Recovery Demand Notice for ₹2,85,000 arrears.
+8. **View Side-by-Side Evidence:** Click **"View Evidence (Side-by-Side)"** on any anomaly to open the split viewport comparison.
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Framework**: [React 18](https://react.dev/)
-- **Build Tool**: [Vite 6](https://vitejs.dev/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Routing**: [React Router v6](https://reactrouter.com/) (`HashRouter` for zero-configuration client hosting)
-- **Icons**: [Lucide React](https://lucide.dev/) + Sovereign SVGs
-- **Design System**: Scoped zero-dependency design tokens (`tokens.ts`) with Inter & Merriweather typography.
+- **Frontend:** [React 18](https://react.dev/), [Vite 6](https://vitejs.dev/), [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** Vanilla Scoped CSS with Centralized Sovereign Design Tokens (`tokens.ts`)
+- **Routing:** [React Router v6](https://reactrouter.com/) (HashRouter for resilient client-side navigation)
+- **Backend Server:** Node.js, Express, JSON Web Tokens (JWT), bcrypt
+- **Database:** MongoDB / Mongoose with offline memory resilience
+- **Icons & Graphics:** Lucide React, Sovereign Ashoka SVGs, Canvas Captcha Generator
 
 ---
 
 ## 📦 Getting Started
 
 ### Prerequisites
-- Node.js (v18 or higher recommended)
+- Node.js (v18 or higher)
 - npm or yarn
 
-### Installation
+### Installation & Local Setup
 
 ```bash
 # Clone the repository
 git clone https://github.com/adityaraj250806-jpg/GemxAI.git
 cd GemxAI
 
-# Install dependencies
+# Install dependencies for frontend and backend
 npm install
-```
+cd server && npm install && cd ..
 
-### Running Locally
-
-```bash
-# Start development server
+# Start Vite Development Server (Port 5173)
 npm run dev
+
+# (Optional) Start Express Backend API (Port 5000)
+cd server && npm run dev
 ```
 
-Visit `http://localhost:5173/` in your browser.
-
-### Production Build
-
-```bash
-# Build for production
-npm run build
-
-# Preview production bundle
-npm run preview
-```
+Open your browser at `http://localhost:5173/`.
 
 ---
 
@@ -82,50 +137,46 @@ npm run preview
 
 ```
 GemxAI/
-├── index.html              # HTML Shell with Google Font preconnects
-├── package.json            # Dependencies and scripts
-├── tsconfig.json           # TypeScript configuration
-├── vite.config.ts          # Vite configuration
+├── index.html                  # Sovereign HTML shell with UIDAI / GeM meta
+├── package.json                # Frontend dependencies and build scripts
+├── server/                     # Express REST backend
+│   ├── models/                 # User, Tender, and Submission schemas
+│   ├── routes/                 # Auth and Tender evaluation endpoints
+│   ├── seed.js                 # Database seeding with Kavach & CPCL accounts
+│   └── server.js               # Express app entry point
 └── src/
-    ├── main.tsx            # Application entry point
-    ├── App.tsx             # HashRouter & route declarations
-    ├── index.css           # Global typography and base CSS reset
-    ├── tokens.ts           # Centralized design tokens (colors, fonts, shadows)
-    ├── context/
-    │   └── AppContext.tsx  # Global state (auth, active role, toasts)
-    ├── data/               # Strongly typed mock datasets
-    │   ├── tenders.ts
-    │   ├── bidders.ts
-    │   ├── documents.ts
-    │   ├── verificationResults.ts
-    │   └── evidence.ts
-    ├── services/           # Service layer
-    │   ├── authService.ts
-    │   ├── tenderService.ts
-    │   ├── bidderService.ts
-    │   ├── documentService.ts
-    │   └── verificationService.ts
-    ├── components/
-    │   ├── layout/         # AppHeader, AppSidebar, AppLayout
-    │   └── modals/         # DocumentModal, OfficerDecisionModal
+    ├── App.tsx                 # Route declarations and layout shells
+    ├── tokens.ts               # Sovereign color palette (Navy, Green, Saffron, Amber)
+    ├── data/
+    │   ├── tenders.ts          # Public tenders (CPCL, ONGC, IOCL, GAIL, HPCL)
+    │   ├── bidders.ts          # Registered bidders (BID-001 to BID-005)
+    │   ├── documents.ts        # Authentic 10-document sets per bidder
+    │   ├── govtRegistry.ts     # Ground-truth databases (CBIC, CBDT, MSME, EPFO, ESIC, ICAI)
+    │   ├── verificationResults.ts # Audit scorecards and anomaly checklists
+    │   └── evidence.ts         # Multi-error side-by-side evidence records
+    ├── services/
+    │   ├── authService.ts      # Authentication with KNOWN_ACCOUNTS fallback
+    │   ├── tenderService.ts    # Tender persistence and search
+    │   ├── bidderService.ts    # Bidder evaluation and registry updates
+    │   ├── documentService.ts  # Document upload and bid submission
+    │   └── verificationService.ts # 10-stage AI verification execution
     └── pages/
-        ├── HomePage.tsx    # Mercell-inspired sovereign landing page
-        ├── LoginPage.tsx   # Dual-panel e-Gov login with canvas captcha
-        ├── bidder/         # Bidder workspace views
-        └── officer/        # Procurement officer evaluation views
+        ├── HomePage.tsx        # GeM sovereign portal landing page
+        ├── LoginPage.tsx       # Dual-panel e-Gov login with textured canvas captcha
+        ├── bidder/             # Bidder dashboard, tenders, and upload checklist
+        └── officer/            # Officer console, bidders, live AI scan, and evidence viewer
 ```
 
 ---
 
-## ⚖️ Governance & Compliance
+## ⚖️ Statutory Governance & Standards
 
-Built in accordance with:
-- **General Financial Rules (GFR) 2017** — Rule 144, Rule 149, Rule 170.
-- **Public Procurement (Preference to Make in India) Order 2017**.
-- **GeM 4.0 Standard Architecture**.
+- **General Financial Rules (GFR) 2017:** Rule 144 (Fundamental principles of public procurement), Rule 149 (Procurement through GeM), Rule 173 (Technical evaluation and rejection of non-conforming bids).
+- **Public Procurement (Preference to Make in India) Order 2017:** Class-I Local Supplier ($\ge 50\%$) and Class-II ($\ge 20\%$) eligibility.
+- **Public Procurement Policy for MSEs Order 2012:** EMD waivers and MSME purchase preference.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**.

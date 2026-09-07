@@ -91,8 +91,16 @@ export const OfficerAiResults: React.FC = () => {
 
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 800, background: "#f0fdf4", color: C.emerald, border: "1px solid #bbf7d0" }}>
-                ✓ {results.riskLevel}
+              <span style={{ 
+                padding: "4px 12px", 
+                borderRadius: 20, 
+                fontSize: 12, 
+                fontWeight: 800, 
+                background: results.riskLevel === "LOW RISK" ? "#f0fdf4" : results.riskLevel === "HIGH RISK" ? "#fef2f2" : "#fffbeb", 
+                color: results.riskLevel === "LOW RISK" ? C.emerald : results.riskLevel === "HIGH RISK" ? C.crimson : C.amber, 
+                border: `1px solid ${results.riskLevel === "LOW RISK" ? "#bbf7d0" : results.riskLevel === "HIGH RISK" ? "#fecaca" : "#fde68a"}` 
+              }}>
+                {results.riskLevel === "LOW RISK" ? "✓" : results.riskLevel === "HIGH RISK" ? "✕" : "⚠"} {results.riskLevel}
               </span>
               <span style={{ fontSize: 13, color: C.inkMuted }}>
                 AI Model Confidence: <strong style={{ color: C.navy }}>{results.aiConfidence}</strong>
@@ -112,57 +120,104 @@ export const OfficerAiResults: React.FC = () => {
         <div style={{ border: `1px solid ${C.border}`, borderRadius: 10, overflow: "hidden", marginBottom: 24 }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <tbody>
-              {results.checks.map((chk, idx) => (
-                <tr key={idx} style={{ borderBottom: idx === results.checks.length - 1 ? "none" : `1px solid #f1f5f9` }}>
-                  <td style={{ padding: "12px 18px", fontWeight: 700, color: C.ink, width: "25%" }}>
-                    {chk.parameter}
-                  </td>
-                  <td style={{ padding: "12px 18px", color: C.inkMuted }}>
-                    {chk.details}
-                  </td>
-                  <td style={{ padding: "12px 18px", textAlign: "right", width: 140 }}>
-                    <span
-                      style={{
-                        padding: "3px 10px",
-                        borderRadius: 12,
-                        fontSize: 11,
-                        fontWeight: 700,
-                        background: chk.type === "success" ? "#f0fdf4" : "#fffbeb",
-                        color: chk.type === "success" ? C.emerald : C.amber,
-                        border: `1px solid ${chk.type === "success" ? "#bbf7d0" : "#fde68a"}`
-                      }}
-                    >
-                      {chk.icon} {chk.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              {results.checks.map((chk, idx) => {
+                const isSuccess = chk.type === "success";
+                const isError = chk.type === "error";
+                return (
+                  <tr key={idx} style={{ borderBottom: idx === results.checks.length - 1 ? "none" : `1px solid #f1f5f9` }}>
+                    <td style={{ padding: "12px 18px", fontWeight: 700, color: C.ink, width: "25%" }}>
+                      {chk.parameter}
+                    </td>
+                    <td style={{ padding: "12px 18px", color: C.inkMuted }}>
+                      {chk.details}
+                    </td>
+                    <td style={{ padding: "12px 18px", textAlign: "right", width: 170 }}>
+                      <span
+                        style={{
+                          padding: "3px 10px",
+                          borderRadius: 12,
+                          fontSize: 11,
+                          fontWeight: 700,
+                          background: isSuccess ? "#f0fdf4" : isError ? "#fef2f2" : "#fffbeb",
+                          color: isSuccess ? C.emerald : isError ? C.crimson : C.amber,
+                          border: `1px solid ${isSuccess ? "#bbf7d0" : isError ? "#fecaca" : "#fde68a"}`
+                        }}
+                      >
+                        {chk.icon} {chk.status}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
 
-        {/* Anomalies Warning Box */}
-        <div style={{ background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 10, padding: 18, marginBottom: 24 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#9a3412", fontWeight: 800, fontSize: 14, marginBottom: 10 }}>
-            <span>⚠</span>
-            <span>{results.anomaliesCount} ANOMALIES FOUND</span>
+        {/* Anomalies Box (Warning or Success) */}
+        {results.anomaliesCount === 0 ? (
+          <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, padding: 18, marginBottom: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#166534", fontWeight: 800, fontSize: 14 }}>
+              <span>✓</span>
+              <span>0 ANOMALIES FOUND — 100% REGULATORY & STATUTORY INTEGRITY</span>
+            </div>
+            <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#15803d", lineHeight: 1.5 }}>
+              All submitted registration numbers, statutory filings, and financial metrics verified flawlessly against official government portals with zero contradictions detected.
+            </p>
           </div>
+        ) : (
+          <div style={{ background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 10, padding: 18, marginBottom: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#9a3412", fontWeight: 800, fontSize: 14, marginBottom: 10 }}>
+              <span>⚠</span>
+              <span>{results.anomaliesCount} ANOMALIES FOUND</span>
+            </div>
 
-          <ol style={{ paddingLeft: 20, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-            {results.anomalies.map(ano => (
-              <li key={ano.id} style={{ fontSize: 13, color: "#431407", lineHeight: 1.5 }}>
-                <strong>{ano.title}:</strong> {ano.description}
-              </li>
-            ))}
-          </ol>
-        </div>
+            <ol style={{ paddingLeft: 20, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+              {results.anomalies.map((ano, idx) => (
+                <li key={ano.id} style={{ fontSize: 13, color: "#431407", lineHeight: 1.5 }}>
+                  <div style={{ fontWeight: 800, color: "#7c2d12" }}>
+                    #{idx + 1}: {ano.title}
+                  </div>
+                  <div style={{ margin: "2px 0 6px", color: "#431407" }}>
+                    {ano.description}
+                  </div>
+                  <Link
+                    to={`/officer/bidders/${bidder?.id || bidderId}/evidence?error=${idx}`}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 6,
+                      fontSize: 11.5,
+                      fontWeight: 700,
+                      color: C.navy,
+                      textDecoration: "none",
+                      background: "#ffffff",
+                      padding: "3px 10px",
+                      borderRadius: 6,
+                      border: `1px solid #fed7aa`,
+                      boxShadow: "0 1px 3px rgba(0,0,0,0.05)"
+                    }}
+                  >
+                    <span>🔍</span> Inspect Live Evidence Proof (Flaw #{idx + 1}) →
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
 
         {/* AI Advisory */}
         <div style={{ background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 10, padding: 18, marginBottom: 24 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
             <span style={{ fontSize: 16 }}>🤖</span>
             <span style={{ fontSize: 12, fontWeight: 800, color: C.navy, letterSpacing: "0.06em", textTransform: "uppercase" }}>AI ADVISORY</span>
-            <span style={{ padding: "2px 8px", borderRadius: 4, fontSize: 11, fontWeight: 700, background: "#fffbeb", color: C.amber }}>
+            <span style={{ 
+              padding: "2px 8px", 
+              borderRadius: 4, 
+              fontSize: 11, 
+              fontWeight: 700, 
+              background: results.aiAdvisory.statusBadge === "badge-success" ? "#f0fdf4" : results.aiAdvisory.statusBadge === "badge-danger" ? "#fef2f2" : "#fffbeb", 
+              color: results.aiAdvisory.statusBadge === "badge-success" ? C.emerald : results.aiAdvisory.statusBadge === "badge-danger" ? C.crimson : C.amber 
+            }}>
               {results.aiAdvisory.status}
             </span>
           </div>
@@ -175,21 +230,24 @@ export const OfficerAiResults: React.FC = () => {
         </div>
 
         {/* Evidence Link Buttons */}
-        <div style={{ display: "flex", gap: 14, marginBottom: 32 }}>
+        <div style={{ display: "flex", gap: 14, marginBottom: 32, flexWrap: "wrap" }}>
           <Link
             to={`/officer/bidders/${bidder?.id || bidderId}/evidence`}
             style={{
-              padding: "11px 22px",
+              padding: "12px 24px",
               borderRadius: 8,
               background: `linear-gradient(135deg, ${C.navy}, ${C.navyLight})`,
               color: "#ffffff",
               fontSize: 13,
               fontWeight: 700,
               textDecoration: "none",
-              boxShadow: "0 2px 8px rgba(11, 61, 145, 0.25)"
+              boxShadow: "0 2px 8px rgba(11, 61, 145, 0.25)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8
             }}
           >
-            🔍 VIEW EVIDENCE →
+            <span>🔍</span> VIEW ALL FORENSIC EVIDENCE ({results.anomaliesCount === 0 ? "0 ANOMALIES" : `${results.anomaliesCount} ANOMALIES DETECTED`}) →
           </Link>
           <Link
             to={`/officer/bidders/${bidder?.id || bidderId}/documents`}

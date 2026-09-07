@@ -1,5 +1,5 @@
 import { mockVerificationResults, VerificationResult } from "../data/verificationResults";
-import { mockEvidence, EvidenceRecord } from "../data/evidence";
+import { mockEvidence, mockEvidenceList, EvidenceRecord } from "../data/evidence";
 import { bidderService } from "./bidderService";
 
 export interface VerificationStage {
@@ -48,6 +48,10 @@ export class VerificationService {
 
   getEvidence(bidderId = "BID-001"): EvidenceRecord {
     return mockEvidence[bidderId] || mockEvidence["BID-001"];
+  }
+
+  getAllEvidence(bidderId = "BID-001"): EvidenceRecord[] {
+    return mockEvidenceList[bidderId] || (mockEvidence[bidderId] ? [mockEvidence[bidderId]] : [mockEvidence["BID-001"]]);
   }
 
   async runVerification(

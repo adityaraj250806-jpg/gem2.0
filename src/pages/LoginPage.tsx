@@ -241,10 +241,21 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const handleDemoLogin = async (targetRole: UserRole) => {
-    const userEmail = targetRole === ROLES.OFFICER ? "procurement.officer@cpcl.gov.in" : "tenders@abcengineering.com";
+  const handleDemoLogin = async (targetRole: UserRole, customEmail?: string) => {
+    let userEmail = customEmail;
+    if (!userEmail) {
+      userEmail = targetRole === ROLES.OFFICER ? "procurement.officer@cpcl.gov.in" : "tenders@abcengineering.com";
+    }
     await login(userEmail, "DemoPass", targetRole);
     navigate(targetRole === ROLES.OFFICER ? "/officer/dashboard" : "/bidder/dashboard");
+  };
+
+  const handleFillKavachCredentials = () => {
+    setRole(ROLES.BIDDER);
+    setIsRegisterMode(false);
+    setUsername("bidder@kavach.in");
+    setPassword("Kavach@2026");
+    showToast("Filled Kavach Engineering credentials (bidder@kavach.in / Kavach@2026). Enter captcha to login!", "info");
   };
 
   return (
@@ -892,15 +903,79 @@ export const LoginPage: React.FC = () => {
             <div
               style={{
                 marginTop: 24,
-                padding: "12px 14px",
+                padding: "14px 16px",
                 background: "#eff6ff",
                 border: "1px dashed #93c5fd",
                 borderRadius: 10
               }}
             >
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.navy, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>
-                ⚡ 1-Click Evaluation Demo Access:
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: C.navy, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  ⚡ Live Internal Evaluation Accounts:
+                </span>
+                <span style={{ fontSize: 11, color: C.inkFaint, fontWeight: 600 }}>1-Click or Manual Login</span>
               </div>
+
+              {/* Dedicated Highlight for New Tender Bidder: Kavach Engineering */}
+              <div
+                style={{
+                  background: "#ffffff",
+                  border: `1.5px solid ${C.navy}`,
+                  borderRadius: 8,
+                  padding: "10px 12px",
+                  marginBottom: 10,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  boxShadow: "0 2px 4px rgba(11,61,145,0.08)"
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: C.navy, display: "flex", alignItems: "center", gap: 6 }}>
+                    <span>🚀 Kavach Engineering (New Bidder)</span>
+                    <span style={{ padding: "1px 6px", borderRadius: 4, background: "#dbeafe", color: "#1e40af", fontSize: 10 }}>ONGC Tender</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: C.inkMuted, fontFamily: F.mono, marginTop: 2 }}>
+                    ID: <strong>bidder@kavach.in</strong> • Pass: <strong>Kavach@2026</strong>
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: 6 }}>
+                  <button
+                    type="button"
+                    onClick={handleFillKavachCredentials}
+                    style={{
+                      padding: "5px 10px",
+                      borderRadius: 5,
+                      border: "1px solid #cbd5e1",
+                      background: "#f8fafc",
+                      color: C.ink,
+                      fontSize: 11,
+                      fontWeight: 700,
+                      cursor: "pointer"
+                    }}
+                    title="Fill email and password into form"
+                  >
+                    ✏️ Fill
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin(ROLES.BIDDER, "bidder@kavach.in")}
+                    style={{
+                      padding: "5px 12px",
+                      borderRadius: 5,
+                      border: "none",
+                      background: `linear-gradient(135deg, ${C.navy} 0%, #1e40af 100%)`,
+                      color: "#ffffff",
+                      fontSize: 11,
+                      fontWeight: 800,
+                      cursor: "pointer"
+                    }}
+                  >
+                    Login →
+                  </button>
+                </div>
+              </div>
+
               <div style={{ display: "flex", gap: 8 }}>
                 <button
                   type="button"
@@ -917,7 +992,7 @@ export const LoginPage: React.FC = () => {
                     cursor: "pointer"
                   }}
                 >
-                  👤 Bidder Portal
+                  👤 ABC Bidder
                 </button>
                 <button
                   type="button"

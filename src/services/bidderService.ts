@@ -14,7 +14,19 @@ export class BidderService {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length >= mockBidders.length) {
+        if (Array.isArray(parsed)) {
+          mockBidders.forEach(mb => {
+            const idx = parsed.findIndex((p: Bidder) => p.id === mb.id);
+            if (idx === -1) {
+              parsed.push(JSON.parse(JSON.stringify(mb)));
+            } else {
+              parsed[idx].documentsCount = mb.documentsCount;
+              parsed[idx].documentsSubmitted = mb.documentsSubmitted;
+              parsed[idx].gstin = mb.gstin;
+              parsed[idx].pan = mb.pan;
+              parsed[idx].udyamNumber = mb.udyamNumber;
+            }
+          });
           return parsed;
         }
       }

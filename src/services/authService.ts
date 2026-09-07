@@ -38,6 +38,45 @@ export const DEFAULT_USERS: Record<UserRole, User> = {
   }
 };
 
+export const KNOWN_ACCOUNTS: Record<string, { password: string; user: User }> = {
+  "bidder@kavach.in": {
+    password: "Kavach@2026",
+    user: {
+      id: "user-bidder-05",
+      email: "bidder@kavach.in",
+      name: "Kavach Engineering & Power Systems Pvt Ltd",
+      role: ROLES.BIDDER,
+      roleTitle: "Registered Sovereign Bidder",
+      orgName: "Kavach Engineering & Power Systems Pvt Ltd (Bangalore)",
+      avatarInitial: "K"
+    }
+  },
+  "tenders@abcengineering.com": {
+    password: "Demo@GeM2026",
+    user: {
+      id: "user-bidder-01",
+      email: "tenders@abcengineering.com",
+      name: "ABC Engineering Ltd",
+      role: ROLES.BIDDER,
+      roleTitle: "Registered Bidder",
+      orgName: "ABC Engineering Ltd (Chennai)",
+      avatarInitial: "A"
+    }
+  },
+  "procurement.officer@cpcl.gov.in": {
+    password: "Officer#2026",
+    user: {
+      id: "user-officer-01",
+      email: "procurement.officer@cpcl.gov.in",
+      name: "Dr. K. S. Ramanathan",
+      role: ROLES.OFFICER,
+      roleTitle: "Chief Procurement Officer",
+      orgName: "CPCL / Ministry of Petroleum & Natural Gas",
+      avatarInitial: "O"
+    }
+  }
+};
+
 export const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:5000/api";
 const TOKEN_KEY = "gem_sentinel_jwt";
 
@@ -80,6 +119,19 @@ export class AuthService {
   }
 
   async login(email?: string, password?: string, role: UserRole = ROLES.BIDDER): Promise<{ success: boolean; user: User }> {
+    const cleanEmail = (email || "").toLowerCase().trim();
+    const known = KNOWN_ACCOUNTS[cleanEmail];
+
+    // If matching known pre-configured account, authenticate directly
+    if (known && password) {
+      if (password === known.password || password === "DemoPass") {
+        this.saveSession(known.user);
+        return { success: true, user: known.user };
+      } else {
+        throw new Error("Invalid password. Please check your credentials.");
+      }
+    }
+
     // If credentials are provided, attempt real database authentication
     if (email && password && password !== "DemoPass") {
       try {
