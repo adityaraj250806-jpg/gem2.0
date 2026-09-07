@@ -1136,19 +1136,224 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
             </div>
           )}
 
-          {/* 6. MAKE IN INDIA */}
-          {doc.id === "doc-mii" && (
-            <div style={{ border: "2px solid #d97706", borderRadius: 8, padding: 20, background: "#fafafa" }}>
-              <div style={{ textAlign: "center", borderBottom: "2px solid #d97706", paddingBottom: 12, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, letterSpacing: 1, color: C.inkMuted }}>STATUTORY DECLARATION ON COMPANY LETTERHEAD</div>
-                <div style={{ fontSize: 18, fontWeight: 800, color: C.amber, margin: "4px 0" }}>Make in India Local Content Certificate</div>
-                <div style={{ fontSize: 12, color: C.inkFaint }}>Public Procurement Order 2017</div>
+          {/* 6. AUTHENTIC ESIC REGISTRATION LETTER (Form C-11, ESIC Act 1948) */}
+          {(doc.id === "doc-esic" || doc.fileName?.toLowerCase().includes("esic") || doc.title?.toLowerCase().includes("esic")) && (
+            <div style={{ background: "#ffffff", border: "1.5px solid #cbd5e1", borderRadius: 4, padding: "26px 32px", color: "#000000", fontFamily: "Arial, sans-serif", fontSize: 11.5, lineHeight: 1.45, boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}>
+              {/* Top Header Grid */}
+              <div style={{ display: "grid", gridTemplateColumns: "70px 1fr 130px", alignItems: "flex-start", marginBottom: 14 }}>
+                {/* Red/Maroon ESIC Emblem */}
+                <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#991b1b", color: "#ffffff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", border: "2px solid #7f1d1d" }}>
+                  <div style={{ fontSize: 18 }}>🏛️</div>
+                  <div style={{ fontSize: 6.5, fontWeight: 900, letterSpacing: 0.5 }}>ESIC</div>
+                </div>
+
+                {/* Center Office Title */}
+                <div style={{ textAlign: "center", padding: "0 10px" }}>
+                  <div style={{ fontSize: 13, fontWeight: 900 }}>Regional Office</div>
+                  <div style={{ fontSize: 12, fontWeight: 800, margin: "2px 0" }}>EMPLOYEES' STATE INSURANCE CORPORATION</div>
+                  <div style={{ fontSize: 9.5, color: "#334155" }}>5-9-23, HILLFORT ROAD, ADARSHNAGAR, HYDERABAD - 500063</div>
+                </div>
+
+                {/* Right: Form C-11 */}
+                <div style={{ textAlign: "right", fontSize: 10, fontWeight: 700 }}>
+                  <div>C-11 &nbsp; Regd. with a.d.</div>
+                </div>
               </div>
-              <div style={{ background: "#fffbeb", border: "1px solid #fde68a", padding: 12, borderRadius: 6, marginBottom: 14, color: "#92400e", fontWeight: 700 }}>
-                LOCAL CONTENT CLAIMED: {content.claimedLocalContent} ({content.supplierClassification})
+
+              <div style={{ borderBottom: "1px solid #94a3b8", marginBottom: 12 }} />
+
+              {/* To & Dated */}
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+                <div>
+                  <div style={{ fontWeight: 700 }}>To</div>
+                  <div style={{ fontWeight: 800 }}>M/s {content.legalName || "ABC ENGINEERING PRIVATE LIMITED"}</div>
+                  <div>Plot No. 14-B, Industrial Area,</div>
+                  <div>Serilingampally, Hyderabad, 500084</div>
+                </div>
+                <div style={{ fontWeight: 700, fontSize: 11 }}>
+                  Dated : 12/8/2023
+                </div>
               </div>
-              <p style={{ fontSize: 13, color: C.ink, lineHeight: 1.5 }}>{content.statutoryDeclaration}</p>
-              <div style={{ fontSize: 13, marginTop: 10 }}><strong>Location:</strong> {content.locationOfValueAddition}</div>
+
+              {/* Subject */}
+              <div style={{ fontWeight: 800, marginBottom: 10, fontSize: 11.5, background: "#f8fafc", padding: "6px 8px", borderLeft: "3px solid #991b1b" }}>
+                Subject:- Implementation of the E.S.I. Act, 1948 and Registration of Employees of the Factories and Establishments under Section 1(5) of the Act, as amended.
+              </div>
+
+              <div>Dear Sir(s),</div>
+
+              {/* Numbered Points 1-7 matching the screenshot */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 6, fontSize: 10.5, color: "#1e293b", textAlign: "justify" }}>
+                <div>
+                  <strong>1.</strong> It is informed that under section 1(3) of the esi. act, 1948 is applicable to all factories/establishments covered under the act within the area where your factory/establishment is situated.
+                </div>
+                <div>
+                  <strong>2.</strong> It is further informed that the appropriate government has extended the provisions of the act to other establishments under section 1(5) of the act in this area.
+                </div>
+                <div>
+                  <strong>3.</strong> Under section 2 a of the act such a factory/establishment is required to register itself under the act and chapter iv thereof casts a responsibility on the principal employer thereof to get his employees registered and pay contributions in respect of these employees covered under the act.
+                </div>
+                <div>
+                  <strong>4.</strong> On the basis of the particulars in respect of your factory/establishment submitted by you, the report of the inspection conducted by the Social Security Officer, your establishment falls within the purview of Section 1(5) of the Act with effect from <strong>12-08-2023</strong>.
+                </div>
+                <div>
+                  <strong>5.</strong> It is requested to take immediate steps for registration of your employees by submitting declaration forms online, payment of contribution, maintenance of records etc. from the date of coverage under the act.
+                </div>
+                <div style={{ background: "#fef2f2", border: "1px solid #fecaca", padding: "6px 10px", borderRadius: 4 }}>
+                  <strong>6.</strong> For the sake of convenience your establishment has been allotted <strong>Employer Code No:</strong>{" "}
+                  <span style={{ fontFamily: F.mono, fontWeight: 900, color: "#991b1b", fontSize: 12 }}>
+                    {content.employerCode || "52000849200000606"}
+                  </span>{" "}
+                  which may kindly be used in all communications. The Branch Office at Prashanti Nagar Kukatpally, Hyderabad-500072 has been instructed to render necessary assistance.
+                </div>
+                <div>
+                  <strong>7.</strong> A State-wise list of ESI Dispensaries is available on our portal <strong>www.esic.nic.in</strong>. Publicity may be given about the Dispensaries to enable your employees to choose their ESI Dispensaries.
+                </div>
+              </div>
+
+              {/* Official Sign-off */}
+              <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+                <div style={{ fontSize: 9.5, color: "#15803d", fontWeight: 700 }}>
+                  ✓ Authenticated under ESI (General) Regulations 1950 • Contribution Active
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: 10 }}>Yours faithfully,</div>
+                  <div style={{ fontFamily: "cursive", fontSize: 16, color: "#991b1b", margin: "2px 0" }}>K. Srinivasa Rao</div>
+                  <div style={{ fontWeight: 800, fontSize: 11 }}>For Regional Director</div>
+                  <div style={{ fontSize: 10, color: "#475569" }}>Employees' State Insurance Corporation</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 7. AUTHENTIC MAKE IN INDIA SELF-DECLARATION ON COMPANY LETTERHEAD (PPO 2017) */}
+          {(doc.id === "doc-mii" || doc.fileName?.toLowerCase().includes("make_in_india") || doc.title?.toLowerCase().includes("make in india")) && (
+            <div style={{ background: "#ffffff", border: "1px solid #cbd5e1", borderRadius: 6, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontFamily: "Arial, sans-serif" }}>
+              {/* Corporate Letterhead Banner */}
+              <div style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%)", color: "#ffffff", padding: "18px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "3px solid #f59e0b" }}>
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 0.5 }}>ABC ENGINEERING PRIVATE LIMITED</div>
+                  <div style={{ fontSize: 10, opacity: 0.85, marginTop: 2 }}>Heavy Flow Valves & High Pressure Fluid Systems • ISO 9001:2015 Certified</div>
+                  <div style={{ fontSize: 9.5, opacity: 0.75, marginTop: 1, fontFamily: F.mono }}>CIN: L28120TN2004PLC053210 • GSTIN: 37AABCA1234F1Z5</div>
+                </div>
+                <div style={{ textAlign: "right", fontSize: 9.5, opacity: 0.85, lineHeight: 1.3 }}>
+                  <div>Plot 14-B, Ambattur Industrial Estate</div>
+                  <div>Chennai, Tamil Nadu - 600058</div>
+                  <div>contact@abcengineering.com • www.abcengineering.com</div>
+                </div>
+              </div>
+
+              <div style={{ padding: "22px 28px", color: "#0f172a", fontSize: 11.5, lineHeight: 1.5 }}>
+                {/* Reference & Date */}
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12, borderBottom: "1px solid #e2e8f0", paddingBottom: 8, fontSize: 11 }}>
+                  <div><strong>Ref No:</strong> <span style={{ fontFamily: F.mono }}>ABC/CPCL/MII-DECL/2026/045</span></div>
+                  <div><strong>Date:</strong> 28th August 2026</div>
+                </div>
+
+                {/* Addressee */}
+                <div style={{ marginBottom: 12, lineHeight: 1.35 }}>
+                  <div><strong>To,</strong></div>
+                  <div>The Tender Inviting Authority / General Manager (Materials & Contracts)</div>
+                  <div>Chennai Petroleum Corporation Limited (CPCL) / GeM Portal</div>
+                  <div>Manali Refinery, Chennai - 600068, Tamil Nadu</div>
+                </div>
+
+                {/* Subject */}
+                <div style={{ background: "#fffbeb", border: "1px solid #fde68a", padding: "8px 12px", borderRadius: 4, fontWeight: 800, color: "#92400e", marginBottom: 14, fontSize: 12 }}>
+                  Subject: Self-Declaration Certificate of Local Content under Public Procurement (Preference to Make in India) Order 2017 (PPO-2017) against Tender Ref: CPCL/2026/TE/045
+                </div>
+
+                <p style={{ margin: "0 0 10px" }}>
+                  Dear Sir/Madam,
+                </p>
+
+                <p style={{ margin: "0 0 12px", textAlign: "justify" }}>
+                  In terms of Public Procurement (Preference to Make in India) Order 2017 notified by Department for Promotion of Industry and Internal Trade (DPIIT), Ministry of Commerce and Industry, Government of India vide Order No. P-45021/2/2017-PP (BE-II) dated 16th September 2020, we hereby formally declare and certify on our official letterhead:
+                </p>
+
+                {/* Golden Highlight Box */}
+                <div style={{ background: "#f0fdf4", border: "2px solid #22c55e", borderRadius: 6, padding: "12px 18px", marginBottom: 14, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <div style={{ fontSize: 10.5, color: "#166534", fontWeight: 700, textTransform: "uppercase" }}>Percentage of Domestic Local Content Offered:</div>
+                    <div style={{ fontSize: 24, fontWeight: 900, color: "#15803d" }}>75.00% (LOCAL VALUE ADDITION)</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ background: "#15803d", color: "#ffffff", padding: "4px 12px", borderRadius: 4, fontWeight: 800, fontSize: 12 }}>
+                      CLASS-I LOCAL SUPPLIER
+                    </div>
+                    <div style={{ fontSize: 10, color: "#166534", marginTop: 3 }}>Local Content ≥ 50% Threshold Met</div>
+                  </div>
+                </div>
+
+                {/* Breakdown Table */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontWeight: 800, marginBottom: 6 }}>1. Itemized Domestic Local Content Breakdown:</div>
+                  <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #cbd5e1", fontSize: 11 }}>
+                    <thead>
+                      <tr style={{ background: "#f8fafc", textAlign: "left" }}>
+                        <th style={{ border: "1px solid #cbd5e1", padding: "5px 8px", width: 45 }}>S.No.</th>
+                        <th style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Component Description</th>
+                        <th style={{ border: "1px solid #cbd5e1", padding: "5px 8px", width: 85, textAlign: "center" }}>% Value</th>
+                        <th style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Facility Location of Local Value Addition</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center" }}>1</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Valve Casting Body (ASTM A216 WCB Cast Carbon Steel)</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center", fontWeight: 700 }}>35.00%</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Ambattur Foundry Facility, Chennai, TN</td>
+                      </tr>
+                      <tr>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center" }}>2</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Precision CNC Machining, Stems, Bonnet, Flanges & Seat Rings</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center", fontWeight: 700 }}>22.50%</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Plant Unit-1, Chennai Heavy Engineering Works</td>
+                      </tr>
+                      <tr>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center" }}>3</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Final Assembly, Hydrostatic Testing, QA & Epoxy Coating</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px", textAlign: "center", fontWeight: 700 }}>17.50%</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "5px 8px" }}>Factory Unit-2, Chennai, Tamil Nadu</td>
+                      </tr>
+                      <tr style={{ background: "#f1f5f9", fontWeight: 900 }}>
+                        <td colSpan={2} style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "right" }}>Total Domestic Value Addition:</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: "#15803d", fontSize: 12 }}>75.00%</td>
+                        <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Compliant with DPIIT PPO-2017 Class-I</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Factory Location & GFR Rule 175 Legal Notice */}
+                <div style={{ background: "#f8fafc", padding: "10px 14px", border: "1px solid #e2e8f0", borderRadius: 4, marginBottom: 14, fontSize: 10.5, color: "#334155" }}>
+                  <strong>2. Address of Manufacturing Plant where Local Value Addition is made:</strong><br />
+                  Plot No. 14-B, Ambattur Industrial Estate, Chennai, Tamil Nadu - 600058.<br />
+                  <span style={{ color: "#b91c1c", marginTop: 4, display: "inline-block" }}>
+                    * We understand that false declarations will be in breach of the Code of Integrity under Rule 175(1)(i)(h) of the GFR 2017 for which debarment up to two years under Rule 151(iii) will apply.
+                  </span>
+                </div>
+
+                {/* Signature & Seal Block */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 18, paddingTop: 10, borderTop: "1px solid #e2e8f0" }}>
+                  {/* Corporate Blue Seal */}
+                  <div style={{ width: 95, height: 95, borderRadius: "50%", border: "2px dashed #1e3a8a", color: "#1e3a8a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 4, transform: "rotate(-5deg)", fontSize: 8, fontWeight: 800 }}>
+                    <div>ABC ENGINEERING</div>
+                    <div style={{ fontSize: 6.5, fontWeight: 700, margin: "2px 0" }}>PVT. LTD.</div>
+                    <div>★ CHENNAI ★</div>
+                    <div style={{ fontSize: 6.5, marginTop: 2 }}>CORP SEAL</div>
+                  </div>
+
+                  {/* Authorized Signatory */}
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: 11, color: "#475569" }}>For <strong>ABC ENGINEERING PRIVATE LIMITED</strong></div>
+                    <div style={{ fontFamily: "cursive", fontSize: 20, color: "#1e3a8a", margin: "4px 0" }}>Rajesh Kumar</div>
+                    <div style={{ fontWeight: 800, fontSize: 12 }}>Mr. Rajesh Kumar</div>
+                    <div style={{ fontSize: 10.5, color: "#334155" }}>Managing Director & Authorized Signatory</div>
+                    <div style={{ fontSize: 9.5, color: "#64748b", fontFamily: F.mono }}>DIN: 02849102</div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1341,43 +1546,156 @@ export const DocumentModal: React.FC<DocumentModalProps> = ({ doc, onClose }) =>
             </div>
           )}
 
-          {/* 8. TECHNICAL BOQ */}
-          {doc.id === "doc-boq" && (
-            <div style={{ border: "2px solid #334155", borderRadius: 8, padding: 20, background: "#fafafa" }}>
-              <div style={{ textAlign: "center", borderBottom: "2px solid #334155", paddingBottom: 12, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, letterSpacing: 1, color: C.inkMuted }}>SCHEDULE OF BILL OF QUANTITIES & TECHNICAL COMPLIANCE</div>
-                <div style={{ fontSize: 18, fontWeight: 800, color: C.navy, margin: "4px 0" }}>API 6D TECHNICAL DATASHEETS</div>
-                <div style={{ fontSize: 12, color: C.inkFaint }}>Standard: {content.specificationStandard}</div>
+          {/* 8. AUTHENTIC TECHNICAL BOQ & SPECIFICATION COMPLIANCE DATASHEET */}
+          {(doc.id === "doc-boq" || doc.fileName?.toLowerCase().includes("boq") || doc.title?.toLowerCase().includes("boq")) && (
+            <div style={{ background: "#ffffff", border: "1px solid #334155", borderRadius: 6, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontFamily: "Arial, sans-serif" }}>
+              {/* Technical Header */}
+              <div style={{ background: "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)", color: "#ffffff", padding: "16px 22px", borderBottom: "3px solid #38bdf8" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 900, letterSpacing: 0.5 }}>SCHEDULE OF BILL OF QUANTITIES & TECHNICAL COMPLIANCE</div>
+                    <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 2 }}>Tender Ref: CPCL/2026/TE/045 • High Pressure Heavy Flow Cryogenic Valves</div>
+                  </div>
+                  <div style={{ textAlign: "right", fontFamily: F.mono, fontSize: 11, background: "rgba(255,255,255,0.1)", padding: "4px 10px", borderRadius: 4 }}>
+                    API Spec 6D / ASME B16.34
+                  </div>
+                </div>
               </div>
-              <div style={{ fontSize: 13, display: "flex", flexDirection: "column", gap: 10 }}>
-                <div><strong>Total Line Items:</strong> {content.totalLineItems}</div>
-                <div><strong>Key Component:</strong> {content.keyComponent1}</div>
-                <div style={{ background: "#fff1f2", border: "1px solid #fecdd3", padding: 10, borderRadius: 6, color: "#9f1239" }}>
-                  <strong>Note:</strong> {content.keyComponent2}
+
+              <div style={{ padding: "20px 24px" }}>
+                {/* 6 Evaluated Technical Parameters Table */}
+                <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #cbd5e1", fontSize: 11, marginBottom: 14 }}>
+                  <thead>
+                    <tr style={{ background: "#f1f5f9", fontWeight: 800, textAlign: "left" }}>
+                      <th style={{ border: "1px solid #cbd5e1", padding: "6px 8px", width: 45 }}>Item</th>
+                      <th style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Tender Specification Requirement</th>
+                      <th style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Bidder Offered Technical Datasheet</th>
+                      <th style={{ border: "1px solid #cbd5e1", padding: "6px 8px", width: 110, textAlign: "center" }}>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", fontWeight: 700 }}>1.1</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>API 6D Trunnion Mounted Ball Valves, Full Bore, ASME Class 600/900</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Model VF-600T, Full Bore, 8" to 24", API 6D Monogram Licensed</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: "#15803d", fontWeight: 800 }}>COMPLIANT ✓</td>
+                    </tr>
+                    <tr>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", fontWeight: 700 }}>1.2</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Body Metallurgy: Cast Carbon Steel ASTM A216 Gr. WCB (NACE MR0175)</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>ASTM A216 WCB Domestic Melt & Pour, Sour Gas NACE Certified</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: "#15803d", fontWeight: 800 }}>COMPLIANT ✓</td>
+                    </tr>
+                    <tr>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", fontWeight: 700 }}>1.3</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Cryogenic Extended Bonnet (-196°C Service) with ISO 15848-1 Class A</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Extended Stem 300mm with Double PEEK Seals, Class A Helium Tested</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: "#15803d", fontWeight: 800 }}>COMPLIANT ✓</td>
+                    </tr>
+                    <tr style={{ background: "#fff1f2" }}>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", fontWeight: 700 }}>14.2</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Emergency Shutdown Electro-Hydraulic Actuator Pump Sub-assembly</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Voith-Rexroth Hydraulic Actuator, Manufactured in Frankenthal, Germany</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: "#be123c", fontWeight: 800 }}>
+                        IMPORT CONTENT ⚠️
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", fontWeight: 700 }}>1.4</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Fire-Safe Testing Certification under API 607 / ISO 10497</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Third-party Certificate No: TUV-FS-2025-9014 (Valid through 2029)</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: "#15803d", fontWeight: 800 }}>COMPLIANT ✓</td>
+                    </tr>
+                    <tr>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", fontWeight: 700 }}>1.5</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>Hydrostatic Shell Pressure Test: 1.5x Design Rating (API 598)</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px" }}>100% Hydrostatic Factory Tested at 2225 PSI, Zero Leakage Recorded</td>
+                      <td style={{ border: "1px solid #cbd5e1", padding: "6px 8px", textAlign: "center", color: "#15803d", fontWeight: 800 }}>COMPLIANT ✓</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                {/* Quality Engineer Sign-off */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #e2e8f0", paddingTop: 12 }}>
+                  <div style={{ fontSize: 11, color: "#475569" }}>
+                    <div><strong>Test Laboratory:</strong> L&T Central Testing Laboratory (NABL Accredited)</div>
+                    <div><strong>Monogram License:</strong> API 6D-1892 (Valid)</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontFamily: "cursive", fontSize: 16, color: "#1e3a8a" }}>K. Ramaswamy</div>
+                    <div style={{ fontSize: 11, fontWeight: 800 }}>K. Ramaswamy, M.Tech</div>
+                    <div style={{ fontSize: 10, color: "#475569" }}>Lead Quality Assurance Engineer</div>
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* 9. OEM AUTHORIZATION */}
-          {doc.id === "doc-oem" && (
-            <div style={{ border: "2px solid #4338ca", borderRadius: 8, padding: 20, background: "#fafafa" }}>
-              <div style={{ textAlign: "center", borderBottom: "2px solid #4338ca", paddingBottom: 12, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, letterSpacing: 1, color: C.inkMuted }}>ORIGINAL EQUIPMENT MANUFACTURER AUTHORIZATION</div>
-                <div style={{ fontSize: 18, fontWeight: 800, color: "#4338ca", margin: "4px 0" }}>MANUFACTURER AUTHORIZATION FORM (MAF)</div>
-                <div style={{ fontSize: 12, color: C.inkFaint }}>Back-to-Back Warranty Guarantee</div>
+          {/* 9. AUTHENTIC MANUFACTURER AUTHORIZATION FORM (MAF) ON OEM LETTERHEAD */}
+          {(doc.id === "doc-oem" || doc.fileName?.toLowerCase().includes("oem") || doc.title?.toLowerCase().includes("oem") || doc.fileName?.toLowerCase().includes("maf")) && (
+            <div style={{ background: "#ffffff", border: "1px solid #cbd5e1", borderRadius: 6, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontFamily: "Arial, sans-serif" }}>
+              {/* OEM Top Banner */}
+              <div style={{ background: "linear-gradient(135deg, #312e81 0%, #1e1b4b 100%)", color: "#ffffff", padding: "16px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "3px solid #6366f1" }}>
+                <div>
+                  <div style={{ fontSize: 17, fontWeight: 900, letterSpacing: 0.5 }}>ABC VALVECRAFT MANUFACTURING LTD</div>
+                  <div style={{ fontSize: 10, opacity: 0.85, marginTop: 2 }}>Original Equipment Manufacturer (OEM) • Global Fluid Dynamics Division</div>
+                  <div style={{ fontSize: 9.5, opacity: 0.75, fontFamily: F.mono }}>API Spec Q1 / ISO 29001 Certified OEM</div>
+                </div>
+                <div style={{ background: "rgba(255,255,255,0.15)", padding: "4px 10px", borderRadius: 4, textAlign: "center" }}>
+                  <div style={{ fontSize: 9, textTransform: "uppercase", letterSpacing: 1 }}>AUTHENTIC MAF</div>
+                  <div style={{ fontSize: 11, fontWeight: 800, fontFamily: F.mono }}>OEM/MAF/2026/045</div>
+                </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, fontSize: 13 }}>
-                <div><strong>Authorizing OEM:</strong> {content.authorizingManufacturer}</div>
-                <div><strong>Territory:</strong> {content.territory}</div>
-                <div><strong>Validity:</strong> <span style={{ color: C.emerald, fontWeight: 700 }}>{content.validThrough}</span></div>
-                <div><strong>Warranty:</strong> {content.warrantyCommitment}</div>
+
+              <div style={{ padding: "20px 26px", color: "#0f172a", fontSize: 11.5, lineHeight: 1.5 }}>
+                <div style={{ textAlign: "center", fontSize: 15, fontWeight: 900, letterSpacing: 0.5, borderBottom: "1px solid #e2e8f0", paddingBottom: 8, marginBottom: 14 }}>
+                  MANUFACTURER'S AUTHORIZATION FORM (MAF)
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12, fontSize: 11 }}>
+                  <div><strong>To:</strong> Chennai Petroleum Corporation Limited (CPCL) / GeM Authority</div>
+                  <div><strong>Date:</strong> 15th August 2026</div>
+                </div>
+
+                <p style={{ margin: "0 0 10px", textAlign: "justify" }}>
+                  WHEREAS, We, <strong>M/s ABC VALVECRAFT MANUFACTURING LTD</strong>, who are official and established original manufacturers of high-pressure API 6D industrial valves, having manufacturing facilities at Plot 14-B, Ambattur Industrial Estate, Chennai;
+                </p>
+
+                <div style={{ background: "#e0e7ff", borderLeft: "4px solid #4338ca", padding: "10px 14px", borderRadius: 4, margin: "12px 0", fontWeight: 600 }}>
+                  DO HEREBY AUTHORIZE <strong>M/s ABC ENGINEERING LIMITED</strong> to submit a bid, negotiate and conclude the contract with you against Tender Enquiry No: <strong>CPCL/2026/TE/045</strong> for the supply of API 6D Valves manufactured by us.
+                </div>
+
+                {/* Warranty Commitment Box */}
+                <div style={{ background: "#ecfdf5", border: "1.5px solid #10b981", borderRadius: 6, padding: "12px 16px", marginBottom: 14 }}>
+                  <div style={{ fontWeight: 800, color: "#065f46", fontSize: 12, marginBottom: 4 }}>
+                    🛡️ Comprehensive Back-to-Back OEM Warranty Commitment:
+                  </div>
+                  <div style={{ fontSize: 11, color: "#047857" }}>
+                    We hereby extend our full <strong>36 (Thirty-Six) Months On-Site PSU Warranty</strong> for the goods offered by the above bidder. We further guarantee continuous availability of genuine spare parts and technical service support for a minimum period of <strong>10 (Ten) Years</strong> from the date of commissioning.
+                  </div>
+                </div>
+
+                {/* Sign-off */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 16, paddingTop: 10, borderTop: "1px solid #e2e8f0" }}>
+                  <div style={{ width: 90, height: 90, borderRadius: "50%", border: "2px solid #4338ca", color: "#4338ca", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 4, transform: "rotate(-6deg)", fontSize: 8, fontWeight: 900 }}>
+                    <div>OEM SEAL</div>
+                    <div style={{ fontSize: 6.5 }}>ABC VALVECRAFT</div>
+                    <div>★ VERIFIED ★</div>
+                  </div>
+
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: 10.5, color: "#475569" }}>For ABC VALVECRAFT MANUFACTURING LTD</div>
+                    <div style={{ fontFamily: "cursive", fontSize: 18, color: "#4338ca", margin: "2px 0" }}>Dr. Sundararajan V.</div>
+                    <div style={{ fontWeight: 800, fontSize: 11.5 }}>Dr. Sundararajan V.</div>
+                    <div style={{ fontSize: 10, color: "#334155" }}>Vice President (PSU Tenders & Contracts)</div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
 
           {/* Generic Fallback for unlisted documents */}
-          {!["doc-gst", "doc-pan", "doc-udyam", "doc-mii", "doc-undertaking", "doc-itr", "doc-epfo", "doc-balance-sheet", "doc-boq", "doc-oem"].includes(doc.id) && (
+          {!["doc-gst", "doc-pan", "doc-udyam", "doc-mii", "doc-undertaking", "doc-itr", "doc-epfo", "doc-esic", "doc-balance-sheet", "doc-boq", "doc-oem"].includes(doc.id) && (
             <div style={{ border: `1px solid ${C.border}`, borderRadius: 8, padding: 20, background: "#fafafa" }}>
               <div style={{ borderBottom: `1px solid ${C.border}`, paddingBottom: 12, marginBottom: 16 }}>
                 <div style={{ fontSize: 18, fontWeight: 700, color: C.ink }}>{doc.title}</div>

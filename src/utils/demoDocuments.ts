@@ -189,6 +189,32 @@ export const DEMO_DOCUMENTS: DemoDocDefinition[] = [
     }
   },
   {
+    id: "doc-esic",
+    name: "6. ESIC Registration Certificate (Form C-11)",
+    fileName: "ESIC_Form_C11_Registration_Letter.pdf",
+    fileSize: "890 KB",
+    category: "Labor & Social Security",
+    officialRef: "Code: 52000849200000606",
+    summary: "Form C-11 Registration Letter under Section 1(5) of ESI Act 1948 by Regional Office Hyderabad",
+    lines: [
+      "EMPLOYEES' STATE INSURANCE CORPORATION (ESIC)",
+      "REGIONAL OFFICE, 5-9-23 HILLFORT ROAD, ADARSHNAGAR, HYDERABAD - 500063",
+      "FORM C-11 (Regd. with a.d.) - REGISTRATION UNDER E.S.I. ACT 1948",
+      "Dated: 12/08/2023 | Subject: Registration under Section 1(5) of ESI Act",
+      "To: M/s ABC ENGINEERING PRIVATE LIMITED (Serilingampally, Hyderabad)",
+      "Allotted Employer Code No: 52000849200000606",
+      "Coverage Date: Effective from 12-08-2023",
+      "Branch Office Designated: Prashanti Nagar Kukatpally, Hyderabad - 500072",
+      "Statutory Status: Active Employer & Timely Monthly Contributions Verified"
+    ],
+    metadata: {
+      employerCode: "52000849200000606",
+      coveredEmployees: "182 Insured Persons",
+      contributionCompliance: "Paid up to July 2026",
+      regionalOffice: "Regional Office, Adarshnagar, Hyderabad - 500063"
+    }
+  },
+  {
     id: "doc-mii",
     name: "6. Make in India Declaration (PPO 2017)",
     fileName: "Make_in_India_Class1_Declaration.pdf",
