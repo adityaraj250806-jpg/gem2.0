@@ -116,20 +116,22 @@ export const BidderTenders: React.FC = () => {
                       Active
                     </span>
                   </td>
-                  <td style={{ padding: "14px 18px", textAlign: "right" }}>
+                  <td style={{ padding: "14px 18px", textAlign: "right", whiteSpace: "nowrap" }}>
                     <Link
                       to={`/bidder/tenders/${t.id}`}
                       style={{
                         padding: "6px 14px",
                         borderRadius: 6,
-                        background: C.navy,
+                        background: C.gemOrange,
                         color: "#ffffff",
                         fontSize: 12,
                         fontWeight: 700,
-                        textDecoration: "none"
+                        textDecoration: "none",
+                        boxShadow: "0 2px 6px rgba(243,112,33,0.3)",
+                        display: "inline-block"
                       }}
                     >
-                      View Tender
+                      View Tender & Apply →
                     </Link>
                   </td>
                 </tr>

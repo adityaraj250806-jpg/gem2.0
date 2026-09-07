@@ -125,7 +125,17 @@ export class AuthService {
     return { success: true, user };
   }
 
-  async register(data: { email: string; password: string; name: string; role: UserRole; orgName?: string; gstin?: string }): Promise<{ success: boolean; user: User }> {
+  async register(data: {
+    email: string;
+    password: string;
+    name: string;
+    role: UserRole;
+    orgName?: string;
+    gstin?: string;
+    officerCode?: string;
+    officerKey?: string;
+    designation?: string;
+  }): Promise<{ success: boolean; user: User }> {
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

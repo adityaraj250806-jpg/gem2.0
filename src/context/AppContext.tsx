@@ -10,7 +10,17 @@ export interface ToastItem {
 interface AppContextType {
   user: User | null;
   login: (email?: string, password?: string, role?: UserRole) => Promise<void>;
-  register: (data: { email: string; password: string; name: string; role: UserRole; orgName?: string; gstin?: string }) => Promise<User>;
+  register: (data: {
+    email: string;
+    password: string;
+    name: string;
+    role: UserRole;
+    orgName?: string;
+    gstin?: string;
+    officerCode?: string;
+    officerKey?: string;
+    designation?: string;
+  }) => Promise<User>;
   logout: () => Promise<void>;
   switchRole: (role: UserRole) => void;
   showToast: (message: string, type?: "success" | "warning" | "danger" | "info") => void;
@@ -47,7 +57,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showToast(`Welcome back, ${res.user.name}!`, "success");
   };
 
-  const register = async (data: { email: string; password: string; name: string; role: UserRole; orgName?: string; gstin?: string }) => {
+  const register = async (data: {
+    email: string;
+    password: string;
+    name: string;
+    role: UserRole;
+    orgName?: string;
+    gstin?: string;
+    officerCode?: string;
+    officerKey?: string;
+    designation?: string;
+  }) => {
     const res = await authService.register(data);
     setUser(res.user);
     showToast(`Account created successfully! Welcome, ${res.user.name}`, "success");

@@ -83,7 +83,7 @@ router.post("/login", async (req, res) => {
 // POST /api/auth/register
 router.post("/register", async (req, res) => {
   try {
-    const { email, password, name, role, orgName, gstin } = req.body;
+    const { email, password, name, role, orgName, gstin, officerCode, officerKey, designation } = req.body;
 
     if (!email || !password || !name) {
       return res.status(400).json({
@@ -108,6 +108,25 @@ router.post("/register", async (req, res) => {
       });
     }
 
+    // Distinguished Officer Security Validation
+    const isOfficerRole = role === "OFFICER";
+    if (isOfficerRole) {
+      const validOfficerKeys = ["GEM-OFFICER-2025", "GOV-SECURE-2025", "CPCL-OFFICER", "OFFICER-2025"];
+      const cleanKey = (officerKey || "").trim().toUpperCase();
+      if (!cleanKey || !validOfficerKeys.includes(cleanKey)) {
+        return res.status(403).json({
+          success: false,
+          message: "Unauthorized: Creating an Officer account requires a valid Department Authorization Passkey (e.g. GEM-OFFICER-2025). Only authorized Government/PSU personnel may register."
+        });
+      }
+      if (!officerCode || !officerCode.trim()) {
+        return res.status(400).json({
+          success: false,
+          message: "Government Employee Code / Officer ID is required for Officer registration."
+        });
+      }
+    }
+
     const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
     if (existingUser) {
       return res.status(409).json({
@@ -116,8 +135,8 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    const newUserRole = role === "OFFICER" ? "OFFICER" : "BIDDER";
-    const roleTitle = newUserRole === "OFFICER" ? "Procurement Officer" : "Registered Bidder";
+    const newUserRole = isOfficerRole ? "OFFICER" : "BIDDER";
+    const roleTitle = newUserRole === "OFFICER" ? (designation?.trim() || "Procurement Officer") : "Registered Bidder";
     const avatarInitial = name.charAt(0).toUpperCase();
 
     const user = new User({
@@ -128,6 +147,8 @@ router.post("/register", async (req, res) => {
       roleTitle,
       orgName: orgName || (newUserRole === "OFFICER" ? "CPCL / Ministry of Petroleum" : "ABC Engineering Ltd"),
       gstin: gstin || "",
+      officerCode: isOfficerRole ? (officerCode?.trim() || "") : "",
+      designation: isOfficerRole ? (designation?.trim() || "Procurement Officer") : "",
       avatarInitial
     });
 

@@ -1,4 +1,6 @@
 import { mockDocuments, DocumentItem } from "../data/documents";
+import { bidderService } from "./bidderService";
+import { tenderService } from "./tenderService";
 
 const STORAGE_KEY_DOCS = "gem_sentinel_documents";
 const STORAGE_KEY_BIDS = "gem_sentinel_submitted_bids";
@@ -27,7 +29,16 @@ export class DocumentService {
     try {
       const stored = localStorage.getItem(STORAGE_KEY_DOCS);
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        if (parsed["BID-001"]) {
+          const defaultList = mockDocuments["BID-001"] || [];
+          defaultList.forEach(defDoc => {
+            if (!parsed["BID-001"].some((d: DocumentItem) => d.id === defDoc.id)) {
+              parsed["BID-001"].push(JSON.parse(JSON.stringify(defDoc)));
+            }
+          });
+        }
+        return parsed;
       }
     } catch (e) {
       console.warn("Error reading stored documents:", e);
@@ -86,7 +97,7 @@ export class DocumentService {
   async uploadDocument(
     bidderId: string,
     docId: string,
-    file: { name?: string; size?: number }
+    file: { name?: string; size?: number; fileDataUrl?: string }
   ): Promise<{ success: boolean; document?: DocumentItem; error?: string }> {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -94,21 +105,38 @@ export class DocumentService {
           this.documents[bidderId] = JSON.parse(JSON.stringify(this.documents["BID-001"] || []));
         }
 
-        const doc = this.documents[bidderId].find(d => d.id === docId);
-        if (doc) {
-          doc.fileName = file.name || "Uploaded_Document.pdf";
-          doc.fileSize = file.size ? `${(file.size / 1024).toFixed(1)} KB` : "1.2 MB";
-          doc.uploadDate = new Date().toLocaleDateString("en-IN", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-          });
-          doc.verified = true;
-          this.saveDocuments();
-          resolve({ success: true, document: doc });
-        } else {
-          resolve({ success: false, error: "Document item not found" });
+        let doc = this.documents[bidderId].find(d => d.id === docId);
+        if (!doc) {
+          doc = {
+            id: docId,
+            title: file.name || "Statutory Document",
+            fileName: file.name || "Uploaded_Document.pdf",
+            fileSize: "1.2 MB",
+            uploadDate: "",
+            verified: true,
+            category: "Compliance",
+            content: { status: "Uploaded" }
+          };
+          this.documents[bidderId].push(doc);
         }
+
+        doc.fileName = file.name || "Uploaded_Document.pdf";
+        doc.fileSize = file.size
+          ? file.size > 1024 * 1024
+            ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
+            : `${(file.size / 1024).toFixed(1)} KB`
+          : "1.2 MB";
+        doc.uploadDate = new Date().toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric"
+        });
+        doc.verified = true;
+        if (file.fileDataUrl) {
+          doc.fileDataUrl = file.fileDataUrl;
+        }
+        this.saveDocuments();
+        resolve({ success: true, document: doc });
       }, 150);
     });
   }
@@ -116,35 +144,83 @@ export class DocumentService {
   async submitBid(
     tenderId: string,
     tenderRef: string,
-    _bidderName?: string,
-    documentsList?: any[]
-  ): Promise<{ success: boolean; submission: SubmittedBid }> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const randomNum = Math.floor(100 + Math.random() * 900);
-        const newBidId = `BID-002${randomNum}`;
-        const newSubmission: SubmittedBid = {
-          bidId: newBidId,
-          tenderId: tenderId,
-          tenderRef: tenderRef || "CPCL/2026/TE/045",
-          tenderTitle: "Supply of High Pressure Valves",
-          department: "CPCL",
-          submissionDate: new Date().toLocaleString("en-IN", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-          }),
-          status: "UNDER EVALUATION",
-          documentsCount: documentsList ? documentsList.length : 10
-        };
+    bidderName = "ABC Engineering Ltd",
+    documentsList?: any[],
+    tenderTitle?: string,
+    department?: string
+  ): Promise<{ success: boolean; submission: SubmittedBid; bidderId: string }> {
+    const randomNum = Math.floor(100 + Math.random() * 900);
+    const newBidId = `BID-002${randomNum}`;
+    const uploadedDocs = documentsList && documentsList.length > 0 ? documentsList : (this.documents["BID-001"] || []);
 
-        this.submittedBids.unshift(newSubmission);
-        this.saveSubmittedBids();
-        resolve({ success: true, submission: newSubmission });
-      }, 300);
+    // Format and store documents under this new bidderId
+    const formattedDocs: DocumentItem[] = uploadedDocs.map((item: any, idx: number) => {
+      const fileSize = item.fileSize || (item.file?.size
+        ? (item.file.size > 1024 * 1024 ? `${(item.file.size / (1024 * 1024)).toFixed(1)} MB` : `${(item.file.size / 1024).toFixed(1)} KB`)
+        : "1.2 MB");
+
+      if (item.docRef) {
+        return {
+          ...item.docRef,
+          fileName: item.fileName || item.docRef.fileName || "Uploaded_Document.pdf",
+          fileSize: fileSize || item.docRef.fileSize || "1.2 MB",
+          fileDataUrl: item.fileDataUrl || item.docRef.fileDataUrl
+        };
+      }
+      return {
+        id: item.id || `doc-${idx + 1}`,
+        title: item.name || item.title || `Document ${idx + 1}`,
+        fileName: item.fileName || "Submitted_Document.pdf",
+        fileSize: fileSize,
+        fileDataUrl: item.fileDataUrl,
+        uploadDate: new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }),
+        verified: true,
+        category: "Compliance",
+        content: { status: "Submitted for Technical Verification" }
+      };
     });
+
+    this.documents[newBidId] = formattedDocs;
+    this.documents["BID-001"] = formattedDocs; // Also sync to default bidder profile
+    this.saveDocuments();
+
+    // Register bidder into bidderService for real-time visibility in officer portal
+    await bidderService.registerBidder({
+      id: newBidId,
+      bidIdCode: `GEM/2026/BID/${randomNum}`,
+      bidderName: bidderName,
+      tenderId: tenderId,
+      tenderRef: tenderRef || tenderId,
+      documentsSubmitted: `${formattedDocs.length} / 10`,
+      documentsCount: formattedDocs.length,
+      status: "Submitted",
+      aiStatus: "NOT_RUN"
+    });
+
+    // Increment tender's total bidder and document count
+    await tenderService.incrementBidderCount(tenderId);
+
+    const newSubmission: SubmittedBid = {
+      bidId: newBidId,
+      tenderId: tenderId,
+      tenderRef: tenderRef || "CPCL/2026/TE/045",
+      tenderTitle: tenderTitle || "Supply of High Pressure Valves",
+      department: department || "CPCL",
+      submissionDate: new Date().toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }),
+      status: "UNDER EVALUATION",
+      documentsCount: formattedDocs.length
+    };
+
+    this.submittedBids.unshift(newSubmission);
+    this.saveSubmittedBids();
+
+    return { success: true, submission: newSubmission, bidderId: newBidId };
   }
 
   async getMyBids(): Promise<SubmittedBid[]> {

@@ -42,6 +42,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: ""
     },
+    officerCode: {
+      type: String,
+      default: ""
+    },
+    designation: {
+      type: String,
+      default: ""
+    },
     avatarInitial: {
       type: String,
       default: "U"

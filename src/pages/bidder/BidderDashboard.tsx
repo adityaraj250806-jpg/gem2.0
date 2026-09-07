@@ -146,21 +146,27 @@ export const BidderDashboard: React.FC = () => {
               <span style={{ fontSize: 12, color: C.inkFaint }}>
                 Published under Public Procurement (Preference to Make in India) Policy
               </span>
-              <Link
-                to={`/bidder/tenders/${t.id}`}
-                style={{
-                  padding: "8px 18px",
-                  borderRadius: 6,
-                  background: C.navy,
-                  color: "#ffffff",
-                  fontSize: 12,
-                  fontWeight: 700,
-                  textDecoration: "none",
-                  letterSpacing: "0.03em"
-                }}
-              >
-                VIEW TENDER →
-              </Link>
+              <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                <Link
+                  to={`/bidder/tenders/${t.id}`}
+                  style={{
+                    padding: "8px 20px",
+                    borderRadius: 6,
+                    background: C.gemOrange,
+                    color: "#ffffff",
+                    fontSize: 12.5,
+                    fontWeight: 800,
+                    textDecoration: "none",
+                    letterSpacing: "0.02em",
+                    boxShadow: "0 2px 8px rgba(243,112,33,0.35)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6
+                  }}
+                >
+                  VIEW TENDER & APPLY →
+                </Link>
+              </div>
             </div>
           </div>
         ))}

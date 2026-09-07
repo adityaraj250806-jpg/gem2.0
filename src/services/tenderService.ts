@@ -13,12 +13,19 @@ export class TenderService {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length >= mockTenders.length) {
+          return parsed;
+        }
       }
     } catch (e) {
       console.warn("Error reading stored tenders:", e);
     }
-    return JSON.parse(JSON.stringify(mockTenders));
+    const fresh = JSON.parse(JSON.stringify(mockTenders));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
+    } catch (e) {}
+    return fresh;
   }
 
   saveTenders(): void {
@@ -30,40 +37,41 @@ export class TenderService {
   }
 
   async getAllTenders(): Promise<Tender[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([...this.tenders]);
-      }, 50);
-    });
+    return [...this.tenders];
   }
 
   async getTenderById(id: string): Promise<Tender | null> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const tender = this.tenders.find(t => t.id === id || t.referenceNumber === id);
-        resolve(tender ? { ...tender } : null);
-      }, 50);
-    });
+    const tender = this.tenders.find(t => t.id === id || t.referenceNumber === id);
+    return tender ? { ...tender } : null;
   }
 
   async searchTenders(query?: string, statusFilter = "ALL"): Promise<Tender[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        let results = [...this.tenders];
-        if (query && query.trim()) {
-          const q = query.toLowerCase().trim();
-          results = results.filter(t =>
-            t.referenceNumber.toLowerCase().includes(q) ||
-            t.title.toLowerCase().includes(q) ||
-            t.department.toLowerCase().includes(q)
-          );
-        }
-        if (statusFilter && statusFilter !== "ALL") {
-          results = results.filter(t => t.status === statusFilter || t.officerStatus === statusFilter);
-        }
-        resolve(results);
-      }, 50);
-    });
+    let results = [...this.tenders];
+    if (query && query.trim()) {
+      const q = query.toLowerCase().trim();
+      results = results.filter(t =>
+        t.referenceNumber.toLowerCase().includes(q) ||
+        t.title.toLowerCase().includes(q) ||
+        t.department.toLowerCase().includes(q)
+      );
+    }
+    if (statusFilter && statusFilter !== "ALL") {
+      results = results.filter(t => t.status === statusFilter || t.officerStatus === statusFilter);
+    }
+    return results;
+  }
+
+  async incrementBidderCount(tenderId: string): Promise<void> {
+    const tender = this.tenders.find(
+      t => t.id.toLowerCase() === tenderId.toLowerCase() ||
+           t.referenceNumber.toLowerCase() === tenderId.toLowerCase() ||
+           tenderId.toLowerCase().includes(t.id.toLowerCase())
+    );
+    if (tender) {
+      tender.biddersCount = (tender.biddersCount || 0) + 1;
+      tender.documentsCount = (tender.documentsCount || 0) + 10;
+      this.saveTenders();
+    }
   }
 }
 

@@ -80,14 +80,7 @@ export class VerificationService {
           const result = mockVerificationResults[bidderId] || mockVerificationResults["BID-001"];
           this.resultsCache.set(bidderId, result);
 
-          bidderService.getBidderById(bidderId).then(bidder => {
-            if (bidder) {
-              bidder.aiStatus = "VERIFIED";
-              bidder.complianceScore = result.complianceScore;
-              bidder.riskLevel = result.riskLevel;
-              bidder.aiAdvisory = result.aiAdvisory.status;
-            }
-          });
+          bidderService.updateAiVerification(bidderId, result);
 
           if (onProgress) {
             onProgress({

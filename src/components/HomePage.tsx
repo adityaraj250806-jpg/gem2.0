@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { ROLES } from '../services/authService';
+import { tenderService } from '../services/tenderService';
+import { Tender } from '../data/tenders';
 import { GemLogo } from './GemLogo';
+import { OfficialNoticeModal } from './modals/OfficialNoticeModal';
 
 /* ─── GeM PORTAL-INSPIRED DESIGN TOKENS ────────────────────────── */
 const T = {
@@ -749,22 +752,26 @@ const BenefitsSection: React.FC = () => {
   );
 };
 
-/* ─── LIVE PSU TENDERS ───────────────────────────────────────── */
-const tenders = [
-  { ref: 'CPCL/2026/TE/045', title: 'Supply of High Pressure API 6D Gate, Globe & Check Valves', org: 'Chennai Petroleum Corporation Limited (CPCL)', cat: 'Mechanical & Flow Control', val: '₹8.45 Cr', close: '15 Sep 2026', location: 'Manali Refinery, Chennai' },
-  { ref: 'IOCL/ENG/2026/088', title: 'High-Pressure Electro-Hydraulic Turbine Actuators & Control Skids', org: 'Indian Oil Corporation Limited (IOCL)', cat: 'Oil & Gas / Energy', val: '₹12.40 Cr', close: '24 Sep 2026', location: 'Panipat Refinery, Haryana' },
-  { ref: 'ONGC/OFFSHORE/2026/012', title: 'Subsea Pipeline Ultrasonic Diagnostic Sensors & Telemetry System', org: 'Oil and Natural Gas Corporation (ONGC)', cat: 'Instrumentation & Telecom', val: '₹22.50 Cr', close: '30 Sep 2026', location: 'Western Offshore Basin, Mumbai' },
-  { ref: 'GAIL/PIPE/2026/410', title: 'Cryogenic Gas Compressors and Pressure Regulating Skid Stations', org: 'GAIL (India) Limited', cat: 'Mechanical & Flow Control', val: '₹19.20 Cr', close: '05 Oct 2026', location: 'HVJ Pipeline Corridor, Hazira' },
-];
+/* ─── LIVE PSU TENDERS (DYNAMICALLY SYNCED WITH tenderService) ── */
+interface TendersProps {
+  onSelect: (t: Tender) => void;
+  onBidNow: (t: Tender) => void;
+}
 
-interface TendersProps { onSelect: (t: typeof tenders[0]) => void; }
-const TendersSection: React.FC<TendersProps> = ({ onSelect }) => {
+const TendersSection: React.FC<TendersProps> = ({ onSelect, onBidNow }) => {
+  const [tendersList, setTendersList] = useState<Tender[]>([]);
   const [query, setQuery] = useState('');
   const [cat, setCat] = useState('All');
-  const cats = ['All', 'Mechanical & Flow Control', 'Oil & Gas / Energy', 'Instrumentation & Telecom'];
-  const filtered = tenders.filter(t =>
-    (cat === 'All' || t.cat === cat) &&
-    (!query || [t.ref, t.title, t.org, t.location].join(' ').toLowerCase().includes(query.toLowerCase()))
+
+  useEffect(() => {
+    tenderService.getAllTenders().then(setTendersList);
+  }, []);
+
+  const cats = ['All', 'Mechanical & Flow Control', 'Chemical & Process', 'Drilling & Subsea', 'Oil & Gas'];
+
+  const filtered = tendersList.filter(t =>
+    (cat === 'All' || t.category.toLowerCase().includes(cat.toLowerCase().slice(0, 6))) &&
+    (!query || [t.referenceNumber, t.title, t.department, t.category].join(' ').toLowerCase().includes(query.toLowerCase()))
   );
 
   return (
@@ -782,7 +789,7 @@ const TendersSection: React.FC<TendersProps> = ({ onSelect }) => {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'white', border: `1.5px solid ${T.greenBorder}`, borderRadius: 10, padding: '8px 16px', fontSize: 12, color: T.green, fontFamily: font, fontWeight: 800 }}>
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: T.green, display: 'inline-block' }} />
-            4 Live Tenders Open
+            {tendersList.length} Live Tenders Open
           </div>
         </div>
 
@@ -817,15 +824,15 @@ const TendersSection: React.FC<TendersProps> = ({ onSelect }) => {
               >{c}</button>
             ))}
             <span style={{ marginLeft: 'auto', fontSize: 12, color: T.inkFaint, fontFamily: fontMono }}>
-              Showing {filtered.length} of {tenders.length} tenders
+              Showing {filtered.length} of {tendersList.length} active tenders
             </span>
           </div>
         </div>
 
         {/* Tender Cards */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {filtered.map((t, i) => (
-            <div key={i} style={{
+          {filtered.map((t) => (
+            <div key={t.id} style={{
               background: 'white', borderRadius: 16, padding: '24px 28px', border: `1px solid ${T.border}`,
               transition: 'all 0.25s', boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
             }}
@@ -836,17 +843,17 @@ const TendersSection: React.FC<TendersProps> = ({ onSelect }) => {
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 10, alignItems: 'center' }}>
                     <span style={{ fontFamily: fontMono, fontSize: 12, fontWeight: 800, color: T.navy, background: T.navySubtle, padding: '3px 10px', borderRadius: 6, border: `1px solid #bfdbfe` }}>
-                      {t.ref}
+                      {t.referenceNumber}
                     </span>
                     <span style={{ fontSize: 11, fontWeight: 800, color: T.green, background: T.greenSubtle, padding: '3px 10px', borderRadius: 6, border: `1px solid ${T.greenBorder}`, display: 'flex', alignItems: 'center', gap: 4 }}>
                       <span style={{ width: 6, height: 6, borderRadius: '50%', background: T.green, display: 'inline-block' }} />
                       OPEN FOR BIDDING
                     </span>
                     <span style={{ fontSize: 11, fontWeight: 700, color: T.inkMuted, background: T.surfaceAlt, padding: '3px 10px', borderRadius: 6, border: `1px solid ${T.border}` }}>
-                      {t.cat}
+                      {t.category}
                     </span>
                     <span style={{ fontSize: 12, fontWeight: 900, color: T.green, background: T.greenSubtle, padding: '3px 12px', borderRadius: 6, border: `1px solid ${T.greenBorder}` }}>
-                      Est. {t.val}
+                      Est. {t.estimatedValue}
                     </span>
                   </div>
 
@@ -856,31 +863,21 @@ const TendersSection: React.FC<TendersProps> = ({ onSelect }) => {
 
                   <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap' }}>
                     <span style={{ fontSize: 13, color: T.inkMuted, fontFamily: font, display: 'flex', alignItems: 'center', gap: 6 }}>
-                      🏢 {t.org}
+                      🏢 {t.department}
                     </span>
                     <span style={{ fontSize: 13, color: T.inkMuted, fontFamily: font, display: 'flex', alignItems: 'center', gap: 6 }}>
-                      📍 {t.location}
+                      💰 EMD: {t.emdAmount} (MSME Exempt)
                     </span>
                     <span style={{ fontSize: 13, fontWeight: 700, color: '#dc2626', fontFamily: font, display: 'flex', alignItems: 'center', gap: 6 }}>
-                      📅 Closing: {t.close}
+                      📅 Closing: {t.closingDate}
                     </span>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexShrink: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                   <button onClick={() => onSelect(t)}
                     style={{
-                      padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 700, fontFamily: font, cursor: 'pointer',
-                      border: `1.5px solid ${T.border}`, background: 'white', color: T.ink, transition: 'all 0.15s',
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = T.navy; e.currentTarget.style.color = T.navy; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.ink; }}
-                  >
-                    View Specs
-                  </button>
-                  <button onClick={() => onSelect(t)}
-                    style={{
-                      padding: '10px 20px', borderRadius: 8, fontSize: 13, fontWeight: 800, fontFamily: font, cursor: 'pointer',
+                      padding: '10px 22px', borderRadius: 8, fontSize: 13, fontWeight: 800, fontFamily: font, cursor: 'pointer',
                       border: 'none', background: `linear-gradient(135deg, ${T.orange} 0%, ${T.orangeDark} 100%)`, color: 'white',
                       boxShadow: `0 4px 14px ${T.orange}40`, transition: 'all 0.2s',
                       display: 'flex', alignItems: 'center', gap: 6,
@@ -888,7 +885,7 @@ const TendersSection: React.FC<TendersProps> = ({ onSelect }) => {
                     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = `0 6px 20px ${T.orange}60`; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = `0 4px 14px ${T.orange}40`; }}
                   >
-                    <span>Bid Now</span>
+                    <span>View Notice & Participate</span>
                     <span>→</span>
                   </button>
                 </div>
@@ -896,7 +893,7 @@ const TendersSection: React.FC<TendersProps> = ({ onSelect }) => {
 
               <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: T.inkMuted, fontFamily: font }}>
                 <span style={{ color: T.green }}>✅</span>
-                Eligible for instant GSTIN, Udyam MSME & PAN statutory verification · Two-Cover e-Tender
+                Real-Time Synchronization with Officer Evaluation Console · GFR 2017 Verified
               </div>
             </div>
           ))}
@@ -1046,74 +1043,11 @@ const Footer: React.FC = () => (
   </footer>
 );
 
-/* ─── TENDER DETAILS MODAL ───────────────────────────────────── */
-const TenderDetailModal: React.FC<{ tender: typeof tenders[0]; onClose: () => void; onSubmit: () => void }> = ({ tender, onClose, onSubmit }) => (
-  <div onClick={onClose} style={{
-    position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15,23,42,0.65)',
-    backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
-  }}>
-    <div onClick={e => e.stopPropagation()} style={{
-      background: 'white', borderRadius: 20, width: '100%', maxWidth: 660, overflow: 'hidden',
-      boxShadow: '0 32px 80px rgba(0,0,0,0.25)', maxHeight: '85vh', display: 'flex', flexDirection: 'column',
-    }}>
-      <div style={{ background: T.navy, padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'start', flexShrink: 0, borderBottom: `3px solid ${T.orange}` }}>
-        <div>
-          <span style={{ fontFamily: fontMono, fontSize: 11, color: T.orangeLight, fontWeight: 800 }}>{tender.ref}</span>
-          <div style={{ fontSize: 17, fontWeight: 800, color: 'white', fontFamily: fontHead, marginTop: 4, lineHeight: 1.4 }}>{tender.title}</div>
-        </div>
-        <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', cursor: 'pointer', width: 32, height: 32, borderRadius: 8, fontSize: 16, marginLeft: 16 }}>✕</button>
-      </div>
-
-      <div style={{ padding: '22px 24px', overflowY: 'auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, marginBottom: 20, background: T.surfaceWarm, padding: 16, borderRadius: 12, border: `1px solid ${T.orangeBorder}`, fontSize: 12, fontFamily: font }}>
-          <div><span style={{ color: T.inkMuted, fontSize: 11, fontWeight: 600 }}>Issuing PSU / Dept</span><br /><strong style={{ color: T.ink }}>{tender.org}</strong></div>
-          <div><span style={{ color: T.inkMuted, fontSize: 11, fontWeight: 600 }}>Estimated Value</span><br /><strong style={{ color: T.green, fontSize: 15, fontWeight: 900 }}>{tender.val}</strong></div>
-          <div><span style={{ color: T.inkMuted, fontSize: 11, fontWeight: 600 }}>Closing Deadline</span><br /><strong style={{ color: '#dc2626' }}>{tender.close}</strong></div>
-          <div><span style={{ color: T.inkMuted, fontSize: 11, fontWeight: 600 }}>Location</span><br /><strong style={{ color: T.ink }}>{tender.location}</strong></div>
-        </div>
-
-        <div style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.orange, fontFamily: font, marginBottom: 12 }}>
-          Mandatory Statutory Upload Checklist
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {[
-            ['GST Registration & GSTR-3B Tax Filings', 'Valid active GSTIN with returns filed for previous 24 consecutive months.'],
-            ['Udyam Registration Certificate', 'Verified MSME enterprise classification for EMD waiver under GFR Rule 170.'],
-            ['Audited Balance Sheets & CA Turnover Certificate', 'Minimum average annual turnover exceeding threshold criteria for past 3 fiscal years.'],
-            ['Make in India Declaration (PPO 2017)', 'Mandatory domestic local content certificate with audited manufacturing origin breakdown.'],
-          ].map(([title, desc]) => (
-            <div key={title} style={{ display: 'flex', gap: 12, padding: '12px 14px', borderRadius: 10, border: `1px solid ${T.border}`, alignItems: 'start' }}>
-              <span style={{ color: T.green, fontSize: 16, flexShrink: 0 }}>✅</span>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 800, color: T.ink, fontFamily: fontHead }}>{title}</div>
-                <div style={{ fontSize: 12, color: T.inkMuted, fontFamily: font, marginTop: 2 }}>{desc}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ padding: '16px 24px', borderTop: `1px solid ${T.border}`, display: 'flex', justifyContent: 'flex-end', gap: 12, flexShrink: 0 }}>
-        <button onClick={onClose} style={{ padding: '10px 20px', borderRadius: 9, fontSize: 13, fontWeight: 700, fontFamily: font, border: `1.5px solid ${T.border}`, background: 'white', color: T.ink, cursor: 'pointer' }}>Close</button>
-        <button onClick={onSubmit}
-          style={{
-            padding: '10px 22px', borderRadius: 9, fontSize: 13, fontWeight: 800, fontFamily: font, border: 'none',
-            background: `linear-gradient(135deg, ${T.orange} 0%, ${T.orangeDark} 100%)`, color: 'white', cursor: 'pointer',
-            boxShadow: `0 4px 16px ${T.orange}40`,
-          }}
-        >
-          Proceed to Document Upload →
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
 /* ─── MAIN HOME PAGE EXPORT ──────────────────────────────────── */
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useApp();
-  const [selectedTender, setSelectedTender] = useState<typeof tenders[0] | null>(null);
+  const [selectedTender, setSelectedTender] = useState<Tender | null>(null);
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -1128,10 +1062,13 @@ export const HomePage: React.FC = () => {
 
   const openTenders = () => scrollTo('tenders');
 
-  const handleTenderSubmit = async () => {
-    setSelectedTender(null);
+  const handleExploreAsBidder = async () => {
     await login('tenders@abcengineering.com', 'DemoPass', ROLES.BIDDER);
-    navigate('/bidder/tenders/CPCL-2026-TE-045/documents');
+    navigate('/bidder/tenders');
+  };
+
+  const handleBidNow = (tender: Tender) => {
+    setSelectedTender(tender);
   };
 
   return (
@@ -1146,15 +1083,25 @@ export const HomePage: React.FC = () => {
       <Navbar onOfficerLogin={handleOfficerLogin} onExploreTenders={openTenders} onPortalLogin={handlePortalLogin} />
       <HeroSection onExplore={openTenders} onLogin={handleOfficerLogin} />
       <StatsSection />
-      <JourneySection onBidder={openTenders} onOfficer={handleOfficerLogin} />
+      <JourneySection onBidder={handleExploreAsBidder} onOfficer={handleOfficerLogin} />
       <AIProcessSection />
       <BenefitsSection />
-      <TendersSection onSelect={setSelectedTender} />
+      <TendersSection onSelect={setSelectedTender} onBidNow={handleBidNow} />
       <TrustSection />
       <FinalCTA onExplore={openTenders} onLogin={handleOfficerLogin} />
       <Footer />
 
-      {selectedTender && <TenderDetailModal tender={selectedTender} onClose={() => setSelectedTender(null)} onSubmit={handleTenderSubmit} />}
+      {selectedTender && (
+        <OfficialNoticeModal
+          tender={selectedTender}
+          onClose={() => setSelectedTender(null)}
+          onParticipate={() => {
+            const targetId = selectedTender.id;
+            setSelectedTender(null);
+            navigate('/login?role=bidder', { state: { role: ROLES.BIDDER, targetTenderId: targetId } });
+          }}
+        />
+      )}
     </div>
   );
 };

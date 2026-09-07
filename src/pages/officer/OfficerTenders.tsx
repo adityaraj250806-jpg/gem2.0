@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { tenderService } from "../../services/tenderService";
 import { Tender } from "../../data/tenders";
+import { OfficialNoticeModal } from "../../components/modals/OfficialNoticeModal";
 import { C, F, S } from "../../tokens";
 
 export const OfficerTenders: React.FC = () => {
   const [tenders, setTenders] = useState<Tender[]>([]);
+  const [selectedNoticeTender, setSelectedNoticeTender] = useState<Tender | null>(null);
 
   useEffect(() => {
     tenderService.getAllTenders().then(setTenders);
@@ -66,6 +68,27 @@ export const OfficerTenders: React.FC = () => {
                   </span>
                 </td>
                 <td style={{ padding: "14px 18px", textAlign: "right", whiteSpace: "nowrap" }}>
+                  <button
+                    onClick={() => setSelectedNoticeTender(t)}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 4,
+                      padding: "6px 12px",
+                      borderRadius: 6,
+                      background: "#eff6ff",
+                      color: C.navy,
+                      border: "1px solid #bfdbfe",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      marginRight: 8,
+                      transition: "all 0.15s"
+                    }}
+                    title="View Official Notice Inviting Tender in formal modal"
+                  >
+                    <span>📄</span> Notice
+                  </button>
                   <Link
                     to={`/officer/tenders/${t.id}/bidders`}
                     style={{
@@ -94,6 +117,14 @@ export const OfficerTenders: React.FC = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Official Notice Modal */}
+      {selectedNoticeTender && (
+        <OfficialNoticeModal
+          tender={selectedNoticeTender}
+          onClose={() => setSelectedNoticeTender(null)}
+        />
+      )}
     </div>
   );
 };

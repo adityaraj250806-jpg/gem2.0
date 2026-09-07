@@ -29,7 +29,7 @@ export const OfficerBidderDocs: React.FC = () => {
     <div style={{ maxWidth: 1040, margin: "0 auto", fontFamily: F.sans }}>
       {/* Breadcrumb */}
       <div style={{ fontSize: 12, color: C.inkFaint, marginBottom: 16 }}>
-        <Link to="/officer/tenders/CPCL-2026-TE-045/bidders" style={{ color: C.navy, textDecoration: "none", fontWeight: 600 }}>
+        <Link to={`/officer/tenders/${bidder?.tenderId || "CPCL-2026-TE-045"}/bidders`} style={{ color: C.navy, textDecoration: "none", fontWeight: 600 }}>
           ← Back to Bidders
         </Link>
         {" / "}

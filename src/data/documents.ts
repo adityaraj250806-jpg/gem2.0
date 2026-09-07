@@ -8,6 +8,7 @@ export interface DocumentItem {
   flagged?: boolean;
   category: string;
   content: Record<string, any>;
+  fileDataUrl?: string;
 }
 
 export const mockDocuments: Record<string, DocumentItem[]> = {
@@ -179,6 +180,29 @@ export const mockDocuments: Record<string, DocumentItem[]> = {
         validThrough: "31/12/2027",
         warrantyCommitment: "Comprehensive 36 Months On-site PSU Warranty"
       }
+    },
+    {
+      id: "doc-undertaking",
+      title: "10. Non-Blacklisting & Integrity Undertaking",
+      fileName: "Non_Blacklisting_Integrity_Undertaking.pdf",
+      fileSize: "845 KB",
+      uploadDate: "01 Sep 2026",
+      verified: true,
+      category: "Legal & Debarment Compliance",
+      content: {
+        affidavitNumber: "AFF-2026/BL-9042",
+        stampPaperValue: "₹100 (Non-Judicial Stamp Paper)",
+        stampSerialNumber: "IN-TN98234710298374U",
+        notaryAdvocate: "R. Shanmugam, B.Sc., B.L., Advocate & Notary Public (Reg No. 4412/2014)",
+        deponentName: "Mr. Rajesh Kumar, Managing Director, ABC Engineering Limited",
+        notarizedDate: "28/08/2026",
+        declarationClause: "Undertaking under Rule 151 of General Financial Rules (GFR) 2017 & GeM Policy",
+        debarmentStatus: "Never Debarred / Non-Blacklisted",
+        solemnAffirmation: "We hereby solemnly affirm and state on oath that M/s ABC Engineering Limited, its directors, partners, and key managerial personnel have never been blacklisted, debarred, suspended, or put on holiday list by GeM, Ministry of Petroleum & Natural Gas, CPCL, any Central/State Government Ministry, PSU, or multilateral funding agency. We also confirm full compliance with the Integrity Pact without any conflict of interest.",
+        courtCasesPending: "Nil / None",
+        jurisdiction: "High Court of Judicature at Madras / Chennai"
+      }
     }
   ]
 };
+
