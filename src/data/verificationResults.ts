@@ -99,28 +99,21 @@ export const mockVerificationResults: Record<string, VerificationResult> = {
         details: "API 6D compliance verified through valid independent lab test reports. Valid ICAI UDIN 25558996BGSVMJ2721."
       }
     ],
-    anomaliesCount: 2,
+    anomaliesCount: 1,
     anomalies: [
       {
         id: "ano-1",
-        title: "Make-in-India declaration mismatch",
+        title: "Make in India (MII) Local Content Discrepancy",
         severity: "CRITICAL_REVIEW",
-        description: "Bidder declared 75% local content in Make in India Declaration (Page 3), yet Technical BOQ (Page 64, Line Item 14.2) specifies imported primary valve pump assembly from Germany without adequate domestic value breakdown.",
+        description: "Statutory MII Declaration certifies 75% domestic value addition, but Technical BOQ explicitly lists imported sub-assemblies from Munich, Germany.",
         evidenceRef: "evidence-mii-boq"
-      },
-      {
-        id: "ano-2",
-        title: "Missing supporting document",
-        severity: "MODERATE",
-        description: "Sub-tier component supplier ISO 9001 quality accreditation certificate referenced on Technical Data Sheet Page 12 is omitted from the submission package.",
-        evidenceRef: null
       }
     ],
     aiAdvisory: {
       status: "CONDITIONAL",
       statusBadge: "badge-warning",
-      summary: "Human review recommended before final decision.",
-      fullNote: "Bidder demonstrates exceptional statutory, tax, and labor compliance (Score 82/100, Low General Risk). However, an unresolved material discrepancy exists between the Make-in-India declaration (75% claimed local content) and the Technical BOQ (imported core components from Germany). Under Public Procurement Order 2017 Sec 9(a), the Competent Procurement Officer is advised to seek clarification or review supplier localization calculations before qualifying."
+      summary: "Conditional Qualification — Material discrepancy between MII declaration and BOQ sourcing.",
+      fullNote: "The bidder meets primary financial (₹48.67 Cr turnover) and statutory tax registration criteria. However, an inconsistency between Make in India declaration (75%) and Technical BOQ (Line Item 14.2 actuator pump assembly) requires official clarification before commercial opening."
     }
   },
 
@@ -380,105 +373,4 @@ export const mockVerificationResults: Record<string, VerificationResult> = {
       fullNote: "Bidder ShreeRam Enterprises maintains active GST and PAN registrations but fails fundamental Pre-Qualification Criteria (PQC): 1) Audited turnover of ₹8.40 Cr represents a 44% deficit against the tender prerequisite of ₹15.00 Cr; 2) Outstanding Section 45A demand notice of ₹4.28 Lakhs on ESIC portal indicates statutory non-compliance; 3) Local content of 42% qualifies only as Class-II Local Supplier. Rejection on commercial PQC grounds is warranted under GFR Rule 173(v)."
     }
   },
-
-  "BID-005": {
-    bidId: "BID-005",
-    bidderName: "KAVACH ENGINEERING & POWER SYSTEMS PVT LTD",
-    tenderRef: "ONGC/2026/TE/088",
-    evaluatedAt: "08 Sep 2026, 11:20 AM",
-    complianceScore: 68,
-    scoreOutOf: 100,
-    riskLevel: "HIGH RISK",
-    riskLevelBadge: "badge-danger",
-    aiConfidence: "98%",
-    checks: [
-      {
-        parameter: "Udyam / MSME",
-        status: "VERIFIED",
-        type: "success",
-        icon: "✓",
-        details: "Active Medium Enterprise (UDYAM-KR-03-0067123) verified directly on Ministry of MSME portal."
-      },
-      {
-        parameter: "GST & Returns",
-        status: "VERIFIED",
-        type: "success",
-        icon: "✓",
-        details: "GSTIN 29AABCK7788P1ZR active & regular in Karnataka. GSTR-1 and GSTR-3B filings up to date through August 2026."
-      },
-      {
-        parameter: "PAN / ITR",
-        status: "VERIFIED",
-        type: "success",
-        icon: "✓",
-        details: "PAN AABCK7788P matches corporate entity. Corporate ITR-6 verified for AY 2025-26 with acknowledgment 918204918239011."
-      },
-      {
-        parameter: "Financial Eligibility (PQC)",
-        status: "FAILED",
-        type: "error",
-        icon: "✕",
-        details: "Turnover Deficiency: 3-year average turnover of ₹10.50 Cr fails mandatory tender threshold of ₹12.00 Cr (Deficit: ₹1.50 Cr)."
-      },
-      {
-        parameter: "Make in India",
-        status: "INCONSISTENT",
-        type: "warning",
-        icon: "⚠",
-        details: "Contradiction: Declared 80% local content, but BOQ Item 8.4 specifies imported electro-hydraulic servo actuator (44% of unit cost)."
-      },
-      {
-        parameter: "EPFO / ESIC",
-        status: "NON_COMPLIANT",
-        type: "error",
-        icon: "✕",
-        details: "Labor Arrears: Active Section 45A demand notice of ₹2,85,000 for unpaid ESIC employee health contributions."
-      },
-      {
-        parameter: "Blacklisting",
-        status: "CLEAR",
-        type: "success",
-        icon: "✓",
-        details: "Cross-checked with CPPP debarment register, GeM incident list, and ONGC holiday list. Clean record."
-      },
-      {
-        parameter: "Technical Criteria",
-        status: "PASSED",
-        type: "success",
-        icon: "✓",
-        details: "SIL-3 functional safety certificate and cryogenic actuator pressure proof test reports comply with API 6D."
-      }
-    ],
-    anomaliesCount: 3,
-    anomalies: [
-      {
-        id: "ano-k1",
-        title: "Financial PQC Turnover Shortfall Below Mandatory Threshold",
-        severity: "CRITICAL_REVIEW",
-        description: "Clause 3.1 of Tender ONGC-2026-TE-088 mandates a minimum 3-year average annual turnover of ₹12.00 Crores. The bidder's certified audited balance sheet and tax return reflect an average turnover of ₹10.50 Crores, failing commercial eligibility.",
-        evidenceRef: "evidence-turnover-kavach"
-      },
-      {
-        id: "ano-k2",
-        title: "Make-in-India Domestic Value Contradiction vs Technical BOQ",
-        severity: "CRITICAL_REVIEW",
-        description: "In the Make in India Declaration (Page 2), the bidder claims 80% local content. However, Technical BOQ (Line Item 8.4) specifies imported electro-hydraulic servo actuator from Switzerland amounting to ₹4,15,000 (44% of total skid assembly price), mathematically violating the 80% local claim.",
-        evidenceRef: "evidence-mii-kavach"
-      },
-      {
-        id: "ano-k3",
-        title: "Statutory ESIC Section 45A Recovery Demand Notice",
-        severity: "MODERATE",
-        description: "The regional ESIC databank reports an active Section 45A statutory recovery demand notice of ₹2,85,000/- for outstanding contributions across Q3 and Q4 of FY 2025-26 for Bangalore establishment 57000981200000303.",
-        evidenceRef: "evidence-esic-kavach"
-      }
-    ],
-    aiAdvisory: {
-      status: "HIGH RISK / RECOMMENDED REJECTION",
-      statusBadge: "badge-danger",
-      summary: "High Risk: Bidder fails mandatory commercial turnover criteria (₹10.50 Cr vs ₹12.00 Cr NIT threshold) and exhibits material MII calculation discrepancies.",
-      fullNote: "Automated forensic analysis flagged three non-conformances for Kavach Engineering & Power Systems Pvt Ltd: 1) Financial Turnover Shortfall: 3-year average turnover of ₹10.50 Cr is ₹1.50 Cr below the mandatory ₹12.00 Cr PQC threshold under ONGC-2026-TE-088 Clause 3.1; 2) Make in India Contradiction: Claim of 80% local content is directly contradicted by Technical BOQ Item 8.4 specifying imported Swiss servo actuator accounting for 44% of unit value; 3) Active statutory ESIC demand notice of ₹2,85,000 pending under Section 45A. In accordance with GFR 2017 Rule 173(v), disqualification or formal clarification rejection is strongly recommended."
-    }
-  }
 };
-

@@ -26,8 +26,12 @@ export const OfficerDecisionModal: React.FC<OfficerDecisionModalProps> = ({
   };
 
   const defaultRemarks = {
-    QUALIFY: "Verified statutory records, tax compliance, and factory capabilities. Qualification confirmed subject to PPO audit submission.",
-    REJECT: "Material contradiction identified in Make in India local content computation fails minimum Class-I threshold requirements.",
+    QUALIFY: bidder?.clarificationResponse
+      ? "Technical clarification accepted. Verified 75% domestic value addition via Chartered Engineer certificate. Qualification approved for commercial opening."
+      : "Verified statutory records, tax compliance, and factory capabilities. Qualification confirmed subject to PPO audit submission.",
+    REJECT: bidder?.clarificationResponse
+      ? "Submitted technical clarification fails to resolve Make in India local content discrepancy for Line Item 14.2. Disqualification confirmed."
+      : "Material contradiction identified in Make in India local content computation fails minimum Class-I threshold requirements.",
     SEND_CLARIFICATION: "Clarification requested under PPO 2017 Clause 9(a) regarding origin of Line Item 14.2 actuator pump assembly versus 75% local content declaration."
   };
 

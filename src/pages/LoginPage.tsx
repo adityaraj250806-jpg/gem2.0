@@ -250,14 +250,6 @@ export const LoginPage: React.FC = () => {
     navigate(targetRole === ROLES.OFFICER ? "/officer/dashboard" : "/bidder/dashboard");
   };
 
-  const handleFillKavachCredentials = () => {
-    setRole(ROLES.BIDDER);
-    setIsRegisterMode(false);
-    setUsername("bidder@kavach.in");
-    setPassword("Kavach@2026");
-    showToast("Filled Kavach Engineering credentials (bidder@kavach.in / Kavach@2026). Enter captcha to login!", "info");
-  };
-
   return (
     <div
       style={{
@@ -297,10 +289,10 @@ export const LoginPage: React.FC = () => {
             <div style={{ marginBottom: 16 }}>
               <GemLogo size={42} showText textColor={C.navyDark} />
               <div style={{ marginTop: 6, fontSize: 12, color: C.inkMuted, lineHeight: 1.4 }}>
-                {isRegisterMode 
-                  ? (role === ROLES.OFFICER 
-                      ? "Government Procurement Officer Onboarding • GeM 4.0 Standard"
-                      : "Official Vendor Registration & Statutory Compliance Gateway")
+                {isRegisterMode
+                  ? (role === ROLES.OFFICER
+                    ? "Government Procurement Officer Onboarding • GeM 4.0 Standard"
+                    : "Official Vendor Registration & Statutory Compliance Gateway")
                   : "Government e-Marketplace Integrated Verification Portal"}
               </div>
             </div>
@@ -310,51 +302,51 @@ export const LoginPage: React.FC = () => {
               <svg viewBox="0 0 460 360" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", maxHeight: isRegisterMode ? 280 : 250, filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.06))" }}>
                 <defs>
                   <linearGradient id="screenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#38bdf8"/>
-                    <stop offset="100%" stopColor="#0284c7"/>
+                    <stop offset="0%" stopColor="#38bdf8" />
+                    <stop offset="100%" stopColor="#0284c7" />
                   </linearGradient>
                   <linearGradient id="chairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#60a5fa"/>
-                    <stop offset="100%" stopColor="#2563eb"/>
+                    <stop offset="0%" stopColor="#60a5fa" />
+                    <stop offset="100%" stopColor="#2563eb" />
                   </linearGradient>
                 </defs>
-                <rect x="25" y="25" width="410" height="310" rx="16" fill="#ffffff" stroke="#e2e8f0" strokeWidth="1.5"/>
-                <line x1="25" y1="95" x2="435" y2="95" stroke="#f1f5f9" strokeWidth="1.5"/>
-                <line x1="25" y1="260" x2="435" y2="260" stroke="#f1f5f9" strokeWidth="1.5"/>
+                <rect x="25" y="25" width="410" height="310" rx="16" fill="#ffffff" stroke="#e2e8f0" strokeWidth="1.5" />
+                <line x1="25" y1="95" x2="435" y2="95" stroke="#f1f5f9" strokeWidth="1.5" />
+                <line x1="25" y1="260" x2="435" y2="260" stroke="#f1f5f9" strokeWidth="1.5" />
 
                 {/* Big Verification Monitor */}
-                <rect x="150" y="55" width="260" height="175" rx="8" fill="#ffffff" stroke="#cbd5e1" strokeWidth="2"/>
-                <rect x="150" y="55" width="260" height="24" rx="8" fill="url(#screenGrad)"/>
-                <circle cx="166" cy="67" r="4" fill="#ffffff" opacity="0.9"/>
-                <circle cx="178" cy="67" r="4" fill="#ffffff" opacity="0.6"/>
-                <circle cx="190" cy="67" r="4" fill="#ffffff" opacity="0.6"/>
+                <rect x="150" y="55" width="260" height="175" rx="8" fill="#ffffff" stroke="#cbd5e1" strokeWidth="2" />
+                <rect x="150" y="55" width="260" height="24" rx="8" fill="url(#screenGrad)" />
+                <circle cx="166" cy="67" r="4" fill="#ffffff" opacity="0.9" />
+                <circle cx="178" cy="67" r="4" fill="#ffffff" opacity="0.6" />
+                <circle cx="190" cy="67" r="4" fill="#ffffff" opacity="0.6" />
 
                 {/* Cards on monitor */}
-                <rect x="165" y="90" width="62" height="52" rx="4" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1"/>
-                <line x1="172" y1="102" x2="218" y2="102" stroke="#93c5fd" strokeWidth="2.5" strokeLinecap="round"/>
-                <line x1="172" y1="112" x2="210" y2="112" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/>
-                <circle cx="216" cy="128" r="4" fill="#22c55e"/>
+                <rect x="165" y="90" width="62" height="52" rx="4" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1" />
+                <line x1="172" y1="102" x2="218" y2="102" stroke="#93c5fd" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="172" y1="112" x2="210" y2="112" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="216" cy="128" r="4" fill="#22c55e" />
 
-                <rect x="240" y="90" width="62" height="52" rx="4" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1"/>
-                <line x1="247" y1="102" x2="293" y2="102" stroke="#93c5fd" strokeWidth="2.5" strokeLinecap="round"/>
-                <line x1="247" y1="112" x2="285" y2="112" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/>
-                <circle cx="291" cy="128" r="4" fill="#22c55e"/>
+                <rect x="240" y="90" width="62" height="52" rx="4" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1" />
+                <line x1="247" y1="102" x2="293" y2="102" stroke="#93c5fd" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="247" y1="112" x2="285" y2="112" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="291" cy="128" r="4" fill="#22c55e" />
 
-                <rect x="315" y="90" width="80" height="52" rx="4" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1"/>
-                <line x1="322" y1="102" x2="385" y2="102" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round"/>
-                <circle cx="385" cy="128" r="4" fill="#f59e0b"/>
+                <rect x="315" y="90" width="80" height="52" rx="4" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1" />
+                <line x1="322" y1="102" x2="385" y2="102" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" />
+                <circle cx="385" cy="128" r="4" fill="#f59e0b" />
 
                 {/* Desk & Person */}
-                <rect x="140" y="240" width="220" height="12" rx="3" fill="#cbd5e1"/>
-                <line x1="165" y1="252" x2="155" y2="330" stroke="#64748b" strokeWidth="4" strokeLinecap="round"/>
-                <line x1="330" y1="252" x2="340" y2="330" stroke="#64748b" strokeWidth="4" strokeLinecap="round"/>
+                <rect x="140" y="240" width="220" height="12" rx="3" fill="#cbd5e1" />
+                <line x1="165" y1="252" x2="155" y2="330" stroke="#64748b" strokeWidth="4" strokeLinecap="round" />
+                <line x1="330" y1="252" x2="340" y2="330" stroke="#64748b" strokeWidth="4" strokeLinecap="round" />
 
-                <rect x="52" y="165" width="48" height="90" rx="10" fill="url(#chairGrad)" transform="rotate(-6 52 165)"/>
-                <rect x="50" y="245" width="55" height="14" rx="6" fill="url(#chairGrad)"/>
-                <circle cx="112" cy="154" r="13" fill="#fbcfe8"/>
-                <path d="M102 150 C102 140 114 138 124 142 C126 146 126 154 122 156 Z" fill="#0f172a"/>
-                <path d="M82 245 L94 175 L118 178 L112 245 Z" fill="#1e293b"/>
-                <path d="M85 240 L135 252 L145 320" fill="none" stroke="#0284c7" strokeWidth="15" strokeLinecap="round" strokeLinejoin="round"/>
+                <rect x="52" y="165" width="48" height="90" rx="10" fill="url(#chairGrad)" transform="rotate(-6 52 165)" />
+                <rect x="50" y="245" width="55" height="14" rx="6" fill="url(#chairGrad)" />
+                <circle cx="112" cy="154" r="13" fill="#fbcfe8" />
+                <path d="M102 150 C102 140 114 138 124 142 C126 146 126 154 122 156 Z" fill="#0f172a" />
+                <path d="M82 245 L94 175 L118 178 L112 245 Z" fill="#1e293b" />
+                <path d="M85 240 L135 252 L145 320" fill="none" stroke="#0284c7" strokeWidth="15" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
 
@@ -432,8 +424,8 @@ export const LoginPage: React.FC = () => {
                 {isRegisterMode ? "Create New ID" : "Portal Login"}
               </h2>
               <p style={{ fontSize: 13, color: C.inkMuted }}>
-                {isRegisterMode 
-                  ? "Register official credentials directly into the cloud database" 
+                {isRegisterMode
+                  ? "Register official credentials directly into the cloud database"
                   : "Government e-Marketplace Integrated Verification System"}
               </p>
 
@@ -691,8 +683,8 @@ export const LoginPage: React.FC = () => {
 
               <div style={{ marginBottom: 14 }}>
                 <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: C.ink, marginBottom: 5 }}>
-                  {isRegisterMode 
-                    ? (role === ROLES.OFFICER ? "Official Department Email ID" : "Business Email ID") 
+                  {isRegisterMode
+                    ? (role === ROLES.OFFICER ? "Official Department Email ID" : "Business Email ID")
                     : "Username / Email ID"} <span style={{ color: C.crimson }}>*</span>
                 </label>
                 <input
@@ -869,9 +861,9 @@ export const LoginPage: React.FC = () => {
                     transition: "all 0.15s"
                   }}
                 >
-                  {isSubmitting 
-                    ? "Processing..." 
-                    : isRegisterMode 
+                  {isSubmitting
+                    ? "Processing..."
+                    : isRegisterMode
                       ? (role === ROLES.OFFICER ? "🏛️ Register Verified Officer ID →" : "✨ Create Bidder ID →")
                       : (role === ROLES.OFFICER ? "🛡️ Authenticate Officer Credentials →" : "Secure Login →")}
                 </button>
@@ -892,8 +884,8 @@ export const LoginPage: React.FC = () => {
                     textDecoration: "underline"
                   }}
                 >
-                  {isRegisterMode 
-                    ? "Already have an ID? Switch to Sign In" 
+                  {isRegisterMode
+                    ? "Already have an ID? Switch to Sign In"
                     : "Need a new account? Create a Bidder or Officer ID here"}
                 </button>
               </div>
@@ -916,65 +908,6 @@ export const LoginPage: React.FC = () => {
                 <span style={{ fontSize: 11, color: C.inkFaint, fontWeight: 600 }}>1-Click or Manual Login</span>
               </div>
 
-              {/* Dedicated Highlight for New Tender Bidder: Kavach Engineering */}
-              <div
-                style={{
-                  background: "#ffffff",
-                  border: `1.5px solid ${C.navy}`,
-                  borderRadius: 8,
-                  padding: "10px 12px",
-                  marginBottom: 10,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  boxShadow: "0 2px 4px rgba(11,61,145,0.08)"
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: 12, fontWeight: 800, color: C.navy, display: "flex", alignItems: "center", gap: 6 }}>
-                    <span>🚀 Kavach Engineering (New Bidder)</span>
-                    <span style={{ padding: "1px 6px", borderRadius: 4, background: "#dbeafe", color: "#1e40af", fontSize: 10 }}>ONGC Tender</span>
-                  </div>
-                  <div style={{ fontSize: 11, color: C.inkMuted, fontFamily: F.mono, marginTop: 2 }}>
-                    ID: <strong>bidder@kavach.in</strong> • Pass: <strong>Kavach@2026</strong>
-                  </div>
-                </div>
-                <div style={{ display: "flex", gap: 6 }}>
-                  <button
-                    type="button"
-                    onClick={handleFillKavachCredentials}
-                    style={{
-                      padding: "5px 10px",
-                      borderRadius: 5,
-                      border: "1px solid #cbd5e1",
-                      background: "#f8fafc",
-                      color: C.ink,
-                      fontSize: 11,
-                      fontWeight: 700,
-                      cursor: "pointer"
-                    }}
-                    title="Fill email and password into form"
-                  >
-                    ✏️ Fill
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDemoLogin(ROLES.BIDDER, "bidder@kavach.in")}
-                    style={{
-                      padding: "5px 12px",
-                      borderRadius: 5,
-                      border: "none",
-                      background: `linear-gradient(135deg, ${C.navy} 0%, #1e40af 100%)`,
-                      color: "#ffffff",
-                      fontSize: 11,
-                      fontWeight: 800,
-                      cursor: "pointer"
-                    }}
-                  >
-                    Login →
-                  </button>
-                </div>
-              </div>
 
               <div style={{ display: "flex", gap: 8 }}>
                 <button

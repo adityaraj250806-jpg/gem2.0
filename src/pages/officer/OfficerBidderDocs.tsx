@@ -9,7 +9,7 @@ import { C, F, S } from "../../tokens";
 
 export const OfficerBidderDocs: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const bidderId = id || "BID-001";
+  const bidderId = id || "BID-002";
   const navigate = useNavigate();
 
   const [bidder, setBidder] = useState<Bidder | null>(null);
@@ -122,48 +122,105 @@ export const OfficerBidderDocs: React.FC = () => {
         </div>
       </div>
 
-      {/* RUN AI VERIFICATION TRIGGER */}
-      <div
-        style={{
-          background: "#ffffff",
+      {/* CLARIFICATION RECEIVED BANNER — shown when bidder has replied to a sent clarification */}
+      {bidder?.officerDecision === "CLARIFICATION_REQUESTED" && bidder?.clarificationResponse && (
+        <div style={{
+          background: "linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%)",
           borderRadius: 14,
-          border: "2px dashed #93c5fd",
-          padding: "32px 24px",
-          textAlign: "center",
+          border: "2px solid #86efac",
+          padding: "24px 28px",
           boxShadow: S.card,
+          marginBottom: 24,
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center"
-        }}
-      >
-        <button
-          onClick={() => navigate(`/officer/bidders/${bidder?.id || "BID-001"}/verification`)}
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 16
+        }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+              <span style={{ fontSize: 20 }}>📩</span>
+              <span style={{ fontSize: 14, fontWeight: 800, color: "#166534", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                CLARIFICATION RESPONSE RECEIVED
+              </span>
+              <span style={{ padding: "2px 8px", borderRadius: 4, fontSize: 11, fontWeight: 700, background: "#dcfce7", color: "#15803d" }}>
+                ACTION REQUIRED
+              </span>
+            </div>
+            <div style={{ fontSize: 12.5, color: "#166534", lineHeight: 1.5, maxWidth: 480 }}>
+              Bidder has submitted their technical clarification ({bidder.clarificationResponseDate || "Recently"}). Re-run the AI forensic verification to incorporate this response into the updated compliance scorecard.
+            </div>
+            <div style={{ fontSize: 12, color: "#15803d", marginTop: 6, background: "#ffffff", padding: "8px 12px", borderRadius: 6, border: "1px solid #bbf7d0", maxWidth: 480 }}>
+              <strong>Bidder Response:</strong> "{bidder.clarificationResponse?.slice(0, 120)}{(bidder.clarificationResponse?.length || 0) > 120 ? "..." : ""}"
+            </div>
+          </div>
+          <button
+            onClick={() => navigate(`/officer/bidders/${bidder.id}/verification`)}
+            style={{
+              padding: "14px 28px",
+              borderRadius: 10,
+              border: "none",
+              background: `linear-gradient(135deg, ${C.navy}, #1e40af)`,
+              color: "#ffffff",
+              fontSize: 14,
+              fontWeight: 800,
+              cursor: "pointer",
+              letterSpacing: "0.04em",
+              boxShadow: "0 6px 20px rgba(11,61,145,0.35)",
+              display: "flex",
+              alignItems: "center",
+              gap: 8
+            }}
+          >
+            <span>✨</span> RE-RUN AI VERIFICATION
+          </button>
+        </div>
+      )}
+
+      {/* RUN AI VERIFICATION TRIGGER — shown on first run or after reset */}
+      {!(bidder?.officerDecision === "CLARIFICATION_REQUESTED" && bidder?.clarificationResponse) && (
+        <div
           style={{
-            padding: "14px 36px",
-            borderRadius: 10,
-            border: "none",
-            background: `linear-gradient(135deg, ${C.navy}, #1e40af)`,
-            color: "#ffffff",
-            fontSize: 15,
-            fontWeight: 800,
-            cursor: "pointer",
-            letterSpacing: "0.04em",
-            boxShadow: `0 6px 20px rgba(11, 61, 145, 0.35)`,
-            transition: "transform 0.15s"
+            background: "#ffffff",
+            borderRadius: 14,
+            border: "2px dashed #93c5fd",
+            padding: "32px 24px",
+            textAlign: "center",
+            boxShadow: S.card,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center"
           }}
         >
-          ✨ RUN AI VERIFICATION
-        </button>
+          <button
+            onClick={() => navigate(`/officer/bidders/${bidder?.id || "BID-002"}/verification`)}
+            style={{
+              padding: "14px 36px",
+              borderRadius: 10,
+              border: "none",
+              background: `linear-gradient(135deg, ${C.navy}, #1e40af)`,
+              color: "#ffffff",
+              fontSize: 15,
+              fontWeight: 800,
+              cursor: "pointer",
+              letterSpacing: "0.04em",
+              boxShadow: `0 6px 20px rgba(11, 61, 145, 0.35)`,
+              transition: "transform 0.15s"
+            }}
+          >
+            ✨ RUN AI VERIFICATION
+          </button>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 14, fontSize: 12, color: C.amber, fontWeight: 600 }}>
-          <span>ℹ️</span>
-          <span>AI analysis has not been performed yet.</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 14, fontSize: 12, color: C.amber, fontWeight: 600 }}>
+            <span>ℹ️</span>
+            <span>AI analysis has not been performed yet.</span>
+          </div>
+
+          <p style={{ fontSize: 12, color: C.inkFaint, maxWidth: 520, margin: "8px 0 0", lineHeight: 1.5 }}>
+            Clicking this button will initiate forensic verification, cross-registry triangulation, and automated anomaly detection for {bidder?.bidderName}.
+          </p>
         </div>
-
-        <p style={{ fontSize: 12, color: C.inkFaint, maxWidth: 520, margin: "8px 0 0", lineHeight: 1.5 }}>
-          Clicking this button will initiate forensic verification, cross-registry triangulation, and automated anomaly detection for {bidder?.bidderName}.
-        </p>
-      </div>
+      )}
 
       {selectedDoc && <DocumentModal doc={selectedDoc} onClose={() => setSelectedDoc(null)} />}
     </div>

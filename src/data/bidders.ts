@@ -15,6 +15,11 @@ export interface Bidder {
   officerDecision: "QUALIFIED" | "REJECTED" | "CLARIFICATION_REQUESTED" | null;
   officerRemarks: string | null;
   officerDecisionDate?: string | null;
+  clarificationResponse?: string | null;
+  clarificationResponseDate?: string | null;
+  clarificationAttachment?: string | null;
+  officerDscToken?: string | null;
+  officerAuditRef?: string | null;
   contactPerson: string;
   email: string;
   phone: string;
@@ -24,30 +29,6 @@ export interface Bidder {
 }
 
 export const mockBidders: Bidder[] = [
-  {
-    id: "BID-001",
-    bidIdCode: "001",
-    bidderName: "ABC Engineering Ltd",
-    tenderId: "CPCL-2026-TE-045",
-    tenderRef: "CPCL/2026/TE/045",
-    submittedAt: "01 Sep 2026, 09:12 AM",
-    documentsSubmitted: "10 / 10",
-    documentsCount: 10,
-    status: "Submitted",
-    aiStatus: "NOT_RUN",
-    complianceScore: null,
-    riskLevel: null,
-    aiAdvisory: null,
-    officerDecision: null,
-    officerRemarks: null,
-    officerDecisionDate: null,
-    contactPerson: "Rajesh Kumar (Director of Tendering)",
-    email: "tenders@abcengineering.com",
-    phone: "+91 98401 23456",
-    gstin: "33AABCA1234F1Z8",
-    pan: "AABCA1234F",
-    udyamNumber: "UDYAM-TN-02-0045892"
-  },
   {
     id: "BID-002",
     bidIdCode: "002",
@@ -232,29 +213,5 @@ export const mockBidders: Bidder[] = [
     gstin: "27AABCL1234N1ZT",
     pan: "AABCL1234N",
     udyamNumber: "UDYAM-MH-01-0012345"
-  },
-  {
-    id: "BID-005",
-    bidIdCode: "005",
-    bidderName: "Kavach Engineering & Power Systems Pvt Ltd",
-    tenderId: "ONGC-2026-TE-088",
-    tenderRef: "ONGC/2026/TE/088",
-    submittedAt: "07 Sep 2026, 04:45 PM",
-    documentsSubmitted: "10 / 10",
-    documentsCount: 10,
-    status: "Submitted",
-    aiStatus: "NOT_RUN",
-    complianceScore: null,
-    riskLevel: null,
-    aiAdvisory: null,
-    officerDecision: null,
-    officerRemarks: null,
-    officerDecisionDate: null,
-    contactPerson: "Vikramaditya Singhania (Head of Tendering)",
-    email: "bidder@kavach.in",
-    phone: "+91 98200 44552",
-    gstin: "29AABCK7788P1ZR",
-    pan: "AABCK7788P",
-    udyamNumber: "UDYAM-KR-03-0067123"
   }
 ];

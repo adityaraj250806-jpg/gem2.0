@@ -39,18 +39,6 @@ export const DEFAULT_USERS: Record<UserRole, User> = {
 };
 
 export const KNOWN_ACCOUNTS: Record<string, { password: string; user: User }> = {
-  "bidder@kavach.in": {
-    password: "Kavach@2026",
-    user: {
-      id: "user-bidder-05",
-      email: "bidder@kavach.in",
-      name: "Kavach Engineering & Power Systems Pvt Ltd",
-      role: ROLES.BIDDER,
-      roleTitle: "Registered Sovereign Bidder",
-      orgName: "Kavach Engineering & Power Systems Pvt Ltd (Bangalore)",
-      avatarInitial: "K"
-    }
-  },
   "tenders@abcengineering.com": {
     password: "Demo@GeM2026",
     user: {

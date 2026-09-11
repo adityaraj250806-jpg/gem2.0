@@ -55,9 +55,10 @@ export const BidderUpload: React.FC = () => {
   // File input refs for each document slot
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
-  const isKavach = user?.email?.toLowerCase().includes("kavach") || user?.name?.toLowerCase().includes("kavach");
-  const currentBidderId = isKavach ? "BID-005" : "BID-001";
-  const defaultTenderId = isKavach ? "ONGC-2026-TE-088" : "CPCL-2026-TE-045";
+  // Generate a stable bidder ID from the logged-in user so the bid appears correctly in the officer portal
+  const bidderName = user?.orgName || user?.name || "ABC Engineering Pvt Ltd";
+  const currentBidderId = "BID-" + bidderName.replace(/[^a-zA-Z0-9]/g, "").slice(0, 8).toUpperCase() || "BID-002";
+  const defaultTenderId = "CPCL-2026-TE-045";
 
   useEffect(() => {
     const tenderId = id || defaultTenderId;
@@ -191,7 +192,12 @@ export const BidderUpload: React.FC = () => {
     const demo = DEMO_DOCUMENTS.find(d => d.id === docId);
     if (!demo) return;
 
-    const dataUrl = generateValidPdfDataUrl(demo);
+    let dataUrl = "";
+    try {
+      dataUrl = generateValidPdfDataUrl(demo);
+    } catch (e) {
+      console.warn("PDF generation failed (non-critical):", e);
+    }
 
     await documentService.uploadDocument(currentBidderId, docId, {
       name: demo.fileName,
@@ -201,12 +207,13 @@ export const BidderUpload: React.FC = () => {
 
     setDocItems(prev => prev.map(item => {
       if (item.id === docId) {
+        // docRef intentionally does NOT carry fileDataUrl so DocumentModal
+        // renders its rich HTML template instead of an iframe with the raw PDF.
         const updatedDocRef: DocumentItem = {
           id: item.id,
           title: demo.name,
           fileName: demo.fileName,
           fileSize: demo.fileSize,
-          fileDataUrl: dataUrl,
           uploadDate: new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }),
           verified: true,
           category: demo.category,
@@ -217,7 +224,7 @@ export const BidderUpload: React.FC = () => {
           ...item,
           fileName: demo.fileName,
           fileSize: demo.fileSize,
-          fileDataUrl: dataUrl,
+          fileDataUrl: dataUrl,   // kept on state for "uploaded" tracking & PC-file previews
           isUploaded: true,
           docRef: updatedDocRef
         };
@@ -306,8 +313,6 @@ export const BidderUpload: React.FC = () => {
   const handleSubmitBid = async () => {
     if (!tender) return;
     setSubmitting(true);
-    const bidderName = user?.name || (isKavach ? "Kavach Engineering & Power Systems Pvt Ltd" : "ABC Engineering Ltd");
-    const specificBidderId = isKavach ? "BID-005" : undefined;
 
     const res = await documentService.submitBid(
       tender.id,
@@ -316,12 +321,12 @@ export const BidderUpload: React.FC = () => {
       docItems,
       tender.title,
       tender.department,
-      specificBidderId
+      currentBidderId
     );
     setSubmitting(false);
 
     if (res.success) {
-      showToast(`Bid submitted successfully! Reference: ${res.submission.bidId} — Synced in real-time to Officer Evaluation Console.`, "success");
+      showToast(`Bid submitted! Reference: ${res.submission.bidId} — Now visible in Officer Evaluation Console.`, "success");
       navigate("/bidder/bids");
     }
   };
@@ -623,10 +628,10 @@ export const BidderUpload: React.FC = () => {
                 border: isDragging
                   ? `2px dashed ${C.navy}`
                   : isUndertaking && !item.isUploaded
-                  ? `1.5px dashed #f59e0b`
-                  : item.isUploaded
-                  ? "1px solid #cbd5e1"
-                  : `1px solid ${C.border}`,
+                    ? `1.5px dashed #f59e0b`
+                    : item.isUploaded
+                      ? "1px solid #cbd5e1"
+                      : `1px solid ${C.border}`,
                 padding: "16px 22px",
                 display: "flex",
                 justifyContent: "space-between",

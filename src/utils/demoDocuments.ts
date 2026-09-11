@@ -85,45 +85,45 @@ export const DEMO_DOCUMENTS: DemoDocDefinition[] = [
   {
     id: "doc-udyam",
     name: "3. Udyam Registration Certificate",
-    fileName: "UDYAM_KR_03_0278313.pdf",
+    fileName: "UDYAM_TN_33_0012345.pdf",
     fileSize: "1.1 MB",
     category: "Enterprise Classification",
-    officialRef: "UDYAM-KR-03-0278313",
-    summary: "Official Ministry of MSME Udyam Registration Certificate with NIC classifications and services classification",
+    officialRef: "UDYAM-TN-33-0012345",
+    summary: "Official Ministry of MSME Udyam Registration Certificate issued to ABC Engineering Private Limited, Chennai",
     lines: [
       "MINISTRY OF MICRO, SMALL AND MEDIUM ENTERPRISES",
       "UDYAM REGISTRATION CERTIFICATE",
-      "Udyam Registration Number: UDYAM-KR-03-0278313",
-      "Name of Enterprise: ABHINAM ENTERPRISES",
-      "Enterprise Type: Micro (Classification Year 2023-24, Date: 26/06/2023)",
-      "Major Activity: SERVICES",
+      "Udyam Registration Number: UDYAM-TN-33-0012345",
+      "Name of Enterprise: ABC ENGINEERING PRIVATE LIMITED",
+      "Enterprise Type: Medium (Classification Year 2023-24, Date: 14/05/2023)",
+      "Major Activity: MANUFACTURING",
       "Social Category of Entrepreneur: GENERAL",
-      "Official Address: NO.60, G3 SAISUCHIN APPARTMENT, VASANTHPURA, BANGALORE - 560061",
-      "Date of Incorporation & Commencement: 15/06/2017",
-      "NIC 5-Digit Codes: 56210 (Event catering), 70200 (Management consultancy activities)",
-      "Date of Udyam Registration: 26/06/2023 (Verified via MSME National Portal)"
+      "Official Address: Plot No. 14-B, Ambattur Industrial Estate, Chennai, Tamil Nadu - 600058",
+      "Date of Incorporation & Commencement: 14/05/2004",
+      "NIC 5-Digit Codes: 25910 (Forging, pressing, stamping of metal), 28140 (Valves & industrial fittings)",
+      "Date of Udyam Registration: 14/05/2023 (Verified via MSME National Portal)"
     ],
     metadata: {
-      udyamNumber: "UDYAM-KR-03-0278313",
-      enterpriseName: "ABHINAM ENTERPRISES",
-      classificationType: "Micro",
+      udyamNumber: "UDYAM-TN-33-0012345",
+      enterpriseName: "ABC ENGINEERING PRIVATE LIMITED",
+      classificationType: "Medium",
       classificationYear: "2023-24",
-      classificationDate: "26/06/2023",
-      majorActivityBanner: "SERVICES",
+      classificationDate: "14/05/2023",
+      majorActivityBanner: "MANUFACTURING",
       socialCategory: "GENERAL",
-      flatDoorBlock: "NO.60",
-      premisesBuilding: "G3 SAISUCHIN APPARTMENT",
-      villageTown: "VASANTHPURA",
-      block: "MARUTHI LAYOUT",
-      roadStreetLane: "BANGALORE",
-      city: "BANGALORE",
-      state: "KARNATAKA",
-      district: "BENGALURU (URBAN) , Pin 560061",
-      mobile: "9880572411",
-      email: "VINAY.ASSOCI@GMAIL.COM",
-      dateOfIncorporation: "15/06/2017",
-      dateOfCommencement: "15/06/2017",
-      dateOfUdyamRegistration: "26/06/2023"
+      flatDoorBlock: "Plot No. 14-B",
+      premisesBuilding: "Ambattur Industrial Estate",
+      villageTown: "AMBATTUR",
+      block: "AMBATTUR IE",
+      roadStreetLane: "CHENNAI",
+      city: "CHENNAI",
+      state: "TAMIL NADU",
+      district: "CHENNAI, Pin 600058",
+      mobile: "9444123456",
+      email: "TENDERS@ABCENGINEERING.COM",
+      dateOfIncorporation: "14/05/2004",
+      dateOfCommencement: "14/05/2004",
+      dateOfUdyamRegistration: "14/05/2023"
     }
   },
   {
@@ -161,57 +161,57 @@ export const DEMO_DOCUMENTS: DemoDocDefinition[] = [
   {
     id: "doc-epfo",
     name: "5. Provident Fund Code Number Intimation (EPFO)",
-    fileName: "EPFO_Code_Intimation_APHYD0089201000.pdf",
+    fileName: "EPFO_Code_Intimation_TNCHE0014231000.pdf",
     fileSize: "920 KB",
     category: "Labor & Social Security",
-    officialRef: "Code: APHYD0089201000",
-    summary: "Statutory Allotment of Code Number under Employees' Provident Fund and Miscellaneous Provisions Act 1952",
+    officialRef: "Code: TNCHE0014231000",
+    summary: "Statutory Allotment of Code Number under Employees Provident Fund and Miscellaneous Provisions Act 1952 — ABC Engineering",
     lines: [
       "EMPLOYEES' PROVIDENT FUND ORGANISATION (EPFO) - GOVT OF INDIA",
       "PROVIDENT FUND CODE NUMBER INTIMATION LETTER",
-      "Reference No: DL/CPM/0029103/000/18293 | Date: 17/08/2023",
-      "Establishment Name: M/S INDUSTRIAL FURNACES",
-      "EPFO Allotted Code Number: APHYD0089201000",
+      "Reference No: TN/CHE/0014231/000/26187 | Date: 01/06/2026",
+      "Establishment Name: M/S ABC ENGINEERING PRIVATE LIMITED",
+      "EPFO Allotted Code Number: TNCHE0014231000",
       "Establishment PAN: AABCA1234F",
-      "Date on which strength crossed 19: 01/08/2023 | Section: 0001(3)(b)",
-      "Primary Activity: ENGINEERS - ENGG. CONTRACTORS",
-      "Ownership Type: Proprietorship Firm | Address: Hyderabad, Telangana - 500072"
+      "Date on which strength crossed 19: 01/06/2004 | Section: 0001(3)(b)",
+      "Primary Activity: MANUFACTURING - VALVE & INDUSTRIAL FITTINGS",
+      "Ownership Type: Private Limited Company | Address: Ambattur IE, Chennai, Tamil Nadu - 600058"
     ],
     metadata: {
-      refNo: "DL/CPM/0029103/000/18293",
-      intimationDate: "17/08/2023",
-      establishmentName: "M/S INDUSTRIAL FURNACES",
-      establishmentCode: "APHYD0089201000",
+      refNo: "TN/CHE/0014231/000/26187",
+      intimationDate: "01/06/2026",
+      establishmentName: "ABC ENGINEERING PRIVATE LIMITED",
+      establishmentCode: "TNCHE0014231000",
       panNumber: "AABCA1234F",
-      activeContributingMembers: "248 Employees",
-      ecrFilingStatus: "Up to date (ECR filed for July 2026)",
-      electronicChallanNo: "TRRN: 312260800921"
+      activeContributingMembers: "312 Employees",
+      ecrFilingStatus: "Up to date (ECR filed for August 2026)",
+      electronicChallanNo: "TRRN: 261260800745"
     }
   },
   {
     id: "doc-esic",
     name: "6. ESIC Registration Certificate (Form C-11)",
-    fileName: "ESIC_Form_C11_Registration_Letter.pdf",
+    fileName: "ESIC_Form_C11_ABC_Engineering.pdf",
     fileSize: "890 KB",
     category: "Labor & Social Security",
-    officialRef: "Code: 52000849200000606",
-    summary: "Form C-11 Registration Letter under Section 1(5) of ESI Act 1948 by Regional Office Hyderabad",
+    officialRef: "Code: 37000012340000101",
+    summary: "Form C-11 Registration Letter under Section 1(5) of ESI Act 1948 by Regional Office Chennai — ABC Engineering",
     lines: [
       "EMPLOYEES' STATE INSURANCE CORPORATION (ESIC)",
-      "REGIONAL OFFICE, 5-9-23 HILLFORT ROAD, ADARSHNAGAR, HYDERABAD - 500063",
+      "REGIONAL OFFICE, 143 STERLING ROAD, NUNGAMBAKKAM, CHENNAI - 600034",
       "FORM C-11 (Regd. with a.d.) - REGISTRATION UNDER E.S.I. ACT 1948",
-      "Dated: 12/08/2023 | Subject: Registration under Section 1(5) of ESI Act",
-      "To: M/s ABC ENGINEERING PRIVATE LIMITED (Serilingampally, Hyderabad)",
-      "Allotted Employer Code No: 52000849200000606",
-      "Coverage Date: Effective from 12-08-2023",
-      "Branch Office Designated: Prashanti Nagar Kukatpally, Hyderabad - 500072",
+      "Dated: 01/06/2026 | Subject: Registration under Section 1(5) of ESI Act",
+      "To: M/s ABC ENGINEERING PRIVATE LIMITED (Ambattur IE, Chennai - 600058)",
+      "Allotted Employer Code No: 37000012340000101",
+      "Coverage Date: Effective from 01-06-2004",
+      "Branch Office Designated: Ambattur, Chennai - 600058",
       "Statutory Status: Active Employer & Timely Monthly Contributions Verified"
     ],
     metadata: {
-      employerCode: "52000849200000606",
-      coveredEmployees: "182 Insured Persons",
-      contributionCompliance: "Paid up to July 2026",
-      regionalOffice: "Regional Office, Adarshnagar, Hyderabad - 500063"
+      employerCode: "37000012340000101",
+      coveredEmployees: "312 Insured Persons",
+      contributionCompliance: "Paid up to August 2026",
+      regionalOffice: "Regional Office, Sterling Road, Nungambakkam, Chennai - 600034"
     }
   },
   {
@@ -326,7 +326,7 @@ export const DEMO_DOCUMENTS: DemoDocDefinition[] = [
     fileSize: "845 KB",
     category: "Legal & Debarment Compliance",
     officialRef: "Affidavit: AFF-2026/BL-9042",
-    summary: "Notarized affidavit on ₹100 Non-Judicial Stamp Paper confirming non-debarment under GFR Rule 151",
+    summary: "Notarized affidavit on Rs.100 Non-Judicial Stamp Paper confirming non-debarment under GFR Rule 151",
     lines: [
       "GOVERNMENT OF INDIA - NOTARIAL ACT & AFFIDAVIT",
       "NON-BLACKLISTING & INTEGRITY COMPLIANCE UNDERTAKING",
@@ -340,7 +340,7 @@ export const DEMO_DOCUMENTS: DemoDocDefinition[] = [
     ],
     metadata: {
       affidavitNumber: "AFF-2026/BL-9042",
-      stampPaperValue: "₹100 (Non-Judicial Stamp Paper)",
+      stampPaperValue: "Rs.100 (Non-Judicial Stamp Paper)",
       stampSerialNumber: "IN-TN98234710298374U",
       notaryAdvocate: "R. Shanmugam, B.Sc., B.L., Advocate & Notary Public (Reg No. 4412/2014)",
       deponentName: "Mr. Rajesh Kumar, Managing Director, ABC Engineering Limited",
@@ -358,8 +358,13 @@ export const DEMO_DOCUMENTS: DemoDocDefinition[] = [
  * Generates a valid standard PDF 1.4 binary string and returns Data URL
  */
 export function generateValidPdfDataUrl(doc: DemoDocDefinition): string {
-  // Sanitize lines for PDF literal syntax
-  const escapePdf = (text: string) => text.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
+  // Strip non-ASCII characters so btoa never crashes on Unicode (e.g. rupee symbol ₹)
+  const toAscii = (s: string) =>
+    s.replace(/₹/g, "Rs.").replace(/[^\x00-\x7F]/g, "?");
+
+  // Sanitize for PDF literal string syntax (escape backslash and parentheses)
+  const escapePdf = (text: string) =>
+    toAscii(text).replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
 
   let stream = `BT\n/F1 16 Tf\n50 740 Td\n(${escapePdf(doc.name)}) Tj\nET\n`;
   stream += `BT\n/F1 11 Tf\n50 718 Td\n(${escapePdf(doc.summary)}) Tj\nET\n`;
@@ -372,7 +377,7 @@ export function generateValidPdfDataUrl(doc: DemoDocDefinition): string {
   }
 
   stream += `BT\n/F1 8 Tf\n50 120 Td\n(Official GeM Portal Demonstration Document - Verified for Tender CPCL/2026/TE/045) Tj\nET\n`;
-  stream += `BT\n/F1 8 Tf\n50 105 Td\n(Timestamp: ${new Date().toUTCString()} - Digital Watermark: GeM-Sentinel-2026) Tj\nET\n`;
+  stream += `BT\n/F1 8 Tf\n50 105 Td\n(Timestamp: ${toAscii(new Date().toUTCString())} - Digital Watermark: GeM-Sentinel-2026) Tj\nET\n`;
 
   const streamLen = stream.length;
   const obj1 = "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n";
@@ -396,7 +401,7 @@ export function generateValidPdfDataUrl(doc: DemoDocDefinition): string {
 
   const pdfString = header + obj1 + obj2 + obj3 + obj4 + obj5 + xref + trailer;
 
-  // Convert to Base64 Data URL
+  // All content is pure ASCII after toAscii() sanitization — btoa is safe.
   return "data:application/pdf;base64," + btoa(pdfString);
 }
 

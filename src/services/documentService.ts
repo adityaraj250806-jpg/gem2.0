@@ -31,7 +31,10 @@ export class DocumentService {
       if (stored) {
         const parsed = JSON.parse(stored);
         // Ensure all mock bidders exist in storage
+        delete parsed["BID-001"];
+        delete parsed["BID-005"];
         Object.keys(mockDocuments).forEach(bidderId => {
+          if (bidderId === "BID-001" || bidderId === "BID-005") return;
           if (!parsed[bidderId] || !Array.isArray(parsed[bidderId]) || parsed[bidderId].length === 0) {
             parsed[bidderId] = JSON.parse(JSON.stringify(mockDocuments[bidderId]));
           } else {
@@ -53,6 +56,8 @@ export class DocumentService {
       console.warn("Error reading stored documents:", e);
     }
     const fresh = JSON.parse(JSON.stringify(mockDocuments));
+    delete fresh["BID-001"];
+    delete fresh["BID-005"];
     try {
       localStorage.setItem(STORAGE_KEY_DOCS, JSON.stringify(fresh));
     } catch (e) {}
@@ -71,23 +76,48 @@ export class DocumentService {
     try {
       const stored = localStorage.getItem(STORAGE_KEY_BIDS);
       if (stored) {
-        return JSON.parse(stored);
+        let parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          parsed = parsed.filter(
+            (b: SubmittedBid) =>
+              b.bidId !== "BID-001" &&
+              b.bidId !== "001" &&
+              b.bidId !== "BID-00231" &&
+              b.bidId !== "BID-002270" &&
+              !b.bidId?.toLowerCase().includes("abc") &&
+              !b.tenderTitle?.toLowerCase().includes("abc") &&
+              b.bidId !== "BID-005" &&
+              b.bidId !== "005" &&
+              !b.bidId?.toLowerCase().includes("kavach") &&
+              !b.tenderTitle?.toLowerCase().includes("kavach")
+          );
+          try {
+            localStorage.setItem(STORAGE_KEY_BIDS, JSON.stringify(parsed));
+          } catch (e) {}
+          return parsed;
+        }
       }
     } catch (e) {
       console.warn("Error reading submitted bids:", e);
     }
     return [
       {
-        bidId: "BID-00231",
+        bidId: "BID-002",
         tenderId: "CPCL-2026-TE-045",
         tenderRef: "CPCL/2026/TE/045",
         tenderTitle: "Supply of High Pressure Valves",
         department: "CPCL",
-        submissionDate: "01 Sep 2026, 09:12 AM",
+        submissionDate: "01 Sep 2026, 11:30 AM",
         status: "UNDER EVALUATION",
         documentsCount: 10
       }
     ];
+  }
+
+  async deleteBid(bidId: string): Promise<boolean> {
+    this.submittedBids = this.submittedBids.filter(b => b.bidId !== bidId);
+    this.saveSubmittedBids();
+    return true;
   }
 
   saveSubmittedBids(): void {
@@ -98,10 +128,10 @@ export class DocumentService {
     }
   }
 
-  async getDocumentsByBidder(bidderId = "BID-001"): Promise<DocumentItem[]> {
+  async getDocumentsByBidder(bidderId = "BID-002"): Promise<DocumentItem[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
-        const docs = this.documents[bidderId] || mockDocuments[bidderId] || this.documents["BID-001"] || [];
+        const docs = this.documents[bidderId] || mockDocuments[bidderId] || this.documents["BID-002"] || [];
         resolve(JSON.parse(JSON.stringify(docs)));
       }, 50);
     });
@@ -115,7 +145,7 @@ export class DocumentService {
     return new Promise((resolve) => {
       setTimeout(() => {
         if (!this.documents[bidderId]) {
-          this.documents[bidderId] = JSON.parse(JSON.stringify(this.documents["BID-001"] || []));
+          this.documents[bidderId] = JSON.parse(JSON.stringify(this.documents["BID-002"] || []));
         }
 
         let doc = this.documents[bidderId].find(d => d.id === docId);
@@ -157,7 +187,7 @@ export class DocumentService {
   async submitBid(
     tenderId: string,
     tenderRef: string,
-    bidderName = "ABC Engineering Ltd",
+    bidderName = "Bharat Industries",
     documentsList?: any[],
     tenderTitle?: string,
     department?: string,
@@ -165,7 +195,7 @@ export class DocumentService {
   ): Promise<{ success: boolean; submission: SubmittedBid; bidderId: string }> {
     const randomNum = Math.floor(100 + Math.random() * 900);
     const newBidId = specificBidderId || `BID-002${randomNum}`;
-    const uploadedDocs = documentsList && documentsList.length > 0 ? documentsList : (this.documents[newBidId] || this.documents["BID-001"] || []);
+    const uploadedDocs = documentsList && documentsList.length > 0 ? documentsList : (this.documents[newBidId] || this.documents["BID-002"] || []);
 
     // Format and store documents under this new bidderId
     const formattedDocs: DocumentItem[] = uploadedDocs.map((item: any, idx: number) => {
@@ -195,9 +225,6 @@ export class DocumentService {
     });
 
     this.documents[newBidId] = formattedDocs;
-    if (!specificBidderId) {
-      this.documents["BID-001"] = formattedDocs; // Also sync to default bidder profile
-    }
     this.saveDocuments();
 
     // Register bidder into bidderService for real-time visibility in officer portal

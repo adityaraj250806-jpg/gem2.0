@@ -75,22 +75,18 @@ A brand new tender and dedicated bidder have been seeded for instant, flawless d
 ### 🔑 Demo Credentials
 | Role | Email / Username | Password | Entity Name |
 | :--- | :--- | :--- | :--- |
-| **New Bidder** | **`bidder@kavach.in`** | **`Kavach@2026`** | **Kavach Engineering & Power Systems Pvt Ltd** (`BID-005`) |
 | **Demo Bidder** | `tenders@abcengineering.com` | `Demo@GeM2026` | ABC Engineering Ltd (`BID-001`) |
 | **Officer** | `procurement.officer@cpcl.gov.in` | `Officer#2026` | Dr. K. S. Ramanathan (Chief Procurement Officer) |
 
 ### 📋 Step-by-Step Walkthrough
-1. **Login:** Go to `/login` and click the **"🚀 Kavach Engineering (New Bidder)"** card or enter `bidder@kavach.in` / `Kavach@2026`.
-2. **Select Tender:** Open **`ONGC-2026-TE-088`** (*Cryogenic Gas Turbine Actuators & Control Skids*).
+1. **Login:** Go to `/login` and select **Demo Bidder** (`tenders@abcengineering.com` / `Demo@GeM2026`).
+2. **Select Tender:** Open **`CPCL-2026-TE-045`** (*Supply of High Pressure Valves*).
 3. **Upload Documents:** Navigate to the statutory upload section, view the authentic certificates, and click **Submit Tender Bid**.
-4. **Switch to Officer:** Log in as **Procurement Officer** and open tender `ONGC-2026-TE-088`.
-5. **Inspect & Verify:** Select **Kavach Engineering (`BID-005`)**, inspect the document package, and click **✨ RUN AI VERIFICATION**.
+4. **Switch to Officer:** Log in as **Procurement Officer** and open tender `CPCL-2026-TE-045`.
+5. **Inspect & Verify:** Select **ABC Engineering (`BID-001`)**, inspect the document package, and click **✨ RUN AI VERIFICATION**.
 6. **Watch Real-Time Scanning:** The 10-stage AI verification pipeline executes dynamically.
-7. **Inspect Scorecard (68/100 • HIGH RISK):** View the 3 detected anomalies:
-   - *Anomaly 1:* Audited 3-year turnover of ₹10.50 Cr fails mandatory ₹12.00 Cr PQC floor.
-   - *Anomaly 2:* Claimed 80% local content directly contradicted by BOQ Line 8.4 specifying imported Swiss servo actuator (44% of unit value).
-   - *Anomaly 3:* Active ESIC Section 45A Statutory Recovery Demand Notice for ₹2,85,000 arrears.
-8. **View Side-by-Side Evidence:** Click **"View Evidence (Side-by-Side)"** on any anomaly to open the split viewport comparison.
+7. **Inspect Scorecard:** View the Make in India local content discrepancy anomaly.
+8. **View Side-by-Side Evidence:** Click **"Inspect Live Evidence Proof"** to view the split-screen evidence verification.
 
 ---
 
@@ -149,7 +145,7 @@ GemxAI/
     ├── tokens.ts               # Sovereign color palette (Navy, Green, Saffron, Amber)
     ├── data/
     │   ├── tenders.ts          # Public tenders (CPCL, ONGC, IOCL, GAIL, HPCL)
-    │   ├── bidders.ts          # Registered bidders (BID-001 to BID-005)
+    │   ├── bidders.ts          # Registered bidders (BID-001 to BID-004)
     │   ├── documents.ts        # Authentic 10-document sets per bidder
     │   ├── govtRegistry.ts     # Ground-truth databases (CBIC, CBDT, MSME, EPFO, ESIC, ICAI)
     │   ├── verificationResults.ts # Audit scorecards and anomaly checklists

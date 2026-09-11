@@ -13,9 +13,19 @@ export class BidderService {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        const parsed = JSON.parse(stored);
+        let parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
+          // Permanently purge BID-001, BID-005, ABC Engineering and Kavach from storage
+          parsed = parsed.filter(
+            (p: Bidder) =>
+              p.id !== "BID-001" &&
+              p.id !== "001" &&
+              !p.bidderName?.toLowerCase().includes("abc engineering") &&
+              p.id !== "BID-005" &&
+              !p.bidderName?.toLowerCase().includes("kavach")
+          );
           mockBidders.forEach(mb => {
+            if (mb.id === "BID-001" || mb.id === "BID-005") return;
             const idx = parsed.findIndex((p: Bidder) => p.id === mb.id);
             if (idx === -1) {
               parsed.push(JSON.parse(JSON.stringify(mb)));
@@ -27,16 +37,19 @@ export class BidderService {
               parsed[idx].udyamNumber = mb.udyamNumber;
             }
           });
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+          } catch (e) { }
           return parsed;
         }
       }
     } catch (e) {
       console.warn("Error reading stored bidders:", e);
     }
-    const fresh = JSON.parse(JSON.stringify(mockBidders));
+    const fresh = JSON.parse(JSON.stringify(mockBidders.filter(b => b.id !== "BID-001" && b.id !== "BID-005")));
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
-    } catch (e) {}
+    } catch (e) { }
     return fresh;
   }
 
@@ -120,7 +133,7 @@ export class BidderService {
         // Check if bidder already exists for this tender
         const existingIndex = this.bidders.findIndex(
           b => (b.id === newId || b.bidderName.toLowerCase() === bidderData.bidderName.toLowerCase()) &&
-               (b.tenderId === bidderData.tenderId || b.tenderRef === bidderData.tenderRef)
+            (b.tenderId === bidderData.tenderId || b.tenderRef === bidderData.tenderRef)
         );
 
         const newBidder: Bidder = {
@@ -191,6 +204,8 @@ export class BidderService {
         if (bidder) {
           bidder.officerDecision = decision;
           bidder.officerRemarks = remarks;
+          bidder.officerDscToken = bidder.officerDscToken || `DSC-${Math.floor(10000 + Math.random() * 89999)}-AUTH`;
+          bidder.officerAuditRef = `AUDIT-TEC-${Math.floor(1000 + Math.random() * 9000)}`;
           bidder.officerDecisionDate = new Date().toLocaleString("en-IN", {
             day: "2-digit",
             month: "short",
@@ -199,13 +214,77 @@ export class BidderService {
             minute: "2-digit"
           });
           bidder.status = decision === "QUALIFIED" ? "Qualified" :
-                          decision === "REJECTED" ? "Disqualified" : "Clarification Sent";
+            decision === "REJECTED" ? "Disqualified" : "Clarification Sent";
           this.saveBidders();
+
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("gem_officer_decision_updated", { detail: bidder }));
+          }
+
           resolve({ success: true, bidder: JSON.parse(JSON.stringify(bidder)) });
         } else {
           resolve({ success: false, error: "Bidder not found" });
         }
       }, 100);
+    });
+  }
+
+  async submitClarificationResponse(
+    bidderId: string,
+    response: string,
+    attachmentName?: string
+  ): Promise<{ success: boolean; bidder?: Bidder; error?: string }> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const bidder = this.bidders.find(b => b.id === bidderId || b.bidIdCode === bidderId);
+        if (bidder) {
+          bidder.clarificationResponse = response;
+          bidder.clarificationResponseDate = new Date().toLocaleString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+          bidder.clarificationAttachment = attachmentName || "Chartered_Engineer_Attestation_MII.pdf";
+          bidder.status = "Clarification Received";
+          this.saveBidders();
+
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("gem_officer_decision_updated", { detail: bidder }));
+          }
+
+          resolve({ success: true, bidder: JSON.parse(JSON.stringify(bidder)) });
+        } else {
+          resolve({ success: false, error: "Bidder not found" });
+        }
+      }, 100);
+    });
+  }
+
+  async resetOfficerDecision(bidderId: string): Promise<{ success: boolean; bidder?: Bidder; error?: string }> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const bidder = this.bidders.find(b => b.id === bidderId || b.bidIdCode === bidderId);
+        if (bidder) {
+          bidder.officerDecision = null;
+          bidder.officerRemarks = null;
+          bidder.officerDecisionDate = null;
+          bidder.clarificationResponse = null;
+          bidder.clarificationResponseDate = null;
+          bidder.clarificationAttachment = null;
+          bidder.status = "Submitted";
+          this.saveBidders();
+
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("gem_officer_decision_updated", { detail: bidder }));
+          }
+
+          resolve({ success: true, bidder: JSON.parse(JSON.stringify(bidder)) });
+        } else {
+          resolve({ success: false, error: "Bidder not found" });
+        }
+      }, 50);
     });
   }
 }
