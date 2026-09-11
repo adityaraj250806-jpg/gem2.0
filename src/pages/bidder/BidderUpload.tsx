@@ -55,9 +55,9 @@ export const BidderUpload: React.FC = () => {
   // File input refs for each document slot
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
-  // Generate a stable bidder ID from the logged-in user so the bid appears correctly in the officer portal
-  const bidderName = user?.orgName || user?.name || "ABC Engineering Pvt Ltd";
-  const currentBidderId = "BID-" + bidderName.replace(/[^a-zA-Z0-9]/g, "").slice(0, 8).toUpperCase() || "BID-002";
+  // Primary stable bidder ID for ABC Engineering Ltd in CPCL tender
+  const bidderName = user?.name || user?.orgName || "ABC Engineering Ltd";
+  const currentBidderId = "BID-002";
   const defaultTenderId = "CPCL-2026-TE-045";
 
   useEffect(() => {

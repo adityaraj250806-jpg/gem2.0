@@ -84,8 +84,6 @@ export class DocumentService {
               b.bidId !== "001" &&
               b.bidId !== "BID-00231" &&
               b.bidId !== "BID-002270" &&
-              !b.bidId?.toLowerCase().includes("abc") &&
-              !b.tenderTitle?.toLowerCase().includes("abc") &&
               b.bidId !== "BID-005" &&
               b.bidId !== "005" &&
               !b.bidId?.toLowerCase().includes("kavach") &&
@@ -112,6 +110,15 @@ export class DocumentService {
         documentsCount: 10
       }
     ];
+  }
+
+  updateBidStatus(bidId: string, status: string): void {
+    this.submittedBids = this.loadSubmittedBids();
+    const bid = this.submittedBids.find(b => b.bidId === bidId || (bidId === "BID-002" && b.bidId === "BID-002"));
+    if (bid) {
+      bid.status = status;
+      this.saveSubmittedBids();
+    }
   }
 
   async deleteBid(bidId: string): Promise<boolean> {
@@ -269,6 +276,7 @@ export class DocumentService {
   async getMyBids(): Promise<SubmittedBid[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
+        this.submittedBids = this.loadSubmittedBids();
         resolve(JSON.parse(JSON.stringify(this.submittedBids)));
       }, 50);
     });

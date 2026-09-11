@@ -30,7 +30,11 @@ export const OfficerAiResults: React.FC = () => {
       });
     };
     window.addEventListener("gem_officer_decision_updated", handleUpdate);
-    return () => window.removeEventListener("gem_officer_decision_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("gem_officer_decision_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
   }, [bidderId]);
 
   if (!results) {

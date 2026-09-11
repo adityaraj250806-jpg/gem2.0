@@ -19,12 +19,23 @@ export const OfficerBidders: React.FC = () => {
   const [activeReqTab, setActiveReqTab] = useState<"ALL" | "TECH" | "PQC" | "STATUTORY">("ALL");
 
   useEffect(() => {
+    const loadBidders = () => {
+      bidderService.getBiddersByTender(tenderId).then(setBidders);
+    };
+
     tenderService.getTenderById(tenderId).then(t => {
       if (t) setTender(t);
       else tenderService.getAllTenders().then(list => setTender(list[0]));
     });
 
-    bidderService.getBiddersByTender(tenderId).then(setBidders);
+    loadBidders();
+
+    window.addEventListener("gem_officer_decision_updated", loadBidders);
+    window.addEventListener("storage", loadBidders);
+    return () => {
+      window.removeEventListener("gem_officer_decision_updated", loadBidders);
+      window.removeEventListener("storage", loadBidders);
+    };
   }, [tenderId]);
 
   const notice: NoticeDetails | null = tender ? getTenderNotice(tender) : null;

@@ -15,12 +15,11 @@ export class BidderService {
       if (stored) {
         let parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          // Permanently purge BID-001, BID-005, ABC Engineering and Kavach from storage
+          // Permanently purge BID-001, BID-005, and Kavach from storage
           parsed = parsed.filter(
             (p: Bidder) =>
               p.id !== "BID-001" &&
               p.id !== "001" &&
-              !p.bidderName?.toLowerCase().includes("abc engineering") &&
               p.id !== "BID-005" &&
               !p.bidderName?.toLowerCase().includes("kavach")
           );
@@ -30,6 +29,7 @@ export class BidderService {
             if (idx === -1) {
               parsed.push(JSON.parse(JSON.stringify(mb)));
             } else {
+              parsed[idx].bidderName = mb.bidderName;
               parsed[idx].documentsCount = mb.documentsCount;
               parsed[idx].documentsSubmitted = mb.documentsSubmitted;
               parsed[idx].gstin = mb.gstin;
@@ -56,14 +56,37 @@ export class BidderService {
   saveBidders(): void {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.bidders));
+      localStorage.setItem("gem_officer_sync_ts", Date.now().toString());
     } catch (e) {
       console.warn("Error saving bidders:", e);
     }
   }
 
+  private syncSubmittedBidStatus(bidderId: string, status: string): void {
+    try {
+      const stored = localStorage.getItem("gem_sentinel_submitted_bids");
+      if (stored) {
+        const bids = JSON.parse(stored);
+        if (Array.isArray(bids)) {
+          let modified = false;
+          bids.forEach((b: any) => {
+            if (b.bidId === bidderId || (bidderId === "BID-002" && b.bidId === "BID-002")) {
+              b.status = status;
+              modified = true;
+            }
+          });
+          if (modified) {
+            localStorage.setItem("gem_sentinel_submitted_bids", JSON.stringify(bids));
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
   async getBiddersByTender(tenderId: string): Promise<Bidder[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
+        this.bidders = this.loadBidders();
         const cleanTenderId = (tenderId || "").trim();
         const matches = this.bidders.filter(b =>
           b.tenderId.toLowerCase() === cleanTenderId.toLowerCase() ||
@@ -90,6 +113,7 @@ export class BidderService {
   async getBidderById(bidderId: string): Promise<Bidder | null> {
     return new Promise((resolve) => {
       setTimeout(() => {
+        this.bidders = this.loadBidders();
         const bidder = this.bidders.find(b => b.id === bidderId || b.bidIdCode === bidderId);
         resolve(bidder ? JSON.parse(JSON.stringify(bidder)) : null);
       }, 50);
@@ -200,6 +224,7 @@ export class BidderService {
   ): Promise<{ success: boolean; bidder?: Bidder; error?: string }> {
     return new Promise((resolve) => {
       setTimeout(() => {
+        this.bidders = this.loadBidders();
         const bidder = this.bidders.find(b => b.id === bidderId || b.bidIdCode === bidderId);
         if (bidder) {
           bidder.officerDecision = decision;
@@ -213,9 +238,12 @@ export class BidderService {
             hour: "2-digit",
             minute: "2-digit"
           });
+          const statusText = decision === "QUALIFIED" ? "TECHNICALLY QUALIFIED" :
+            decision === "REJECTED" ? "DISQUALIFIED" : "CLARIFICATION REQUIRED";
           bidder.status = decision === "QUALIFIED" ? "Qualified" :
             decision === "REJECTED" ? "Disqualified" : "Clarification Sent";
           this.saveBidders();
+          this.syncSubmittedBidStatus(bidder.id, statusText);
 
           if (typeof window !== "undefined") {
             window.dispatchEvent(new CustomEvent("gem_officer_decision_updated", { detail: bidder }));
@@ -236,6 +264,7 @@ export class BidderService {
   ): Promise<{ success: boolean; bidder?: Bidder; error?: string }> {
     return new Promise((resolve) => {
       setTimeout(() => {
+        this.bidders = this.loadBidders();
         const bidder = this.bidders.find(b => b.id === bidderId || b.bidIdCode === bidderId);
         if (bidder) {
           bidder.clarificationResponse = response;
@@ -249,6 +278,7 @@ export class BidderService {
           bidder.clarificationAttachment = attachmentName || "Chartered_Engineer_Attestation_MII.pdf";
           bidder.status = "Clarification Received";
           this.saveBidders();
+          this.syncSubmittedBidStatus(bidder.id, "CLARIFICATION SUBMITTED");
 
           if (typeof window !== "undefined") {
             window.dispatchEvent(new CustomEvent("gem_officer_decision_updated", { detail: bidder }));
@@ -265,6 +295,7 @@ export class BidderService {
   async resetOfficerDecision(bidderId: string): Promise<{ success: boolean; bidder?: Bidder; error?: string }> {
     return new Promise((resolve) => {
       setTimeout(() => {
+        this.bidders = this.loadBidders();
         const bidder = this.bidders.find(b => b.id === bidderId || b.bidIdCode === bidderId);
         if (bidder) {
           bidder.officerDecision = null;
@@ -275,6 +306,7 @@ export class BidderService {
           bidder.clarificationAttachment = null;
           bidder.status = "Submitted";
           this.saveBidders();
+          this.syncSubmittedBidStatus(bidder.id, "UNDER EVALUATION");
 
           if (typeof window !== "undefined") {
             window.dispatchEvent(new CustomEvent("gem_officer_decision_updated", { detail: bidder }));

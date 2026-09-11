@@ -32,7 +32,7 @@ export const mockBidders: Bidder[] = [
   {
     id: "BID-002",
     bidIdCode: "002",
-    bidderName: "Bharat Industries",
+    bidderName: "ABC Engineering Ltd",
     tenderId: "CPCL-2026-TE-045",
     tenderRef: "CPCL/2026/TE/045",
     submittedAt: "01 Sep 2026, 11:30 AM",
@@ -45,12 +45,12 @@ export const mockBidders: Bidder[] = [
     aiAdvisory: null,
     officerDecision: null,
     officerRemarks: null,
-    contactPerson: "Vikramjit Sharma",
-    email: "commercial@bharatindustries.in",
-    phone: "+91 98200 87654",
-    gstin: "27AABCB9876E1ZT",
-    pan: "AABCB9876E",
-    udyamNumber: "UDYAM-MH-01-0081290"
+    contactPerson: "Rajesh Kumar",
+    email: "tenders@abcengineering.com",
+    phone: "+91 98450 11223",
+    gstin: "33AABCT9981K1Z2",
+    pan: "AABCT9981K",
+    udyamNumber: "UDYAM-TN-02-0045891"
   },
   {
     id: "BID-003",

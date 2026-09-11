@@ -23,7 +23,6 @@ export const BidderSubmissions: React.FC = () => {
         b.bidId !== "001" &&
         b.bidId !== "BID-00231" &&
         b.bidId !== "BID-002270" &&
-        !b.bidId?.toLowerCase().includes("abc") &&
         b.bidId !== "BID-005" &&
         b.bidId !== "005" &&
         !b.bidId?.toLowerCase().includes("kavach") &&
@@ -41,35 +40,40 @@ export const BidderSubmissions: React.FC = () => {
 
   useEffect(() => {
     loadBids();
-    // Listen for officer decision events dispatched from OfficerDecisionModal
+    // Listen for officer decision events dispatched from OfficerDecisionModal & cross-tab storage events
     const handleUpdate = () => loadBids();
     window.addEventListener("gem_officer_decision_updated", handleUpdate);
-    return () => window.removeEventListener("gem_officer_decision_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("gem_officer_decision_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
   }, [loadBids]);
 
   const getLiveStatus = (bid: EnrichedBid): { label: string; bg: string; color: string; border: string } => {
     const decision = bid.bidderRecord?.officerDecision;
-    const hasClarificationResponse = !!bid.bidderRecord?.clarificationResponse;
-    if (decision === "QUALIFIED") {
+    const hasClarificationResponse = !!bid.bidderRecord?.clarificationResponse || bid.status === "CLARIFICATION SUBMITTED";
+    if (decision === "QUALIFIED" || bid.status === "TECHNICALLY QUALIFIED" || bid.status === "Qualified") {
       return { label: "TECHNICALLY QUALIFIED", bg: "#f0fdf4", color: "#15803d", border: "#86efac" };
     }
-    if (decision === "REJECTED") {
+    if (decision === "REJECTED" || bid.status === "DISQUALIFIED" || bid.status === "Disqualified") {
       return { label: "DISQUALIFIED", bg: "#fef2f2", color: "#dc2626", border: "#fca5a5" };
     }
-    if (decision === "CLARIFICATION_REQUESTED") {
+    if (decision === "CLARIFICATION_REQUESTED" || bid.status === "CLARIFICATION REQUIRED" || bid.status === "Clarification Sent") {
       if (hasClarificationResponse) {
         return { label: "CLARIFICATION SUBMITTED", bg: "#f0fdf4", color: "#166534", border: "#86efac" };
       }
       return { label: "CLARIFICATION REQUIRED", bg: "#fffbeb", color: "#b45309", border: "#fcd34d" };
     }
-    return { label: bid.status, bg: "#fffbeb", color: C.amber, border: "#fcd34d" };
+    return { label: bid.status || "UNDER EVALUATION", bg: "#fffbeb", color: C.amber, border: "#fcd34d" };
   };
 
   const handleSubmitClarification = async () => {
-    if (!clarificationModalBid?.bidderRecord || !clarificationText.trim()) return;
+    if (!clarificationText.trim()) return;
+    const targetId = clarificationModalBid?.bidderRecord?.id || clarificationModalBid?.bidId || "BID-002";
     setSubmittingClarification(true);
     await bidderService.submitClarificationResponse(
-      clarificationModalBid.bidderRecord.id,
+      targetId,
       clarificationText.trim(),
       "Bidder_Technical_Clarification.pdf"
     );
@@ -124,8 +128,11 @@ export const BidderSubmissions: React.FC = () => {
             ) : bids.map(bid => {
               const liveStatus = getLiveStatus(bid);
               const needsClarification =
-                bid.bidderRecord?.officerDecision === "CLARIFICATION_REQUESTED" &&
-                !bid.bidderRecord?.clarificationResponse;
+                (bid.bidderRecord?.officerDecision === "CLARIFICATION_REQUESTED" ||
+                  bid.status === "CLARIFICATION REQUIRED" ||
+                  bid.status === "Clarification Sent") &&
+                !bid.bidderRecord?.clarificationResponse &&
+                bid.status !== "CLARIFICATION SUBMITTED";
 
               return (
                 <tr key={bid.bidId} style={{ borderBottom: "1px solid #f1f5f9" }}>

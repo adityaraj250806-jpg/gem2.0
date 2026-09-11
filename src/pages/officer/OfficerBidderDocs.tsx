@@ -17,12 +17,22 @@ export const OfficerBidderDocs: React.FC = () => {
   const [selectedDoc, setSelectedDoc] = useState<DocumentItem | null>(null);
 
   useEffect(() => {
-    bidderService.getBidderById(bidderId).then(b => {
-      if (b) setBidder(b);
-      else bidderService.getBiddersByTender("CPCL-2026-TE-045").then(list => setBidder(list[0]));
-    });
+    const loadBidder = () => {
+      bidderService.getBidderById(bidderId).then(b => {
+        if (b) setBidder(b);
+        else bidderService.getBiddersByTender("CPCL-2026-TE-045").then(list => setBidder(list[0]));
+      });
+    };
 
+    loadBidder();
     documentService.getDocumentsByBidder(bidderId).then(setDocs);
+
+    window.addEventListener("gem_officer_decision_updated", loadBidder);
+    window.addEventListener("storage", loadBidder);
+    return () => {
+      window.removeEventListener("gem_officer_decision_updated", loadBidder);
+      window.removeEventListener("storage", loadBidder);
+    };
   }, [bidderId]);
 
   return (
